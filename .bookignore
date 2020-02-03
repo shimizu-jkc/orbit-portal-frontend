@@ -1,0 +1,8 @@
+.bookignore
+.git
+.github
+.gitbook
+.gitignore
+*node_modules*
+package.json
+package-lock.json

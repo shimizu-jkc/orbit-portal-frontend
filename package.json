@@ -1,0 +1,33 @@
+{
+  "name": "OrbitUserManual",
+  "version": "0.0.1",
+  "description": "User manual of orbit cloud platform.",
+  "main": "",
+  "scripts": {
+    "init": "gitbook init",
+    "start": "gitbook serve",
+    "prebuild": "rm -f assets && ln -s .gitbook/assets assets",
+    "build": "gitbook install && gitbook build",
+    "postbuild": "find _book -name '*.html' -exec sed -i 's/.gitbook\\/assets/assets/g' {} +",
+    "publish": "gh-pages -d _book -m 'Auto publish book'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkc-cloud/orbit-doc-UserManual.git"
+  },
+  "keywords": [],
+  "author": "shimizu.yusuke53@jvckenwood.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jkc-cloud/orbit-doc-UserManual/issues"
+  },
+  "homepage": "https://jkc-cloud.github.io/orbit-doc-UserManual/",
+  "dependencies": {
+    "gh-pages": "^2.2.0",
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-expandable-chapters": "^0.2.0",
+    "gitbook-plugin-hide-published-with": "^1.0.3",
+    "gitbook-plugin-search-pro-kui": "^1.0.0",
+    "gitbook-plugin-splitter": "0.0.8"
+  }
+}

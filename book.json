@@ -1,0 +1,16 @@
+{
+    "title": "Orbit UserManual",
+    "description": "user manual of orbit system.",
+    "plugins": [
+        "-sharing",
+        "-lunr",
+        "-search",
+        "search-pro-kui",
+        "hide-published-with",
+        "splitter",
+        "expandable-chapters"
+    ],
+    "styles": {
+        "website": "styles/website.css"
+    }
+}

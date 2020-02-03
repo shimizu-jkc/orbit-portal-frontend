@@ -26,7 +26,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_USERNAME: "[Document::UserManual] Publish Success"
-          SLACK_MESSAGE: "https://jkc-cloud.github.io/shimizu-doctest/"
+          SLACK_MESSAGE: "https://jkc-cloud.github.io/orbit-doc-UserManual/"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_DOC_SLACK_WEBHOOK }}
       - name: Slack Notification Failure
         if: failure()

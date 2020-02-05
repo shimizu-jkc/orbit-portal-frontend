@@ -28,7 +28,7 @@ jobs:
         env:
           SLACK_USERNAME: "Orbit UserManual"
           SLACK_TITLE: "Publish Success"
-          SLACK_MESSAGE: "https://orbit.jvckenwood-dev.com"
+          SLACK_MESSAGE: "https://orbit.jvckenwood-dev.com/orbit-doc-UserManual/"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_DOC_SLACK_WEBHOOK }}
       - name: Slack Notification Failure
         if: failure()

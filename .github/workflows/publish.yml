@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - draft
 jobs:
   build:
     name: Build & Publish OrbitUserManual
@@ -28,7 +27,7 @@ jobs:
         env:
           SLACK_USERNAME: "Orbit UserManual"
           SLACK_TITLE: "Publish Success"
-          SLACK_MESSAGE: "https://orbit.jvckenwood-dev.com/orbit-doc-UserManual/"
+          SLACK_MESSAGE: "https://orbit.jvckenwood-dev.com"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_DOC_SLACK_WEBHOOK }}
       - name: Slack Notification Failure
         if: failure()

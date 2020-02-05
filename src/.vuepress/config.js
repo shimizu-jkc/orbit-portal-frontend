@@ -77,10 +77,10 @@ module.exports = {
       "/guide/gcp/": getGuideSidebarForGCP(),
     },
     // GitHub setting
-    repo: "vuejs/vuepress",
+    repo: "jkc-cloud/orbit-doc-UserManual",
     repoLabel: "GitHub",
-    docsRepo: "vuejs/vuepress",
-    docsDir: "docs",
+    docsRepo: "jkc-cloud/orbit-doc-UserManuals",
+    docsDir: "src",
     docsBranch: "master"
   }
 };

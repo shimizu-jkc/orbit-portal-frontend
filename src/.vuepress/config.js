@@ -1,7 +1,6 @@
 module.exports = {
   title: "Orbit Portal",
   description: "Orbitとは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
-  base: '/orbit-doc-UserManual/',
   dest: "release",
   extraWatchFiles: [
     ".vuepress/config.js"

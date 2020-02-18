@@ -1,2 +1,2 @@
-# ユーザの登録
+# カタログ一覧
 ![image](/img/under_construction.png)

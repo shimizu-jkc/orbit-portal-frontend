@@ -1,2 +1,2 @@
-# ユーザの登録
+# リリースノート
 ![image](/img/under_construction.png)

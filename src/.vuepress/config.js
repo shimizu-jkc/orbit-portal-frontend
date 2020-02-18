@@ -1,18 +1,17 @@
 module.exports = {
-  title: "Orbit Portal",
-  description: "Orbitとは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
+  title: "OrBIT Portal",
+  description: "OrBITとは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
   dest: "release",
-  extraWatchFiles: [
-    ".vuepress/config.js"
+  markdown: {
+    extendMarkdown: md => {
+      md.set({ breaks: true });
+    }
+  },
+  plugins: [
+    "smooth-scroll"
   ],
   themeConfig: {
     logo: "/img/logo.jpg",
-    markdown: {
-      config: md => {
-        md.set({ breaks: true });
-        md.use(require('markdown-it'));
-      }
-    },
     //Navigator Setting
     nav: [
       { text: "おしらせ", link: "/information/" },
@@ -44,10 +43,11 @@ module.exports = {
             ]
           },
           {
-            text: "その他", 
+            text: "作業依頼", 
             items: [
-              { text: "監査ログ確認依頼", link: "/request/analyze-auditlog" },
-              { text: "サポートプラン変更申請", link: "/request/update-support" }
+              { text: "サポートプラン変更", link: "/request/update-support" },
+              { text: "監査ログ確認", link: "/request/analyze-auditlog" },
+              { text: "その他", link: "/request/other" }
             ]
           }
         ]
@@ -55,18 +55,15 @@ module.exports = {
       { 
         text: "カタログ", 
         items: [
-          { text: "カタログとは", link: "/catalog/" },
-          { text: "カタログ検索", link: "/catalog/search" },
+          { text: "一覧", link: "/catalog/list" },
           { text: "フィードバック", link: "/catalog/feedback" }
         ]
       },
       { 
         text: "サポート", 
         items: [
-          { text: "用語集", link: "/glossary/" },
-          { text: "リリースノート", link: "/release/" },
-          { text: "よくある質問", link: "/faq/" },
-          { text: "お問い合わせ", link: "/support/" }
+          { text: "リリースノート", link: "/support/release" },
+          { text: "お問い合わせ", link: "/support/contact" }
         ]
       },
     ],
@@ -98,7 +95,8 @@ function getGuideSidebarForAWS() {
         'id-management',
         'security',
         'audit',
-        'faq'
+        'faq',
+        "glossary"
       ]
     }
   ]

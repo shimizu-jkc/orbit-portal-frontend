@@ -1,2 +1,2 @@
-# ユーザの登録
+# フィードバック
 ![image](/img/under_construction.png)

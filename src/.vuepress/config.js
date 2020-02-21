@@ -8,10 +8,11 @@ module.exports = {
     }
   },
   plugins: [
-    "smooth-scroll"
+    /*"smooth-scroll"*/
   ],
   themeConfig: {
     logo: "/img/logo.jpg",
+    lastUpdated: 'Last Updated',
     //Navigator Setting
     nav: [
       { text: "おしらせ", link: "/information/" },
@@ -35,7 +36,7 @@ module.exports = {
             ],
           },
           {
-            text: "ユーザ関連", 
+            text: "ユーザー関連", 
             items: [
               { text: "登録申請", link: "/request/regist-user" },
               { text: "情報変更申請", link: "/request/update-user" },
@@ -63,6 +64,7 @@ module.exports = {
         text: "サポート", 
         items: [
           { text: "リリースノート", link: "/support/release" },
+          { text: "用語集", link: "/support/glossary" },
           { text: "お問い合わせ", link: "/support/contact" }
         ]
       },
@@ -71,7 +73,7 @@ module.exports = {
     sidebar: {
       "/information/": "",
       "/guide/aws/": getGuideSidebarForAWS(),
-      "/guide/gcp/": getGuideSidebarForGCP(),
+      "/guide/gcp/": getGuideSidebarForGCP()
     },
     // GitHub setting
     repo: "jkc-cloud/orbit-doc-UserManual",
@@ -87,16 +89,16 @@ function getGuideSidebarForAWS() {
   return [
     {
       title: "ユーザーガイド(AWS)",
-      collapsable: false,
+      collapsable: true,
       children: [
         '',
         'account-management',
         'billing',
         'id-management',
         'security',
+        'threat-detection',
         'audit',
-        'faq',
-        "glossary"
+        'faq'
       ]
     }
   ]

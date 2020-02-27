@@ -3,6 +3,9 @@ module.exports = {
   description: "OrBITとは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
   dest: "release",
   markdown: {
+    toc: {
+      includeLevel: [2, 3]
+    },
     extendMarkdown: md => {
       md.set({ breaks: true });
     }
@@ -92,6 +95,7 @@ function getGuideSidebarForAWS() {
       collapsable: true,
       children: [
         '',
+        'architecture',
         'account-management',
         'billing',
         'id-management',

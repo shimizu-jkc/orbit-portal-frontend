@@ -55,102 +55,625 @@ CISのセキュリティ基準は、AWSサービスの増加や知識の蓄積�
 
 ## リファレンス
 ここでは、セキュリティポリシーの各項目に関するリファレンスを示します。
-<CodeDetail title="このポリシーを見る" code="test"/>
-
 
 ### 1. IAM
 各AWSサービスやリソースへのアクセス権限、およびユーザーIDの適切な管理に関する項目です。
 
-#### 1.1 ルートユーザが利用されていないこと <Badge text="必須" type="error"/>
+#### 1.1 ルートユーザーが利用されていないこと <Badge text="必須" type="error"/>
 *(original) Avoid the use of the "root" account*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
-| CIS v1.2.0 | 1.1 | 必須 | あり |
+| CIS v1.2.0 | 1.1 | 必須 | 透過的 |
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
 
-#### 1.2 コンソールログイン用のパスワードが設定されたIAMユーザにMFAが有効化されていること<Badge text="必須" type="error"/>
+#### 1.2 コンソールログイン用のパスワードが設定されたIAMユーザのMFAが有効化されていること<Badge text="必須" type="error"/>
 *(original) Ensure multi-factor authentication (MFA) is enabled for all IAM users that have a console password*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
-| CIS v1.2.0 | 1.2 | 必須 | あり |
+| CIS v1.2.0 | 1.2 | 必須 | 透過的 |
 
-#### 1.11 パスワードの有効期限が90日以内であること <Badge text="任意" type="tip"/>
+この項目は、[2段階認証が有効化されたSSOを利用する](/guide/aws/id-management#SSOにおける二段階認証)ことで遵守されます。
+
+#### 1.3 90日以上利用されていない認証情報は無効化されていること<Badge text="必須" type="error"/>
 *(original) Ensure credentials unused for 90 days or greater are disabled*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
-| CIS v1.2.0 | 1.1 | 必須 | あり |
+| CIS v1.2.0 | 1.3 | 必須 | 提供予定:warning: |
 
-*(original) Ensure credentials unused for 90 days or greater are disabled*
+この項目は、[定期的なユーザーIDの棚卸作業](/guide/aws/id-management#ユーザーIDの棚卸)をすることで遵守されます。
+::: warning ATTENTION
+ユーザーIDの棚卸作業以外にも、OrBITコアシステムにより自動で無効化する仕組みを検討中です。
+:::
+
+#### 1.4 アクセスキーが90日以内にローテーションされていること <Badge text="必須" type="error"/>
 *(original) Ensure access keys are rotated every 90 days or less*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.4 | 必須 | 逸脱検出 |
+
+この項目は、[「*AWS Config Rule*(access-keys-rotated)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/access-keys-rotated.html)で遵守されます。
+
+#### 1.5 パスワードには1文字以上の大文字を含むこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy requires at least one uppercase letter*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.5 | 必須 | 透過的 |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+
+#### 1.6 パスワードには1文字以上の小文字を含むこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy require at least one lowercase letter*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.6 | 必須 | 透過的 |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+
+#### 1.7 パスワードには1文字以上の記号を含むこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy require at least one symbol*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.7 | 必須 | 透過的 |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+
+#### 1.8 パスワードには1文字以上の数字を含むこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy require at least one number*
-*(original)  Ensure IAM password policy requires minimum length of 14 or greater*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.8 | 必須 | 透過的 |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+
+#### 1.9 パスワードは最低14文字以上であること <Badge text="必須" type="error"/>
+*(original) Ensure IAM password policy requires minimum length of 14 or greater*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.9 | 必須 | 提供予定:warning: |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+:::warning ATTENTION
+現在のパスワードポリシーでは、最低8文字以上の設定になっています。
+:::
+
+#### 1.10 パスワードを再利用しないこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy prevents password reuse*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.10 | 必須 | 提供予定:warning: |
+
+この項目は、[SSOにおけるパスワードポリシー](/guide/aws/id-management#パスワードポリシー)により遵守されます。
+:::warning ATTENTION
+現在のパスワードポリシーでは、再利用は可能になっています。
+:::
+
+#### 1.11 パスワードの有効期限が90日以内であること <Badge text="任意" type="tip"/>
 *(original) Ensure IAM password policy expires passwords within 90 days or less*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.11 | 任意 | なし |
+
+この項目は、OrBITでは提供されません。
+
+#### 1.12 ルートユーザ－のアクセスキーが設定されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no root account access key exists*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.12 | 必須 | あり |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+
+#### 1.13 ルートユーザ－のMFAが有効化されていること <Badge text="必須" type="error"/>
 *(original) Ensure MFA is enabled for the "root" account*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.13 | 必須 | あり |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+
+#### 1.14 ルートユーザ－のハードウェアMFAが有効化されていること <Badge text="任意" type="tip"/>
 *(original) Ensure hardware MFA is enabled for the "root" account*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.14 | 任意 | あり |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+
+#### 1.15 秘密の質問が設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure security questions are registered in the AWS account*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.15 | 必須 | あり |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+
+#### 1.16 IAMポリシーがグループまたはロールにのみ適用されていること <Badge text="必須" type="error"/>
 *(original) Ensure IAM policies are attached only to groups or roles*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.16 | 必須 | 一部あり:warning: |
+
+この項目は、[SSOを利用してAWSアカウントへログインする](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+::: warning ATTENTION
+プロジェクト側のAWSアカウントでは、任意のIAMユーザを作成する事が可能ですが、そのIAMユーザに付与されるIAMポリシーに関しては、現在、逸脱を検出する仕組みはありません。
+:::
+
+#### 1.17 連絡先が最新の状態に維持されていること <Badge text="必須" type="error"/>
 *(original) Maintain current contact details*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.17 | 必須 | あり |
+
+この項目は、[定期的なユーザーIDの棚卸作業](/guide/aws/id-management#ユーザーIDの棚卸)をすることで遵守されます。
+::: danger IMPORTANT
+プロジェクトの連絡先に変更があった場合は、速やかに[問い合わせ先](/support/contact)までご連絡ください。
+:::
+
+#### 1.18 セキュリティ担当者の連絡先が登録されていること <Badge text="必須" type="error"/>
 *(original) Ensure security contact information is registered*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.18 | 必須 | 提供予定:warning: |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+::: warning ATTENTION
+OrBITでは、AWSアカウントの払い出し申請の際に設定する、**セキュリティ管理者**の連絡先がセキュリティ連絡先にマッピングされます。現在、**セキュリティ管理者**は必須の役割としていない為、セキュリティ連絡先は未設定の場合があります。
+:::
+
+#### 1.19 EC2インスタンスからのAWSリソースアクセスにIAMロールが使用されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure IAM instance roles are used for AWS resource access from instances*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.19 | 推奨 | なし |
+
+この項目は、OrBITでは遵守されません。各プロジェクトにて遵守するよう心掛けてください。
+
+#### 1.20 インシデント管理の為、AWSサポートへの権限が用意されていること <Badge text="必須" type="error"/>
 *(original) Ensure a support role has been created to manage incidents with AWS Support*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.20 | 必須 | あり |
+
+この項目は、[SSOによる適切なユーザとアクセス権限の管理](/guide/aws/id-management#ユーザーIDの管理)によって遵守されます。
+
+#### 1.21  IAMユーザ作成時に不必要なアクセスキーが生成されていないこと <Badge text="必須" type="error"/>
 *(original) Do not setup access keys during initial user setup for all IAM users that have a console password*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.21 | 必須 | 一部あり |
+
+この項目は、[SSOを利用してAWSアカウントへログイン](/guide/aws/id-management#ユーザーIDの管理)することで遵守されます。
+::: warning ATTENTION
+プロジェクト側のAWSアカウントでは、任意のIAMユーザを作成する事が可能ですが、そのIAMユーザ作成時に設定されるアクセスキーに関しては、現在、必要性を判断する仕組みはありません。
+:::
+
+#### 1.22 フルコントロール権限を持つポリシーが作成されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM policies that allow full "*:*" administrative privileges are not created*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 1.22 | 必須 | 一部あり |
+
+この項目は、[SSOによる適切なユーザとアクセス権限の管理](/guide/aws/id-management#ユーザーIDの管理)によって遵守されます。
+::: warning ATTENTION
+プロジェクト側のAWSアカウントでは、フルコントロール権限を持つIAMユーザーを作成する事が可能ですが、現在、それを抑制するような仕組みは提供していません。IAMユーザーの作成時には常に最小権限を意識してポリシーを付与することをお勧めします。
+:::
+
+#### 1.23 MFAデバイス、もしくはMFAアプリケーションを含む端末を厳重に保管すること <Badge text="必須" type="error"/>
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| なし | なし | 必須 | あり |
+
+この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの管理)ことで遵守されます。
+
+#### 1.24 コンソールログイン用のIAMユーザーは個別に作成し、認証情報を共有しないこと <Badge text="必須" type="error"/>
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| なし | なし | 必須 | あり |
+
+この項目は、[SSOによる適切なユーザとアクセス権限の管理](/guide/aws/id-management#ユーザーIDの管理)によって遵守されます。
+
+#### 1.25 プロジェクトと無関係なユーザーは無効化すること <Badge text="必須" type="error"/>
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| なし | なし | 必須 | あり |
+
+この項目は、[定期的なユーザーIDの棚卸作業](/guide/aws/id-management#ユーザーIDの棚卸)をすることで遵守されます。
+::: danger IMPORTANT
+プロジェクトの連絡先に変更があった場合は、速やかに[問い合わせ先](/support/contact)までご連絡ください。
+:::
+
 
 ### 2. Logging
 監査目的やインシデント解析に必要なログの記録に関する項目です。
 
+#### 2.1 全リージョンでCloudTrailが有効であること <Badge text="必須" type="error"/>
 *(original) Ensure CloudTrail is enabled in all regions*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.1 | 必須 | 一部あり:warning: |
+
+この項目は、OrBITが[AWSアカウントの払い出しの際に代替して設定](/guide/aws/account-management#自動で設定されるサービスとリソース)することで遵守されます。
+::: warning ATTENTION
+現在、全リージョンではなくOrBITが[サポートするリージョンのみ](/guide/aws/#サポートリージョン)になります。
+:::
+
+#### 2.2 CloudTrailログファイルの検証が有効化されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure CloudTrail log file validation is enabled*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.2 | 推奨 | あり |
+
+この項目は、OrBITが[AWSアカウントの払い出しの際に代替して設定](/guide/aws/account-management#自動で設定されるサービスとリソース)することで遵守されます。
+
+#### 2.3 CloudTrailログの格納バケットが公開設定となっていないこと  <Badge text="必須" type="error"/>
 *(original) Ensure the S3 bucket used to store CloudTrail logs is not publicly accessible*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.3 | 必須 | あり |
+
+この項目は、OrBITが[CloudTrailログの収集](/guide/aws/audit#ログの収集)と[一元管理](/guide/aws/audit#ログの一元管理)することで遵守されます。
+
+#### 2.4 CloudTrailログがCloudWatch Logsに配信設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure CloudTrail trails are integrated with CloudWatch Logs*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.4 | 推奨 | あり |
+
+この項目は、OrBITが[AWSアカウントの払い出しの際に代替して配信設定](/guide/aws/audit#ログの記録と配信)することで遵守されます。
+
+#### 2.5 全リージョンでAWS Configが有効であること <Badge text="必須" type="error"/>
 *(original) Ensure AWS Config is enabled in all regions*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.5 | 必須 | 一部あり:warning: |
+
+この項目は、OrBITが[AWSアカウントの払い出しの際に代替して設定](/guide/aws/account-management#自動で設定されるサービスとリソース)することで遵守されます。
+::: warning ATTENTION
+現在、全リージョンではなくOrBITが[サポートするリージョンのみ](/guide/aws/#サポートリージョン)になります。
+:::
+
+#### 2.6 CloudTrailログの格納バケットのアクセスログ記録が有効化されていること <Badge text="必須" type="error"/>
 *(original) Ensure S3 bucket access logging is enabled on the CloudTrail S3 bucket*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.6 | 必須 | あり |
+
+この項目は、OrBITが[CloudTrailログの収集](/guide/aws/audit#ログの収集)と[一元管理](/guide/aws/audit#ログの一元管理)することで遵守されます。
+
+
+#### 2.7 CloudTrailログがSSE-KMSで暗号化設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure CloudTrail logs are encrypted at rest using KMS CMKs*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.7 | 必須 | あり |
+
+この項目は、OrBITが[CloudTrailログの収集](/guide/aws/audit#ログの収集)と[一元管理](/guide/aws/audit#ログの一元管理)することで遵守されます。
+
+#### 2.8 KMSマスタキーがローテーション設定(365日以内)されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure rotation for customer created CMKs is enabled*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.8 | 推奨 | 逸脱検出のみ |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[「*AWS Config Rule*(cmk-backing-key-rotation-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/cmk-backing-key-rotation-enabled.html)を設定することで遵守されます。
+
+#### 2.9 全リージョンでVPC Flow Logsが有効化されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure VPC flow logging is enabled in all VPCs*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 2.9 | 推奨 | 逸脱検出のみ |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[「*AWS Config Rule*(vpc-flow-logs-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-flow-logs-enabled.html)を設定することで遵守されます。
+::: warning ATTENTION
+現在、全リージョンではなくOrBITが[サポートするリージョンのみ](/guide/aws/#サポートリージョン)になります。
+:::
+
+#### 2.10 CloudTrailログを解析可能な環境が整っていること <Badge text="推奨" type="warning"/>
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| なし | なし | 推奨 | あり |
+
+この項目は、OrBITが[ログの解析環境と手順を提供](/guide/aws/audit#ログの解析)することで遵守されます。
+
 
 ### 3. Monitoring
 脅威、およびポリシーからの逸脱を検知する仕組みとその通知に関する項目です。
 
+#### 3.1 許可されていないAPIコールに対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for unauthorized API calls*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.1 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.errorCode = "*UnauthorizedOperation" || 
+$.errorCode = "AccessDenied*"
+'/>
+
+#### 3.2 許可されていないAPIコールに対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for Management Console sign-in without MFA*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.2 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = "ConsoleLogin" && 
+$.additionalEventData.MFAUsed != "Yes" && 
+$.userIdentity.type != "AssumedRole"
+'/>
+
+#### 3.3 ルートユーザーの利用に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for usage of "root" account*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.3 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.userIdentity.type = "Root" &&
+$.userIdentity.invokedBy NOT EXISTS &&
+$.eventType != "AwsServiceEvent"
+'/>
+
+#### 3.4 IAMポリシーの変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for IAM policy changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.4 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName=DeleteGroupPolicy ||
+$.eventName=DeleteRolePolicy ||
+$.eventName=DeleteUserPolicy || 
+$.eventName=PutGroupPolicy ||
+$.eventName=PutRolePolicy || 
+$.eventName=PutUserPolicy ||
+$.eventName=CreatePolicy ||
+$.eventName=DeletePolicy || 
+$.eventName=CreatePolicyVersion || 
+$.eventName=DeletePolicyVersion || 
+$.eventName=AttachRolePolicy || 
+$.eventName=DetachRolePolicy || 
+$.eventName=AttachUserPolicy || 
+$.eventName=DetachUserPolicy || 
+$.eventName=AttachGroupPolicy || 
+$.eventName=DetachGroupPolicy
+'/>
+
+#### 3.5 CloudTrail設定の変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for CloudTrail configuration changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.5 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = CreateTrail  ||
+$.eventName = UpdateTrail  ||
+$.eventName = DeleteTrail  || 
+$.eventName = StartLogging ||
+$.eventName = StopLogging
+'/>
+
+#### 3.6 AWSマネージメントコンソールのログイン失敗に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for AWS Management Console authentication failures*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.6 | 推奨 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = ConsoleLogin &&
+$.errorMessage = "Failed authentication"
+'/>
+
+#### 3.7 KMSマスターキーの無効化またはスケジュール削除に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for disabling or scheduled deletion of customer created CMKs*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.7 | 推奨 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventSource = kms.amazonaws.com &&
+($.eventName=DisableKey || $.eventName=ScheduleKeyDeletion)
+'/>
+
+#### 3.8 S3バケットポリシー変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for S3 bucket policy changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.8 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventSource = s3.amazonaws.com && 
+( $.eventName = PutBucketAcl || 
+  $.eventName = PutBucketPolicy || 
+  $.eventName = PutBucketCors) || 
+  $.eventName = PutBucketLifecycle || 
+  $.eventName = PutBucketReplication || 
+  $.eventName = DeleteBucketPolicy || 
+  $.eventName = DeleteBucketCors || 
+  $.eventName = DeleteBucketLifecycle || 
+  $.eventName = DeleteBucketReplication
+)'/>
+
+#### 3.9 AWS Config設定の変更に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for AWS Config configuration changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.9 | 推奨 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventSource = config.amazonaws.com && 
+( $.eventName=StopConfigurationRecorder ||
+  $.eventName=DeleteDeliveryChannel || 
+  $.eventName=PutDeliveryChannel ||
+  $.eventName=PutConfigurationRecorder
+)'/>
+
+#### 3.10 Security Group設定の変更に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for security group changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.10 | 推奨 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = AuthorizeSecurityGroupIngress ||
+$.eventName = AuthorizeSecurityGroupEgress || 
+$.eventName = RevokeSecurityGroupIngress ||
+$.eventName = RevokeSecurityGroupEgress) || 
+$.eventName = CreateSecurityGroup ||
+$.eventName = DeleteSecurityGroup
+'/>
+
+#### 3.11 Network ACL設定の変更に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for changes to Network Access Control Lists*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.11 | 推奨 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = CreateNetworkAcl ||
+$.eventName = CreateNetworkAclEntry ||
+$.eventName = DeleteNetworkAcl ||
+$.eventName = DeleteNetworkAclEntry || 
+$.eventName = ReplaceNetworkAclEntry ||
+$.eventName = ReplaceNetworkAclAssociation
+'/>
+
+#### 3.12 Internet Gateway設定の変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for changes to network gateways*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.12 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = CreateCustomerGateway || 
+$.eventName = DeleteCustomerGateway ||
+$.eventName = AttachInternetGateway || 
+$.eventName = CreateInternetGateway ||
+$.eventName = DeleteInternetGateway || 
+$.eventName = DetachInternetGateway
+'/>
+
+#### 3.13 Route Table設定の変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for route table changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.13 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = CreateRoute ||
+$.eventName = CreateRouteTable || 
+$.eventName = ReplaceRoute || 
+$.eventName = ReplaceRouteTableAssociation || 
+$.eventName = DeleteRouteTable || 
+$.eventName = DeleteRoute || 
+$.eventName = DisassociateRouteTable
+'/>
+
+#### 3.14 VPC設定(新規作成、削除やVPC Peering, Classic Link等)の変更に対して、アラーム通知設定されていること `<Badge text="必須" type="error"/>`
 *(original) Ensure a log metric filter and alarm exist for VPC changes*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 3.14 | 必須 | あり |
+
+この項目は、OrBITがAWSアカウントの払い出しの際に代替して[CloudTrailログに対するCloudWatchアラーム](/guide/aws/account-management#自動で設定されるサービスとリソース)を設定することで遵守されます。
+
+<CodeDetail
+title="このアラームの対象となるアクションを見る" 
+code='$.eventName = CreateVpc ||
+$.eventName = DeleteVpc || 
+$.eventName = ModifyVpcAttribute ||
+$.eventName = AcceptVpcPeeringConnection ||
+$.eventName = CreateVpcPeeringConnection || 
+$.eventName = DeleteVpcPeeringConnection || 
+$.eventName = RejectVpcPeeringConnection || 
+$.eventName = AttachClassicLinkVpc ||
+$.eventName = DetachClassicLinkVpc ||
+$.eventName = DisableVpcClassicLink) || 
+$.eventName = EnableVpcClassicLink
+'/>
+
+#### 3.15 各種アラームの通知先は常に最新状態にメンテナンスされていること <Badge text="必須" type="error"/>
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| なし | なし | 必須 | なし |
+
+この項目は、OrBITでは提供しません。
+
 
 ### 4. Networking
 ネットワークの構成、および通信ポートの公開範囲に関する項目です。
 
+#### Security Groupにて、0.0.0.0/0からport 22(SSH)への接続が許可されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no security groups allow ingress from 0.0.0.0/0 to port 22*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 4.1 | 必須 | 逸脱検出のみ |
+
+この項目は、[「AWS Configルール(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)で遵守されます。
+
+#### Security Groupにて、0.0.0.0/0からport 3389(RDP)への接続が許可されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 4.2 | 必須 | 逸脱検出のみ |
+
+この項目は、[「AWS Configルール(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)で遵守されます。
+
+#### デフォルトのSecurity Groupが全ての通信を許可していないこと <Badge text="推奨" type="warning"/>
 *(original) Ensure the default security group of every VPC restricts all traffic*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 4.3 | 必須 | 逸脱検出のみ |
+
+この項目は、[「AWS Configルール(vpc-default-security-group-closed)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-default-security-group-closed.html)で遵守されます。
+
+#### VPC Peering越しのルーティングは必要最低限に絞られていること <Badge text="任意" type="tip"/>
 *(original) Ensure routing tables for VPC peering are "least access"*
+| 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
+| :----: | :-----: | :-------: | :----------: |
+| CIS v1.2.0 | 4.4 | 任意 | なし |
 
-## 「検出」のガードレール
-
-以下の項目が検出されます。
-
-| 検出項目      | 検出手段 |  |
-| ------------ |:------------:| ------------:|
-| foo          | bar          | baz          |
-| qux          | quux         | corge        |
-| grault       | garply       | waldo        |
-
+この項目は、OrBITでは提供されません。
 
 ### 検出時のエスカレーション
 

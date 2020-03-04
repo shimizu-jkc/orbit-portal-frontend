@@ -11,6 +11,8 @@ module.exports = {
     }
   },
   plugins: [
+    '@vuepress/back-to-top',
+    '@vuepress/medium-zoom'
     /*"smooth-scroll"*/
   ],
   themeConfig: {
@@ -22,9 +24,10 @@ module.exports = {
       { 
         text: "ユーザーガイド", 
         items: [
-          { text: "はじめに", link: "/guide/common/" },
+          { text: "はじめに", link: "/guide/common/introduction" },
           { text: "AWSを利用する場合", link: "/guide/aws/" },
-          { text: "GCPを利用する場合", link: "/guide/gcp/" }
+          { text: "GCPを利用する場合", link: "/guide/gcp/" },
+          { text: "用語集", link: "/guide/common/glossary" }
         ]
       },
       { 
@@ -59,7 +62,7 @@ module.exports = {
       { 
         text: "カタログ", 
         items: [
-          { text: "一覧", link: "/catalog/list" },
+          { text: "カタログ一覧", link: "/catalog/list" },
           { text: "フィードバック", link: "/catalog/feedback" }
         ]
       },
@@ -67,7 +70,6 @@ module.exports = {
         text: "サポート", 
         items: [
           { text: "リリースノート", link: "/support/release" },
-          { text: "用語集", link: "/support/glossary" },
           { text: "お問い合わせ", link: "/support/contact" }
         ]
       },
@@ -95,7 +97,6 @@ function getGuideSidebarForAWS() {
       collapsable: true,
       children: [
         '',
-        'architecture',
         'account-management',
         'billing',
         'id-management',

@@ -4,7 +4,7 @@ module.exports = {
   dest: "release",
   markdown: {
     toc: {
-      includeLevel: [2, 3]
+      includeLevel: [2, 3, 4]
     },
     extendMarkdown: md => {
       md.set({ breaks: true });
@@ -12,12 +12,13 @@ module.exports = {
   },
   plugins: [
     '@vuepress/back-to-top',
-    '@vuepress/medium-zoom'
+    '@vuepress/medium-zoom',
+    'vuepress-plugin-table-of-contents'
     /*"smooth-scroll"*/
   ],
   themeConfig: {
     logo: "/img/logo.jpg",
-    lastUpdated: 'Last Updated',
+    //lastUpdated: 'Last Updated',
     //Navigator Setting
     nav: [
       { text: "おしらせ", link: "/information/" },

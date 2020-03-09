@@ -1,7 +1,9 @@
 <template>
   <figure>
     <img :src="imagesrc" alt=""/>
-    <figcaption><i>{{ caption }}</i></figcaption>
+    <div style="text-align:right">
+      <figcaption><i>{{ caption }}</i></figcaption>
+    </div>
   </figure>
 </template>
 

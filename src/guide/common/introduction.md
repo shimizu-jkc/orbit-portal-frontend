@@ -80,8 +80,8 @@ OrBITコアシステムは、**SoR**の側面における支援を提供し、�
 #### OrBITベースライン
 OrBITベースラインとは、OrBITから払い出されたすべてのクラウド環境に共通でプロビジョニングされるリソース群です。各プロジェクト側のクラウド環境で収集した情報をOrBITコアシステムへ転送することで、様々な支援を実現します。
 
-プロビジョニングされるリソースは、利用するクラウドベンダ毎に異なりますので、詳細については以下を参照してください。
-- [AWSにおけるベースラインリソース](/guide/aws/baseline)
+プロビジョニングされるリソースは利用するクラウドベンダ毎に異なりますので、詳細については以下を参照してください。
+- [AWSにおけるベースラインのリソース一覧](/guide/aws/baseline)
 
 ### 2. OrBITカタログシステム
 OrBITカタログシステムでは、**カタログ**と呼ばれる様々なモノが提供され、それをプロジェクト側が必要に応じて利用することで、**SoE**の側面における支援を提供します。
@@ -109,9 +109,9 @@ OrBITポータルは本サイトであり、OrBITの利用申請や問い合わ�
 「責任共有モデル」とは、サービスの提供者側と利用者側の双方で役割を分け、セキュリティ全体に対する責任を担保しようとする考え方です。
 
 一般的なパブリッククラウドでも多く採用されている考え方であり、例えば以下のようなセキュリティに関する考え方が各社から示されています。
-- [AWSの責任共有モデル](https://aws.amazon.com/jp/compliance/shared-responsibility-model/)
-- [Google Cloud Platformでのセキュリティとコンプライアンス](https://cloud.google.com/security/overview?hl=ja)
-- [Azureにおける共同責任](https://docs.microsoft.com/ja-jp/azure/security/fundamentals/shared-responsibility)
+- [「AWSの責任共有モデル」](https://aws.amazon.com/jp/compliance/shared-responsibility-model/)
+- [「Google Cloud Platformでのセキュリティとコンプライアンス」](https://cloud.google.com/security/overview?hl=ja)
+- [「Azureにおける共同責任」](https://docs.microsoft.com/ja-jp/azure/security/fundamentals/shared-responsibility)
 
 OrBITでも、この「責任共有モデル」を採用しています。
 

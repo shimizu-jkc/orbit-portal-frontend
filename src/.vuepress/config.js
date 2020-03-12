@@ -1,10 +1,10 @@
 module.exports = {
   title: "OrBIT Portal",
-  description: "OrBITとは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
+  description: "OrBITは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
   dest: "release",
   markdown: {
     toc: {
-      includeLevel: [2, 3, 4]
+      includeLevel: [2, 3]
     },
     extendMarkdown: md => {
       md.set({ breaks: true });
@@ -63,8 +63,9 @@ module.exports = {
       { 
         text: "カタログ", 
         items: [
+          { text: "カタログとは", link: "/catalog/introduction" },
           { text: "カタログ一覧", link: "/catalog/list" },
-          { text: "フィードバック", link: "/catalog/feedback" }
+          { text: "要望/フィードバック", link: "/catalog/feedback" }
         ]
       },
       { 
@@ -104,6 +105,7 @@ function getGuideSidebarForAWS() {
         'security',
         'threat-detection',
         'audit',
+        'baseline',        
         'faq'
       ]
     }

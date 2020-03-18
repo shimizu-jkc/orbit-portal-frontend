@@ -53,7 +53,7 @@ CISが公開しているセキュリティ基準の原文については、以�
 CISのセキュリティ基準は、AWSサービスの増加や知識の蓄積により、随時更新されるものです。OrBITでも本書の更新に即して、随時内容の精査と更新を行っていきます。
 :::
 
-## リファレンス
+## セキュリティポリシーの一覧
 ここでは、セキュリティポリシーの各項目に関するリファレンスを示します。
 
 ### 1. IAM
@@ -394,7 +394,7 @@ code='$.errorCode = "*UnauthorizedOperation" ||
 $.errorCode = "AccessDenied*"
 '/>
 
-#### 3.2 許可されていないAPIコールに対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
+#### 3.2 MFA無しでのコンソールログインに対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for Management Console sign-in without MFA*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -469,7 +469,7 @@ $.eventName = StartLogging ||
 $.eventName = StopLogging
 '/>
 
-#### 3.6 AWSマネージメントコンソールのログイン失敗に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
+#### 3.6 コンソールへのログイン失敗に対して、アラーム通知設定されていること <Badge text="推奨" type="warning"/>
 *(original) Ensure a log metric filter and alarm exist for AWS Management Console authentication failures*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -609,7 +609,7 @@ $.eventName = DeleteRoute ||
 $.eventName = DisassociateRouteTable
 '/>
 
-#### 3.14 VPC設定(新規作成、削除やVPC Peering, Classic Link等)の変更に対して、アラーム通知設定されていること `<Badge text="必須" type="error"/>`
+#### 3.14 VPC設定(新規作成、削除やVPC Peering, Classic Link等)の変更に対して、アラーム通知設定されていること <Badge text="必須" type="error"/>
 *(original) Ensure a log metric filter and alarm exist for VPC changes*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -643,7 +643,7 @@ $.eventName = EnableVpcClassicLink
 ### 4. Networking
 ネットワークの構成、および通信ポートの公開範囲に関する項目です。
 
-#### Security Groupにて、0.0.0.0/0からport 22(SSH)への接続が許可されていないこと <Badge text="必須" type="error"/>
+#### 4.1 Security Groupにて、0.0.0.0/0からport 22(SSH)への接続が許可されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no security groups allow ingress from 0.0.0.0/0 to port 22*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -651,7 +651,7 @@ $.eventName = EnableVpcClassicLink
 
 この項目は、[「AWS Configルール(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)で遵守されます。
 
-#### Security Groupにて、0.0.0.0/0からport 3389(RDP)への接続が許可されていないこと <Badge text="必須" type="error"/>
+#### 4.2 Security Groupにて、0.0.0.0/0からport 3389(RDP)への接続が許可されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -659,7 +659,7 @@ $.eventName = EnableVpcClassicLink
 
 この項目は、[「AWS Configルール(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)で遵守されます。
 
-#### デフォルトのSecurity Groupが全ての通信を許可していないこと <Badge text="推奨" type="warning"/>
+#### 4.3 デフォルトのSecurity Groupが全ての通信を許可していないこと <Badge text="推奨" type="warning"/>
 *(original) Ensure the default security group of every VPC restricts all traffic*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -667,7 +667,7 @@ $.eventName = EnableVpcClassicLink
 
 この項目は、[「AWS Configルール(vpc-default-security-group-closed)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-default-security-group-closed.html)で遵守されます。
 
-#### VPC Peering越しのルーティングは必要最低限に絞られていること <Badge text="任意" type="tip"/>
+#### 4.4 VPC Peering越しのルーティングは必要最低限に絞られていること <Badge text="任意" type="tip"/>
 *(original) Ensure routing tables for VPC peering are "least access"*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -675,5 +675,30 @@ $.eventName = EnableVpcClassicLink
 
 この項目は、OrBITでは提供されません。
 
+## 特定の操作に対する制限
+OrBITではセキュリティポリシーに準拠するため、プロジェクト側のAWSアカウントに対して操作制限を設けています。これには、例えば、セキュリティポリシーからの逸脱を予防する操作や、ベースラインリソースの削除が含まれます。
 
-### 自身の環境で検出結果を受け取る設定
+以下に、制限される項目を示します。
+
+| AWSサービス | 制限される操作 | 対象リソース |
+| :---- | :---- | :---- |
+| CloudTrail | DeleteTrail<br>PutEventSelectors<br>StopLogging<br>UpdateTrail | arn:aws:cloudtrail:*:*:trail/aws-controltower-* |
+| CloudWatch | Put*<br>Delete*<br>SetAlarmState<br>EnableAlarmActions<br>DisableAlarmActions | arn:aws:cloudwatch:*:*:alarm:orbit-* |
+| CloudWatch<br>Events | PutRule<br>PutTargets<br>RemoveTargets<br>DisableRule<br>DeleteRule | arn:aws:events:*:*:rule/aws-controltower-* |
+| CloudWatch<br>Events | Create*<br>Delete*<br>Put*<br>Remove* | arn:aws:events:*:*:rule/orbit-* |
+| CloudWatch<br>Logs | AssociateKmsKey<br>DisassociateKmsKey<br>PutResourcePolicy<br>PutRetentionPolicy<br>Delete* | arn:aws:logs:*:*:log-group:aws-controltower/CloudTrailLogs:* |
+| Config | TagResource<br>UntagResource | "aws-control-tower"<br>のタグが付与されたリソースすべて |
+| Config | DeleteConfigurationRecorder<br>DeleteDeliveryChannel<br>DeleteRetentionConfiguration<br>PutConfigurationRecorder<br>PutDeliveryChannel<br>PutRetentionConfiguration<br>StopConfigurationRecorder | すべて |
+| Config |PutConfigRule<br>DeleteConfigRule<br>DeleteEvaluationResults<br>DeleteConfigurationAggregator<br>PutConfigurationAggregator | "aws:ResourceTag/aws-control-tower": "managed-by-control-tower"<br>の文字列が付与されたリソースすべて |
+| Lambda | AddPermission<br>CreateEventSourceMapping<br>CreateFunction<br>DeleteEventSourceMapping<br>DeleteFunction<br>DeleteFunctionConcurrency<br>PutFunctionConcurrency<br>RemovePermission<br>UpdateEventSourceMapping<br>UpdateFunctionCode<br>UpdateFunctionConfiguration | arn:aws:lambda:*:*:function:aws-controltower-* |
+| SNS | AddPermission<br>CreateTopic<br>DeleteTopic<br>RemovePermission<br>SetTopicAttributes | arn:aws:sns:*:*:aws-controltower-* |
+| SNS | AddPermission<br>Create*<br>Delete*<br>Set*<br>AddPermission<br>RemovePermission | arn:aws:sns:*:*:orbit-* |
+| GuardDuty | CreateDetector<br>DeleteDetector<br>UpdateDetector<br>CreateMembers<br>InviteMembers<br>DeclineInvitations<br>DeleteInvitations | arn:aws:guardduty:*:*:detector/* |
+
+::: warning ATTENTION
+基本的にこれらの操作制限の緩和はできませんが、サービス開発に大きな支障をきたす場合は、[問い合わせ窓口](/support/contact)よりお問い合わせください。
+:::
+
+
+
+

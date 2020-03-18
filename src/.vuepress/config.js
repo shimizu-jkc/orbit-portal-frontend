@@ -104,6 +104,7 @@ function getGuideSidebarForAWS() {
         'id-management',
         'security',
         'threat-detection',
+        'monitoring',
         'audit',
         'baseline',        
         'faq'

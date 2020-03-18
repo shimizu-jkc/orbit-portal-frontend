@@ -4,9 +4,8 @@ OrBITではAWSアカウントの払い出しの際に、全てのAWSアカウン
 [[toc]]
 
 ## アーキテクチャ
-各AWSアカウントでのベースラインの構成は以下の通りです。
-
-<CaptionedImage src="" caption="アーキテクチャ"/>
+各AWSアカウントにおけるベースラインのリソースは、その目的毎にスタックという名称で分類されます。スタック、および各スタックに含まれるリソースの構成を示した図が以下になります。
+<CaptionedImage src="baseline_architecture.png" caption="ベースラインアーキテクチャ"/>
 
 ## リソース管理
 ベースラインのリソースは全て*CloudFormation*のスタックとして管理されます。  
@@ -21,8 +20,8 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 :::
 
 ## リソース一覧
-ここでは、*CloudFormation*のスタックとして提供される各種リソースについて説明します。
-より詳細な情報については、*CloudFormation*のコンソール画面からご確認ください。
+ここでは、スタックとして提供される各リソースについて説明します。
+より詳細な情報については、*CloudFormation*のコンソール画面から直接ご確認ください。
 
 ### 監査ログ(API)スタック
 ---
@@ -103,36 +102,65 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 ### セキュリティポリシー準拠状態確認スタック
 ---
-(スタック名) **
+(スタック名) *StackSet-SC-904580840362-pp-op2ztodi3ahpk-XXX*
 
 これらのリソースは、AWSアカウント内の**セキュリティポリシーに対する準拠状態を確認・通知**することで、セキュリティ監視に使用されます。
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| Config | ルール |  | サポートリージョン |  |
-
+| Config | ルール | orbit-AccessKeyRotated | サポートリージョン | ポリシー[[1.4]]()<br>準拠のため |
+| Config | ルール | orbit-CMKBackingKeyRotationEnabled | サポートリージョン | ポリシー[[2.8]]()<br>準拠のため |
+| Config | ルール | orbit-VpcFlowLogsEnabled | サポートリージョン | ポリシー[[2.9]]()<br>準拠のため |
+| Config | ルール | orbit-DisallowSpecifiedPort | サポートリージョン | ポリシー[[4.1/4.2]]()<br>準拠のため |
+| Config | ルール | orbit-VpcDefaultSecurityGroupClosed | サポートリージョン | ポリシー[[4.3]]()<br>準拠のため |
 
 ### セキュリティポリシー逸脱検出スタック
 ---
-(スタック名) **
+(スタック名) *StackSet-SC-904580840362-pp-wavzgnmpgn4ng-XXX*
 
 これらのリソースは、AWSアカウント内の**セキュリティポリシーを逸脱する可能性のある操作を検知・通知**することで、セキュリティ監視に使用されます。
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| CloudWatch<br>Logs | メトリクスフィルタ | AuthorizationFailuresMetricFilter*1 | オレゴン | []() |
-| CloudWatch | アラーム | orbit-CloudTrailAuthorizationFailures | オレゴン | []() |
+| CloudWatch<br>Logs | メトリクスフィルタ | AuthorizationFailuresMetricFilter*1 | オレゴン | ポリシー[[3.1]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailAuthorizationFailures | オレゴン | ポリシー[[3.1]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInWithoutMFAMetricFilter*1 | オレゴン | ポリシー[[3.2]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInWithoutMFA | オレゴン | ポリシー[[3.2]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | RootAccountUsedMetricFilter*1 | オレゴン | ポリシー[[3.3]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailRootAccountUsed | オレゴン | ポリシー[[3.3]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | IAMPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.4]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailIAMPolicyChanges | オレゴン | ポリシー[[3.4]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | CloudTrailChangesMetricFilter*1 | オレゴン | ポリシー[[3.5]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.5]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInFailuresMetricFilter*1 | オレゴン | ポリシー[[3.6]]()準拠のため 
+| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInFailures | オレゴン | ポリシー[[3.6]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | CMKsDisabledMetricFilter*1 | オレゴン | ポリシー[[3.7]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailCMKsDisabled | オレゴン | ポリシー[[3.7]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | S3BucketPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.8]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailS3BucketPolicyChanges | オレゴン | ポリシー[[3.8]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConfigChangesMetricFilter*1 | オレゴン | ポリシー[[3.9]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.9]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | SecurityGroupChangesMetricFilter*1 | オレゴン | ポリシー[[3.10]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailSecurityGroupChanges | オレゴン | ポリシー[[3.10]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | NetworkAclChangesMetricFilter*1 | オレゴン | ポリシー[[3.11]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailNetworkAclChanges | オレゴン | ポリシー[[3.11]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | GatewayChangesMetricFilter*1 | オレゴン | ポリシー[[3.12]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailGatewayChanges | オレゴン | ポリシー[[3.12]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | RouteTableChangesMetricFilter*1 | オレゴン | ポリシー[[3.13]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailRouteTableChanges | オレゴン | ポリシー[[3.13]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | VpcChangesMetricFilter*1 | オレゴン | ポリシー[[3.14]]()準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailVpcChanges | オレゴン | ポリシー[[3.14]]()準拠のため |
 
 *1 正確には以下のリソース名が完全リソース名となります。
-`SC-012345678910-pp-kvndai34l4m2o-XXXMetricFilter-ZT22M0XB756S`
+`SC-012345678910-pp-wavzgnmpgn4ng-XXXMetricFilter-XXX`
 
-::: tip NOTE
+::: tip INFO
 各アラームとメトリクスは、検知元が*CloudTrail*のログであるため、ロググループの存在するオレゴンにのみプロビジョニングされます。
 :::
 
 ### 脅威検知スタック
 ---
-(スタック名) *StackSet-SC-904580840362-pp-5zrwvh6w7bp3o-XXX*
+(スタック名) *StackSet-SC-904580840362-pp-jcnxehghcgwci-XXX*
 
 これらのリソースは、AWSアカウント内の**脅威を検知・通知**することで、セキュリティ監視に使用されます。
 

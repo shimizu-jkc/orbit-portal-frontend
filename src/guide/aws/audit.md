@@ -1,10 +1,10 @@
-# 監査ログの収集
+# 監査ログの記録と収集
 
 クラウドを利用したサービスにおいて、監査ログを記録する事は非常に重要です。
 
 「いつ」「誰が」「何を」操作したかを記録する事で、利用状況や不正アクセスの有無を把握し、情報漏洩といった事故が発生した際の正確な検知を可能にします。また、事後対応の施策として活用するだけでなく、兆候をつかむ事で予防にも役立てる事ができます。
 
-OrBITでは、監査ログを記録・収集する仕組みを組み込んだAWSアカウントを提供します。
+OrBITでは、監査ログを記録・収集する仕組みを備えたAWSアカウントを提供します。
 
 [[toc]]
 
@@ -30,35 +30,98 @@ AWSアカウント上での監査ログの記録には、以下のサービス�
     - [「AWS Config 料金」](https://aws.amazon.com/jp/config/pricing/)
 
 ::: warning ATTENTION
-提供されたAWSアカウントでは、*AWS CloudTrail* と *AWS Config*は無効にすることはできません。これは[「予防のセキュリティガードレール」](/guide/aws/security/#「予防」のガードレール)によって制限されるものです。
+プロジェクトのAWSアカウントでは、[セキュリティポリシー](/guide/aws/security#特定の操作に対する制限)により*AWS CloudTrail* と *AWS Config*を無効にすることはできません。
 :::
 
-## ログの記録と配信
+## ログ種別
+OrBITでは、以下の２種類の監査ログを記録します。
+
+- 操作ログ
+    
+    操作ログは、マネジメントコンソールやAWS CLI経由で行われた全てのAPIを記録したログであり、*AWS CloudTrail*によって管理されます。
+
+- 構成変更ログ
+
+    構成変更ログは、特定のリソースに対しての変更や削除の履歴を記録したログであり、*AWS Config*によって管理されます。
+
+## アーキテクチャ
+監査ログの記録、および収集する仕組みに関しては、以下を参照してください。
+- [ベースラインのアーキテクチャ](/guide/aws/baseline#アーキテクチャ)
+
+## 操作ログの確認と解析
+操作ログは、基本的にマネジメントコンソールから利用できる*CloudTrail*コンソールにて確認します。
+確認の手順については、以下のチュートリアルを参照して下さい。
+- [CloudTrailコンソールを使用して操作ログを確認する](#cloudtrailコンソールを使用して操作ログを確認する)
+
+また、操作ログは*CloudWatchLogs*へと転送する設定になっています。
+*CloudWatchLogs*では、*CloudWatchLogs Insight*という強力な解析ツールを使用することができます。
+確認の手順については、以下のチュートリアルを参照して下さい。
+- [CloudWatchLogs Insightsを使用して操作ログを解析する](#cloudwatchlogs-insightsを使用して操作ログを解析する)
+
+::: warning ATTENTION
+*CloudTrail*のログはアクティビティが発生してから90日間保管されますが、*CloudWatchLogs*に転送されるログは14日間で失効します。
+:::
+
+## 構成変更ログの確認と解析
+構成変更ログは、基本的にマネジメントコンソールから利用できる*Config*コンソールにて確認・解析します。
+確認・解析の手順については、以下のチュートリアルを参照して下さい。
+- [Configコンソールを使用して構成変更ログを確認する](#configコンソールを使用して構成変更ログを確認する)
+- [Configコンソールを使用して構成変更ログの詳細を確認する](#configコンソールを使用して構成変更ログの詳細を確認する)
 
 ## ログの収集
-また、これらのサービスを有効にすると共に、各種ログがOrBITのコアシステムへとログ転送設定されます。
+プロジェクトアカウントに記録された全ての監査ログは、OrBITコアシステムへと転送され、厳重に管理されます。
 
-## ログの一元管理
-各AWSアカウントから収集されたログは、OrBITのコアシステムにより厳重に管理されます。
+### 管理ポリシー
+各プロジェクトアカウントから収集したログは以下のポリシーにて管理されます。
 
-### セキュリティ
+| 項目 | 設定 |
+| :---: | :----: | 
+| 公開範囲 |　OrBIT運用チームのみ閲覧可能 |　
+| 暗号化 | 有効(AES-256) |
+| バージョニング | 有効 | 
+| ログファイルの検証 | 有効 |
+| アクセスログの記録 | 有効 |
+| 保管期間　| 365日 |
 
-### 保管期間
+::: tip NOTE
+監査ログの保管に掛かる料金はOrBITにて負担しますが、保管期間は365日までとなっています。もし、これ以上の期間残しておく必要がある際はご連絡ください。
+:::
 
-## ログの解析
+### 解析依頼
+プロジェクトアカウントで記録していた監査ログが失効してしまった場合、[こちら](/request/analyze-auditlog)から監査ログの解析依頼を申請できます。
 
-### ～日までのログ
-確認するには、以下の手順を踏んでください。
+## チュートリアル
 
-1. AWSコンソールを開く
-1. リージョンをオレゴンに変更する。
-2. CloudWatchコンソールを開く
-3. `aws-controltower/CloudTrailLogs`のロググループを開く。
-4. 
-```
-aws-controltower/CloudTrailLogs 
-```
+### CloudTrailコンソールを使用して操作ログを確認する
+ここでは、操作ログを確認するために、マネジメントコンソールから利用可能な*CloudTrail*コンソールを使った確認の仕方を紹介します。
 
-### それ以降のログ
+1. マネジメントコンソール にサインインし、[CloudTrailコンソール](https://console.aws.amazon.com/cloudtrail/home/)を開きます。
 
-基盤側でログを1年間持ってるから[ここ](/request/analyze-auditlog)から依頼してね。
+2. 最新のイベントに関するダッシュボードの情報を確認します。
+これらのイベントの1つは ConsoleSignin イベントである必要があり、これはマネジメントコンソール にサインインしたことを示しています。 
+![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-dashboard.png)
+
+3. イベントの詳細を表示するには、これを展開します。
+![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-dashboard-expand-event.png)
+
+4. ナビゲーションペインで **[Event history (イベント履歴)]** を選択します。
+最新のイベントが最初に表示された、フィルタリングされたイベントのリストが表示されます。イベントのデフォルトのフィルターは読み取り専用で、**[false]** に設定されています。削除アイコンを選択することで、このフィルターをクリアできます。 
+![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-event-history.png)
+
+5. デフォルトのフィルターなしでさらに多くのイベントが表示されます。多くの方法でイベントをフィルタリングすることができます。たとえば、すべてのコンソールログインイベントを表示するには、**[Event name (イベント名)]** を選択して、**[ConsoleLogin]** を指定します。フィルターはユーザーが選択できます。
+![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-event-history-filters.png)
+
+6. イベント履歴を保存するには、CSVまたはJSON形式のファイルとしてダウンロードします。
+![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-event-history-download.png)
+
+### CloudWatchLogs Insightsを使用して操作ログを解析する
+このチュートリアルについては、以下のサイトを参照してください。
+- [CloudWatch Logs Insights で監査ログの分析をしてみる](https://dev.classmethod.jp/cloud/aws/analyze-cloudtrail-cloud-watch-logs-insights/)
+
+### Configコンソールを使用して構成変更ログを確認する
+このチュートリアルについては、以下のサイトを参照してください。
+- [AWS Configで検出されたリソースの検索](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/looking-up-discovered-resources.html)
+
+### Configコンソールを使用して構成変更ログの詳細を確認する
+このチュートリアルについては、以下のサイトを参照してください。
+- [AWS Configで検出されたリソースの設定詳細の表示](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/view-manage-resource-console.html)

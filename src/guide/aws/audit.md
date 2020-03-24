@@ -1,8 +1,8 @@
 # 監査ログの記録と収集
 
-クラウドを利用したサービスにおいて、監査ログを記録する事は非常に重要です。
+クラウドを利用したサービスにおいて、監査ログを記録することは非常に重要です。
 
-「いつ」「誰が」「何を」操作したかを記録する事で、利用状況や不正アクセスの有無を把握し、情報漏洩といった事故が発生した際の正確な検知を可能にします。また、事後対応の施策として活用するだけでなく、兆候をつかむ事で予防にも役立てる事ができます。
+「いつ」「誰が」「何を」操作したかを記録することで、利用状況や不正アクセスの有無を把握し、情報漏洩といったこと故が発生した際の正確な検知を可能にします。また、事後対応の施策として活用するだけでなく、兆候をつかむことで予防にも役立ちます。
 
 OrBITでは、監査ログを記録・収集する仕組みを備えたAWSアカウントを提供します。
 
@@ -30,7 +30,7 @@ AWSアカウント上での監査ログの記録には、以下のサービス�
     - [「AWS Config 料金」](https://aws.amazon.com/jp/config/pricing/)
 
 ::: warning ATTENTION
-プロジェクトのAWSアカウントでは、[セキュリティポリシー](/guide/aws/security#特定の操作に対する制限)により*AWS CloudTrail* と *AWS Config*を無効にすることはできません。
+プロジェクトアカウントでは、[セキュリティポリシー](/guide/aws/security#特定の操作に対する制限)により*AWS CloudTrail* と *AWS Config*を無効にすることはできません。
 :::
 
 ## ログ種別
@@ -45,33 +45,33 @@ OrBITでは、以下の２種類の監査ログを記録します。
     構成変更ログは、特定のリソースに対しての変更や削除の履歴を記録したログであり、*AWS Config*によって管理されます。
 
 ## アーキテクチャ
-監査ログの記録、および収集する仕組みに関しては、以下を参照してください。
-- [ベースラインのアーキテクチャ](/guide/aws/baseline#アーキテクチャ)
+監査ログの記録、および収集する仕組みは、[「ベースラインのアーキテクチャ」](/guide/aws/baseline#アーキテクチャ)を参照してください。
 
 ## 操作ログの確認と解析
-操作ログは、基本的にマネジメントコンソールから利用できる*CloudTrail*コンソールにて確認します。
+操作ログは、基本的にマネジメントコンソールから利用できる*AWS CloudTrail*コンソールにて確認します。
 確認の手順については、以下のチュートリアルを参照して下さい。
-- [CloudTrailコンソールを使用して操作ログを確認する](#cloudtrailコンソールを使用して操作ログを確認する)
+- [「CloudTrailコンソールを使用して操作ログを確認する」](#cloudtrailコンソールを使用して操作ログを確認する)
 
 また、操作ログは*CloudWatchLogs*へと転送する設定になっています。
 *CloudWatchLogs*では、*CloudWatchLogs Insight*という強力な解析ツールを使用することができます。
 確認の手順については、以下のチュートリアルを参照して下さい。
-- [CloudWatchLogs Insightsを使用して操作ログを解析する](#cloudwatchlogs-insightsを使用して操作ログを解析する)
+- [「CloudWatchLogs Insightsを使用して操作ログを解析する」](#cloudwatchlogs-insightsを使用して操作ログを解析する)
 
 ::: warning ATTENTION
 *CloudTrail*のログはアクティビティが発生してから90日間保管されますが、*CloudWatchLogs*に転送されるログは14日間で失効します。
 :::
 
 ## 構成変更ログの確認と解析
-構成変更ログは、基本的にマネジメントコンソールから利用できる*Config*コンソールにて確認・解析します。
+構成変更ログは、基本的にマネジメントコンソールから利用できる*AWS Config*コンソールにて確認・解析します。
 確認・解析の手順については、以下のチュートリアルを参照して下さい。
-- [Configコンソールを使用して構成変更ログを確認する](#configコンソールを使用して構成変更ログを確認する)
-- [Configコンソールを使用して構成変更ログの詳細を確認する](#configコンソールを使用して構成変更ログの詳細を確認する)
+- [「Configコンソールを使用して構成変更ログを確認する」](#configコンソールを使用して構成変更ログを確認する)
+- [「Configコンソールを使用して構成変更ログの詳細を確認する」](#configコンソールを使用して構成変更ログの詳細を確認する)
 
 ## ログの収集
 プロジェクトアカウントに記録された全ての監査ログは、OrBITコアシステムへと転送され、厳重に管理されます。
 
 ### 管理ポリシー
+---
 各プロジェクトアカウントから収集したログは以下のポリシーにて管理されます。
 
 | 項目 | 設定 |
@@ -88,14 +88,15 @@ OrBITでは、以下の２種類の監査ログを記録します。
 :::
 
 ### 解析依頼
-プロジェクトアカウントで記録していた監査ログが失効してしまった場合、[こちら](/request/analyze-auditlog)から監査ログの解析依頼を申請できます。
+---
+プロジェクトアカウントで記録していた監査ログが失効してしまった場合、[「監査ログ確認申請フォーム」](/request/analyze-auditlog)から監査ログの解析依頼を申請できます。
 
 ## チュートリアル
 
-### CloudTrailコンソールを使用して操作ログを確認する
-ここでは、操作ログを確認するために、マネジメントコンソールから利用可能な*CloudTrail*コンソールを使った確認の仕方を紹介します。
+### AWS CloudTrailコンソールを使用して操作ログを確認する
+ここでは、操作ログを確認するために、マネジメントコンソールから利用可能な*AWS CloudTrail*コンソールを使った確認の仕方を紹介します。
 
-1. マネジメントコンソール にサインインし、[CloudTrailコンソール](https://console.aws.amazon.com/cloudtrail/home/)を開きます。
+1. マネジメントコンソール にサインインし、[AWS CloudTrailコンソール](https://console.aws.amazon.com/cloudtrail/home/)を開きます。
 
 2. 最新のイベントに関するダッシュボードの情報を確認します。
 これらのイベントの1つは ConsoleSignin イベントである必要があり、これはマネジメントコンソール にサインインしたことを示しています。 
@@ -118,12 +119,12 @@ OrBITでは、以下の２種類の監査ログを記録します。
 
 ### CloudWatchLogs Insightsを使用して操作ログを解析する
 このチュートリアルについては、以下のサイトを参照してください。
-- [CloudWatch Logs Insights で監査ログの分析をしてみる](https://dev.classmethod.jp/cloud/aws/analyze-cloudtrail-cloud-watch-logs-insights/)
+- [「CloudWatch Logs Insights で監査ログの分析をしてみる」](https://dev.classmethod.jp/cloud/aws/analyze-cloudtrail-cloud-watch-logs-insights/)
 
 ### Configコンソールを使用して構成変更ログを確認する
 このチュートリアルについては、以下のサイトを参照してください。
-- [AWS Configで検出されたリソースの検索](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/looking-up-discovered-resources.html)
+- [「AWS Configで検出されたリソースの検索」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/looking-up-discovered-resources.html)
 
 ### Configコンソールを使用して構成変更ログの詳細を確認する
 このチュートリアルについては、以下のサイトを参照してください。
-- [AWS Configで検出されたリソースの設定詳細の表示](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/view-manage-resource-console.html)
+- [「AWS Configで検出されたリソースの設定詳細の表示」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/view-manage-resource-console.html)

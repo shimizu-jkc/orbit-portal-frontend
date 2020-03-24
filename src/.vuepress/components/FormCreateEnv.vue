@@ -1,10 +1,10 @@
 <template>
   <el-form ref="form" :model="form" label-position="top" label-width="150px" >
     <el-form-item label="申請する前に">
-      <el-col><el-checkbox label="個人目的ではなくプロジェクトでの利用である。" v-model="form.agreement1"></el-checkbox></el-col>
-      <el-col><el-checkbox label="事業部にてクラウド利用に関する予算を確保済みである。" v-model="form.agreement2"></el-checkbox></el-col>
-      <el-col><el-checkbox label="払い出しには審査があることを理化している。" v-model="form.agreement3"></el-checkbox></el-col>
-      <el-col><el-checkbox label="払い出しまでに3営業日以上掛かることを理解している。" v-model="form.agreement4"></el-checkbox></el-col>
+      <el-col><el-checkbox label="プロジェクトとしての体制が構築されている。" v-model="form.agreement1"></el-checkbox></el-col>
+      <el-col><el-checkbox label="クラウドの利用に関して決裁が完了している。" v-model="form.agreement2"></el-checkbox></el-col>
+      <el-col><el-checkbox label="払い出しには審査があることを理解している。" v-model="form.agreement3"></el-checkbox></el-col>
+      <el-col><el-checkbox label="払い出しまでに最大5営業日程度掛かることを理解している。" v-model="form.agreement4"></el-checkbox></el-col>
     </el-form-item>
     <el-form-item label="クラウドベンダ">
       <el-select v-model="form.vendor" placeholder="ベンダを選択してください">

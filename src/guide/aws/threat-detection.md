@@ -1,12 +1,12 @@
 # 脅威検知
 
-パブリッククラウドはインターネット経由でのアクセスが可能であるが故、サイバー攻撃の標的にされる事が多く、その攻撃の手法は年々巧妙化し、発見し難くなっています。
+パブリッククラウドはインターネット経由でのアクセスが可能であるが故、サイバー攻撃の標的にされることが多く、その攻撃の手法は年々巧妙化し、発見し難くなっています。
 
-これらのサイバー攻撃への対策を怠ると、「個人情報の漏洩」「IDの不正利用」「データの消失」といった甚大な損害を被る事となり、顧客からの信頼の失墜へと繋がります。
+これらのサイバー攻撃への対策を怠ると、「個人情報の漏洩」「IDの不正利用」「データの消失」といった甚大な損害を被ることとなり、顧客からの信頼の失墜へと繋がります。
 
 OrBITでは、サイバー攻撃に代表される様々な脅威を検知し、通知する仕組みを提供します。
 
-ただし、この仕組みを利用しているから大丈夫、という訳ではありません。
+ただし、この仕組みを利用しているから大丈夫という訳ではありません。
 セキュリティインシデントは早期の発見と迅速な対策が重要です。
 
 プロジェクト側も不測の事態へ備え、セキュアな運用体制を構築する必要があります。
@@ -14,7 +14,7 @@ OrBITでは、サイバー攻撃に代表される様々な脅威を検知し、
 [[toc]]
 
 ## 利用するAWSサービス
-AWSアカウント内の脅威の検知、および通知には、以下のサービスを利用しています。
+AWSアカウント内の脅威の検知および通知には、以下のサービスを利用しています。
 
 - ***Amazon GuardDuty***
 
@@ -35,38 +35,34 @@ AWSアカウント内の脅威の検知、および通知には、以下のサ�
     - [「Amazon SNS料金」](https://aws.amazon.com/jp/sns/pricing/)    
 
 ## アーキテクチャ
-脅威検知、および通知をする仕組みに関しては、以下を参照してください。
-- [ベースラインのアーキテクチャ](/guide/aws/baseline#アーキテクチャ)
+脅威検知および通知をする仕組みは、[「ベースラインのアーキテクチャ」](/guide/aws/baseline#アーキテクチャ)を参照してください。
 
 ## 検知元となるデータソース
 *Amazon GuardDuty*は、下記のデータソースを分析して識別処理を行います。
-- **CloudTrailイベントログ**
+- **AWS CloudTrailイベントログ**
 - **VPCフローログ**
 - **Route53クエリログ**
 
-このうち、**CloudTrailイベントログ**は、OrBITからAWSアカウントを払い出した時点で有効になっています。しかし、**VPCフローログ**と**Route53クエリログ**は、有効化されていません。
+このうち、**AWS CloudTrailイベントログ**は、プロジェクトアカウントを払い出した時点で有効になっています。しかし、**VPCフローログ**と**Route53クエリログ**は、有効化されていません。
 
 より精度の高い脅威検知を行う為、すべてのログを有効化することを推奨します。
 
 ::: tip NOTE
-VPCやRoute53のリソースは、プロジェクトで必ず利用するサービスとは限らない為、これらのサービスに帰属したログの設定については、利用する側の責務となる事をご理解ください。
+VPCやRoute53のリソースは、プロジェクトで必ず利用するサービスとは限らない為、これらのサービスに帰属したログの設定については、利用する側の責務となることをご理解ください。
 :::
 
 ## 検知する脅威の一覧
-*Amazon GuardDuty*で検知する脅威に関しては、以下を参照してください。
-- [「GuardDutyアクティブな結果タイプ」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_finding-types-active.html)
+*Amazon GuardDuty*で検知する脅威に関しては、[「GuardDutyアクティブな結果タイプ」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_finding-types-active.html)を参照してください。
 ::: tip INFO
 *Amazon GuardDuty*で検知可能な脅威種別は、常に更新されます。
-更新の際に通知を受け取る場合は、以下を参照してください。
-- [「GuardDutyアナウンスメント」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_sns.html)
+更新の際に通知を受け取る場合は、[「GuardDutyアナウンスメント」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_sns.html)を参照してください。
 :::
 
 ## 検知した脅威の通知
-*Amazon GuardDuty*で検知した脅威については、OrBITが提供する[脅威検知スタック](/guide/aws/baseline#脅威検知スタック)における
-SNSトピック: `orbit-AggregateGuardDutyNotification`を購読する事で通知を受け取る事ができます。
+*Amazon GuardDuty*で検知した脅威については、OrBITベースラインにおける[脅威検知スタック](/guide/aws/baseline#脅威検知スタック)のSNSトピック `orbit-AggregateGuardDutyNotification`を購読することで通知を受け取ることができます。
 
 SNSトピックのサブスクライバについては、プロジェクト側で自由に設定が可能です。
-ここでは、一例として**Eメール**、および**AWS Chatbotを利用したSlackへの転送**の文面を紹介します。
+ここでは一例として、EメールとAWS Chatbotを利用してSlackへ転送した際の文面を紹介します。
 
 - Eメールへ送信した場合
 
@@ -158,17 +154,14 @@ SNSトピックのサブスクライバについては、プロジェクト側�
 <CaptionedImage src="gd_chatbot_sample.png"/>
 
 ::: warning ATTENTION
-AWSアカウント払い出しの際に「セキュリティ担当者」の役割が割り当てられた方は、事前にSNSトピックへの購読設定を行っていますが、それ以外の方は設定されていませんので、プロジェクトの体制に応じて適切に設定してください。
+プロジェクトアカウント払い出しの際に「セキュリティ担当者」の役割が割り当てられた方は、事前にSNSトピックへの購読設定を行っていますが、それ以外の方は設定されていませんので、プロジェクトの体制に応じて適切に設定してください。
 :::
 
 ## 脅威内容の確認
-検知した脅威の詳細については、GuardDutyのコンソールから確認する事ができます。
-詳細は以下を参照してください。
-- [「GuardDuty 結果の検索と分析」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_findings.html#guardduty_working-with-findings)
+検知した脅威の詳細については、マネジメントコンソールから利用できる*Amazon GuardDuty*コンソールから確認することができます。詳細は[「GuardDuty 結果の検索と分析」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_findings.html#guardduty_working-with-findings)を参照してください。
 
 ## 脅威への対策
-検知した脅威への具体的な対策については、以下を参照してください。
-- [「GuardDuty によって検出されたセキュリティ問題の修復」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_remediate.html)
+検知した脅威への具体的な対策例については、 [「GuardDuty によって検出されたセキュリティ問題の修復」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_remediate.html)を参照してください。
 
 ::: tip NOTE
 具体的な対策案を立てられない際は、[問い合わせ窓口](/support/contact)よりお問い合わせください。

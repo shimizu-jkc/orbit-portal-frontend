@@ -114,6 +114,8 @@ OrBITでは、以下の２種類の監査ログを記録します。
 6. イベント履歴を保存するには、CSVまたはJSON形式のファイルとしてダウンロードします。
 ![](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/images/cloudtrail-event-history-download.png)
 
+これでこのチュートリアルは終了です。
+
 ### CloudWatchLogs Insightsを使用して操作ログを解析する
 このチュートリアルについては、以下のサイトを参照してください。
 - [CloudWatch Logs Insights で監査ログの分析をしてみる](https://dev.classmethod.jp/cloud/aws/analyze-cloudtrail-cloud-watch-logs-insights/)

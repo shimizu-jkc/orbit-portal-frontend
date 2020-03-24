@@ -18,10 +18,15 @@ Amazonが提供しているクラウドサービスの総称。Amazonが自社�
 ##### C
 ---
 ### CIS (Center for Internet Security)
-米国のNSA(National Security Agency/国家安全保障局)、DISA(Difense Informaton Systems Agency/国防情報システム局)、NIST(National Institute of Standards and Technology/米国立標準技術研究所)などの米国政府機関と、企業、学術機関などが協力して、インターネット・セキュリティ標準化に取り組む団体の名称。
+米国のNSA(National Security Agency/国家安全保障局)、DISA(Difense Informaton Systems Agency/国防情報システム局)、NIST(National Institute of Standards and Technology/米国立標準技術研究所)などの米国政府機関と企業、学術機関などが協力してインターネット・セキュリティ標準化に取り組む団体の名称。
 
 ##### D
 ---
+### DR (Design Review)
+開発における成果物を、複数の人にチェックしてもらう機会のことで、JIS(日本工業規格)やISO(国際標準化機構)9000シリーズにおいて定義されている設計審査のことである。
+参考までに、当社のCESで規定されているDRの一覧を以下に示す。
+<CaptionedImage src="design_review.png" />
+
 ### デプロイ (Deploy)
 開発したソフトウェアを利用できるように実際の運用環境に展開すること。主に、コードやバイナリ、アセットといった更新頻度が高いリソースを配置し、利用可能な状態にする行為を指す。
 
@@ -75,6 +80,12 @@ Google がクラウド上で提供するサービス群の総称。Google 社内
 
 ##### P
 ---
+### PoC (Proof of Concept)
+「概念実証」という意味で、新しい概念や理論、原理、アイディアの実証を目的とした、試作開発の前段階における検証やデモンストレーションを行うこと。
+
+### プロジェクトアカウント (Project Account)
+OrBITから払い出されたAWSアカウントの総称。
+
 ### プロビジョニング (Provisioning)
 ユーザの需要を予想し、設備やサービスなどのリソースを計画的に調達し、ユーザの必要に応じたサービスを提供できるように備える行為の総称。主に、ネットワーク設備やコンピュートリソースといった更新頻度が低いインフラストラクチャの構築などを指す。
 

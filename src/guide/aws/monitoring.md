@@ -1,6 +1,6 @@
 # 監視とエスカレーション
 
-クラウドを利用するにあたって、[セキュリティ](/guide/aws/security)は非常に重要であり、また、[脅威検知](/guide/aws/thread-detection)といったセキュリティインシデントを把握可能な仕組み作りや体制の構築が非常に重要になります。
+クラウドを利用するにあたって、[セキュリティ](/guide/aws/security)は非常に重要であり、また、[脅威検知](/guide/aws/threat-detection)といったセキュリティインシデントを把握可能な仕組み作りや体制の構築が非常に重要になります。
 
 OrBITではセキュリティポリシーを定義するだけでなく、セキュリティインシデントが発生した際に、通知を受け取る事ができる仕組みを提供します。また、重大なインシデントに関しては、OrBIT運用チームが直接、プロジェクトへエスカレーションするサービスを提供します。
 
@@ -35,7 +35,7 @@ OrBITでは、以下の3つのAWSサービスから取得できる情報を監�
 
 - *Amazon GuardDuty*の検知結果
 
-  *Amazon GuardDuty*では、悪意のある操作や不正な動作を検知可能であり、その結果について監視する事ができます。詳細については、[「脅威検知の仕組み」](/guide/aws/thread-detection)を参照してください。
+  *Amazon GuardDuty*では、悪意のある操作や不正な動作を検知可能であり、その結果について監視する事ができます。詳細については、[「脅威検知」](/guide/aws/threat-detection)を参照してください。
 
 - *AWS CloudTrail*における特定のイベント
 
@@ -80,9 +80,9 @@ OrBITでは、緊急度の高いインシデントが発生した際、プロジ
 #### 2. 要因の調査
 アラートの受信後は、発生した要因を調査します。
 要因の調査は発生元によって異なりますので、該当する監視対象の調査手順をを参考にしながら調査を行ってください。
-- *Amazon GuardDuty*からの通知の場合は、[こちら](/guide/aws/threat-detection#脅威内容の確認)を参考にしてください。
-- *AWS CloudTrail*からの通知の場合は、[こちら](/guide/aws/audit#操作ログの確認と解析)を参考にしてください。
-- *AWS ConfigRule*からの通知の場合は、[こちら](/guide/aws/audit#構成変更ログの確認と解析)を参考にしてください。
+- *Amazon GuardDuty*からの通知の場合は、[「脅威内容の確認」](/guide/aws/threat-detection#脅威内容の確認)を参考にしてください。
+- *AWS CloudTrail*からの通知の場合は、[「操作ログの確認と解析」](/guide/aws/audit#操作ログの確認と解析)を参考にしてください。
+- *AWS ConfigRule*からの通知の場合は、[「 構成変更ログの確認と解析」](/guide/aws/audit#構成変更ログの確認と解析)を参考にしてください。
 
 **OrBIT運用チーム**では、AWSアカウントの利用目的、およびアラート種別を考慮した上で、プロジェクトへ連絡するか否かを決定します。その判断基準については、[「エスカレーションの可否判断」](#エスカレーションの可否判断)をご覧ください。
 
@@ -107,9 +107,9 @@ OrBITでは、緊急度の高いインシデントが発生した際、プロジ
 攻撃を受けている可能性がある以上、要因を取り除く為、迅速に対策を打つ必要があります。
 要因の発生元に応じて、対策方法を検討してください。
 
-- *Amazon GuardDuty*からの通知の場合は、[こちら](/guide/aws/threat-detection#脅威への対策)を参考にしてください。
-- *AWS CloudTrail*からの通知の場合は、[こちら](/guide/aws/audit#操作ログの確認と解析)を参考にしてください。
-- *AWS ConfigRule*からの通知の場合は、[こちら](/guide/aws/audit#構成変更ログの確認と解析)を参考にしてください。
+- *Amazon GuardDuty*からの通知の場合は、[「脅威への対策」](/guide/aws/threat-detection#脅威への対策)を参考にしてください。
+- *AWS CloudTrail*からの通知の場合は、[「操作ログの確認と解析」](/guide/aws/audit#操作ログの確認と解析)を参考にしてください。
+- *AWS ConfigRule*からの通知の場合は、[「構成変更ログの確認と解析」](/guide/aws/audit#構成変更ログの確認と解析)を参考にしてください。
 
 もし、「対策手段が分からない」という場合は**OrBIT運用チーム**にご連絡ください。
 対応方法に関して支援をさせて頂きます。
@@ -133,7 +133,7 @@ OrBIT運用チームでは、[責任共有モデル](/guide/common/introduction#
 
 - *Amazon GuardDuty*の検知結果
 
-| 検証環境<br>開発環境<br>ステージング環境 | 本番環境 | 重要度 | 結果タイプ | 概要 |
+| 概念実証<br>開発環境<br>ステージング環境 | 本番環境 | 重要度 | 結果タイプ | 概要 |
 | :---: | :---: | :---: | :---- | :---- |
 |                           | :heavy_check_mark:    | 中    | Backdoor:EC2/Spambot                                      | EC2 インスタンスがポート 25 でリモートホストと通信して通常と異なる動作を示しています。                                                                                                                   |
 | :heavy_check_mark:                          | :heavy_check_mark:    | 高    | Backdoor:EC2/C&CActivity.B!DNS                            | EC2 インスタンスは、既知のコマンドアンドコントロールサーバーに関連付けられるドメイン名をクエリしています。                                                                                                           |
@@ -196,7 +196,7 @@ OrBIT運用チームでは、[責任共有モデル](/guide/common/introduction#
 
 - *AWS CloudTrail*のイベントログ
 
-| 検証環境<br/>開発環境<br/>ステージング環境 | 本番環境 | アラート名 | 操作内容 |
+| 概念実証<br/>開発環境<br/>ステージング環境 | 本番環境 | アラート名 | 操作内容 |
 | :----: | :----: | :---- | :---- |
 |                            |      | orbit-CloudTrailAuthorizationFailures   | 許可されていないAPI呼び出し                         |
 |                            | :heavy_check_mark:    | orbit-CloudTrailRouteTableChanges       | ルートテーブルの変更                              |
@@ -215,7 +215,7 @@ OrBIT運用チームでは、[責任共有モデル](/guide/common/introduction#
 
 - *AWS ConfigRule*の評価結果
 
-| 検証環境<br/>開発環境<br/>ステージング環境 | 本番環境 | ルール名 | 評価条件 |
+| 概念実証<br/>開発環境<br/>ステージング環境 | 本番環境 | ルール名 | 評価条件 |
 | :----: | :----: | :---- | :---- |
 | | :heavy_check_mark:    | orbit-DisallowSpecifiedPort         | ポート"22"または"3389"に対するSSHトラフィックが制限されていない |
 | | :heavy_check_mark:    | orbit-VpcDefaultSecurityGroupClosed | デフォルトセキュリティグループに1つ以上のインバウンドまたはアウトバウンドトラフィックがある |

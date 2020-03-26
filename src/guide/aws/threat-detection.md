@@ -64,9 +64,12 @@ VPCやRoute53のリソースは、プロジェクトで必ず利用するサー�
 SNSトピックのサブスクライバについては、プロジェクト側で自由に設定が可能です。
 ここでは一例として、EメールとAWS Chatbotを利用してSlackへ転送した際の文面を紹介します。
 
-- Eメールへ送信した場合
+### Eメールへ送信した場合の文面
+---
 
-``` js{0}
+<CaptionedImage src="gd_mail_sample.png"/>
+
+<CodeDetail title="成形したJSONを見る" code='
 {
   "schemaVersion": "2.0",
   "accountId": "012345678910",
@@ -147,9 +150,10 @@ SNSトピックのサブスクライバについては、プロジェクト側�
   "title": "EC2 instance i-99999999 is communicating with a Drop Point.",
   "description": "EC2 instance i-99999999 is communicating with a remote host xxx.xx.xxx.x that is known to hold credentials and other stolen data captured by malware."
 }
-```
+' />
 
-- *AWS Chatbot*を利用してSlackへ転送した場合
+### AWS Chatbotを利用してSlackへ転送した場合の文面
+---
 
 <CaptionedImage src="gd_chatbot_sample.png"/>
 

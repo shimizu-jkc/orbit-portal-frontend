@@ -2,7 +2,7 @@
 home: true
 heroImage: /img/logo.jpg
 actionText: ようこそ
-actionLink: /information/
+actionLink: /guide/common/introduction
 features:
   - title: クラウド環境の払い出しと統制
     details: クラウドを利用したサービスを開発するためには、アカウントの開設だけではなく、請求処理や適切なユーザ管理といった多くの手順が必要になってきます。私たちはそのような非差別化要素を、可能な限り取り除く仕組みを提供します。これにより、利用者はサービスの開発に集中することができます。

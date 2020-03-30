@@ -23,7 +23,7 @@ OrBITでは、AWSアカウントをセキュアに保つため、以下のサー
     *AWS Organizations*は、OrBITコアシステムにより管理されますので、プロジェクト側での利用料金は発生しません。
     :::
 
-- ***AWS Config Rule***
+- ***AWS Config Rules***
 
     *AWS Config*のサブセットであり、AWSリソースの設定内容を評価し、ルールに準拠しているかを判別するサービスです。
     ルールに対する準拠状態を監視し、通知する事でポリシーの逸脱を検出することができます。
@@ -92,7 +92,7 @@ CISのセキュリティ基準は、AWSサービスの増加や知識の蓄積�
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 1.4 | 必須 | あり |
 
-この項目は、ベースラインの[「*AWS Config Rule*(access-keys-rotated)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/access-keys-rotated.html)で遵守されます。
+この項目は、ベースラインの[「*AWS Config Rules*(access-keys-rotated)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/access-keys-rotated.html)で遵守されます。
 
 #### 1.5 パスワードには1文字以上の大文字を含むこと <Badge text="必須" type="error"/>
 *(original) Ensure IAM password policy requires at least one uppercase letter*
@@ -355,7 +355,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 2.8 | 推奨 | 逸脱検出のみ |
 
-この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「*AWS Config Rule*(cmk-backing-key-rotation-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/cmk-backing-key-rotation-enabled.html)を設定することで遵守されます。
+この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「*AWS Config Rules*(cmk-backing-key-rotation-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/cmk-backing-key-rotation-enabled.html)を設定することで遵守されます。
 ::: warning ATTENTION
 現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
 :::
@@ -366,7 +366,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 2.9 | 推奨 | 逸脱検出のみ |
 
-この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「*AWS Config Rule*(vpc-flow-logs-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-flow-logs-enabled.html)を設定することで遵守されます。
+この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「*AWS Config Rules*(vpc-flow-logs-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-flow-logs-enabled.html)を設定することで遵守されます。
 ::: warning ATTENTION
 現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
 :::
@@ -651,7 +651,7 @@ $.eventName = EnableVpcClassicLink
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 4.1 | 必須 | 逸脱検出のみ |
 
-この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rule(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)を設定することで遵守されます。
+この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rules(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)を設定することで遵守されます。
 
 #### 4.2 Security Groupにて、0.0.0.0/0からport 3389(RDP)への接続が許可されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389*
@@ -659,7 +659,7 @@ $.eventName = EnableVpcClassicLink
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 4.2 | 必須 | 逸脱検出のみ |
 
-この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rule(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)を設定することで遵守されます。
+この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rules(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)を設定することで遵守されます。
 
 #### 4.3 デフォルトのSecurity Groupが全ての通信を許可していないこと <Badge text="推奨" type="warning"/>
 *(original) Ensure the default security group of every VPC restricts all traffic*
@@ -667,7 +667,7 @@ $.eventName = EnableVpcClassicLink
 | :----: | :-----: | :-------: | :----------: |
 | CIS v1.2.0 | 4.3 | 必須 | 逸脱検出のみ |
 
-この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rule(vpc-default-security-group-closed)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-default-security-group-closed.html)を設定することで遵守されます。
+この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rules(vpc-default-security-group-closed)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-default-security-group-closed.html)を設定することで遵守されます。
 
 #### 4.4 VPC Peering越しのルーティングは必要最低限に絞られていること <Badge text="任意" type="tip"/>
 *(original) Ensure routing tables for VPC peering are "least access"*

@@ -54,7 +54,7 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 `arn:aws:config:us-west-2:012345678910:aggregation-authorization/057922233889/us-east-2`
 
 ::: warning ATTENTION
-現時点では、*AWS Config*は[サポートリージョン](/guide/aws/#サポートリージョン)でのみ有効であることに注意してください。
+現時点では、*AWS Config*は[サポートリージョン](/guide/aws/#サポートリージョン)でのみ有効です。
 :::
 
 ### セキュリティ情報集約スタック

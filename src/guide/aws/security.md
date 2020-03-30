@@ -218,7 +218,7 @@ CISのセキュリティ基準は、AWSサービスの増加や知識の蓄積�
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/account-management#ルートユーザーの代替管理)ことで遵守されます。
 ::: warning ATTENTION
-OrBITでは、AWSアカウントの払い出し申請の際に設定する、**セキュリティ管理者**の連絡先がセキュリティ連絡先にマッピングされます。現在、**セキュリティ管理者**は必須の役割としていない為、セキュリティ連絡先は未設定の場合があります。
+OrBITでは、AWSアカウントの払い出し申請の際に設定する、**セキュリティ管理者**の連絡先がセキュリティ連絡先にマッピングされます。現在、**セキュリティ管理者**は必須の役割としていないため、セキュリティ連絡先は未設定の場合があります。
 :::
 
 #### 1.19 EC2インスタンスからのAWSリソースアクセスにIAMロールが使用されていること <Badge text="推奨" type="warning"/>
@@ -229,7 +229,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 
 この項目は、OrBITではサポートされません。各プロジェクトにて遵守するよう心掛けてください。
 
-#### 1.20 インシデント管理の為、AWSサポートへの権限が用意されていること <Badge text="必須" type="error"/>
+#### 1.20 インシデント管理のため、AWSサポートへの権限が用意されていること <Badge text="必須" type="error"/>
 *(original) Ensure a support role has been created to manage incidents with AWS Support*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -661,7 +661,7 @@ $.eventName = EnableVpcClassicLink
 
 この項目は、OrBITの[ベースライン](/guide/aws/baseline)にて、[「AWS Config Rules(restricted-common-ports)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/restricted-common-ports.html)を設定することで遵守されます。
 
-#### 4.3 デフォルトのSecurity Groupが全ての通信を許可していないこと <Badge text="推奨" type="warning"/>
+#### 4.3 デフォルトのSecurity Groupがすべての通信を許可していないこと <Badge text="推奨" type="warning"/>
 *(original) Ensure the default security group of every VPC restricts all traffic*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |

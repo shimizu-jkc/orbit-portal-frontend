@@ -1,0 +1,44 @@
+name: Deploy for orbit portal of draft.
+on:
+  push:
+    branches:
+      - draft
+    paths-ignore:
+      - "README.md"
+      - "figure/*"
+jobs:
+  deploy:
+    name: Deploy portal of draft
+    runs-on: ubuntu-latest
+    env:
+      S3_BUCKET: orbit.jvckenwood-dev.com
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - uses: actions/setup-node@v1.4.2
+        with:
+          node-version: 12.x
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ORBIT_SS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ORBIT_SS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      - uses: ItsKarma/aws-cli@v1.70.0
+      - name: Deploy procedure
+        run: |
+          npm install && npm run build
+          aws s3 sync release s3://${S3_BUCKET} --exact-timestamps
+      - name: Slack Notification Success
+        if: success()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "[Portal] Deploy Success"
+          SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
+          SLACK_ICON: 'https://avatars0.githubusercontent.com/u/44036562?s=100'
+      - name: Slack Notification Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "[Portal] Deploy Failure"
+          SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
+          SLACK_ICON: 'https://avatars0.githubusercontent.com/u/44036562?s=100'
+          SLACK_COLOR: "#FF0000"

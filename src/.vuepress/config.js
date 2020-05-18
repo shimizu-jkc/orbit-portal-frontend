@@ -12,9 +12,7 @@ module.exports = {
   },
   plugins: [
     '@vuepress/back-to-top',
-    '@vuepress/medium-zoom',
-    'vuepress-plugin-table-of-contents'
-    /*"smooth-scroll"*/
+    '@vuepress/medium-zoom'
   ],
   themeConfig: {
     logo: "/img/logo.jpg",

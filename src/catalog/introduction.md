@@ -9,7 +9,7 @@
 
 - **標準サービス構成**
 
-    [Web3層アーキテクチャ](/guide/common/glossary#web3層構成-web-3-tier-architecture)や[サーバレスアーキテクチャ](/guide/common/glossary#サーバーレス-serverless)に代表される標準的なアーキテクチャをリファレンスとして提供します。
+    [Web3層アーキテクチャ](/guide/common/glossary.html#web3層構成-web-3-tier-architecture)や[サーバレスアーキテクチャ](/guide/common/glossary.html#サーバーレス-serverless)に代表される標準的なアーキテクチャをリファレンスとして提供します。
 
 - **開発支援ツール**
 

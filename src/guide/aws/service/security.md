@@ -19,7 +19,7 @@ OrBITでは、AWSアカウントをセキュアに保つため、以下のサー
     詳細は以下を参照してください。
     - [「AWS Organizationsユーザーガイド」](https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_introduction.html)
     
-    ::: tip NOTE
+    ::: tip INFO
     *AWS Organizations*は、OrBITコアシステムにより管理されますので、プロジェクト側での利用料金は発生しません。
     :::
 
@@ -295,7 +295,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 
 この項目は、OrBITの[ベースライン](/guide/aws/reference/baseline.html)で遵守されます。
 ::: warning ATTENTION
-現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
+現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/support-region.html)のみになります。
 :::
 
 #### 2.2 CloudTrailログファイルの検証が有効化されていること <Badge text="推奨" type="warning"/>
@@ -330,7 +330,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 
 この項目は、OrBITの[ベースライン](/guide/aws/reference/baseline.html)で遵守されます。
 ::: warning ATTENTION
-現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
+現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/support-region.html)のみになります。
 :::
 
 #### 2.6 CloudTrailログの格納バケットのアクセスログ記録が有効化されていること <Badge text="必須" type="error"/>
@@ -357,7 +357,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 
 この項目は、OrBITの[ベースライン](/guide/aws/reference/baseline.html)にて、[「*AWS Config Rules*(cmk-backing-key-rotation-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/cmk-backing-key-rotation-enabled.html)を設定することで遵守されます。
 ::: warning ATTENTION
-現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
+現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/support-region.html)のみになります。
 :::
 
 #### 2.9 全リージョンでVPC Flow Logsが有効化されていること <Badge text="推奨" type="warning"/>
@@ -368,7 +368,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 
 この項目は、OrBITの[ベースライン](/guide/aws/reference/baseline.html)にて、[「*AWS Config Rules*(vpc-flow-logs-enabled)」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/vpc-flow-logs-enabled.html)を設定することで遵守されます。
 ::: warning ATTENTION
-現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/#サポートリージョン)のみになります。
+現在、全リージョンではなくOrBITが[サポートするリージョン](/guide/aws/support-region.html)のみになります。
 :::
 
 #### 2.10 CloudTrailログを解析可能な環境が整っていること <Badge text="推奨" type="warning"/>

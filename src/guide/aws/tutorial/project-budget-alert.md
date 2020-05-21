@@ -90,9 +90,8 @@ arn:aws:sns:us-east-1:904580840362:orbit-ProjectBudgetAlertFor${PROJECT}
 }
 ```
 
-::: danger IMPORTANT
-現在、`message`属性の内容がJSON形式になっておりません。
-AWSに確認中ですので、少々お待ちください。
+::: tip INFO
+`message`属性の内容がJSON形式でないのは、*AWS Budgets*の仕様です。
 :::
 
 ## マネジメントコンソールで合算した請求アラートのEメール通知を設定する

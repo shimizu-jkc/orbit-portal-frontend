@@ -17,7 +17,7 @@ OrBITでは利用料金の一括請求を行うにあたり、以下のサービ
     - [「組織の一括請求」](https://docs.aws.amazon.com/ja_jp/awsaccountbilling/latest/aboutv2/consolidated-billing.html)
     - [「ボリューム割引」](https://docs.aws.amazon.com/ja_jp/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-discounts.html)
     
-    ::: tip NOTE
+    ::: tip INFO
     *AWS Organizations*は、OrBITコアシステムにより管理されますので、プロジェクト側での利用料金は発生しません。
     :::
 

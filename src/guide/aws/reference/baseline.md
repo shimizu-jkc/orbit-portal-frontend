@@ -46,15 +46,15 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| Config | 記録 | aws-controltower-BaselineConfigRecorder | [サポートリージョン](/guide/aws/#サポートリージョン) | 監査ログの記録 |
-| Config | ログ転送 | aws-controltower-BaselineConfigDeliveryChannel | [サポートリージョン](/guide/aws/#サポートリージョン) | 監査ログの転送 |
-| Config | ログ転送承認 | なし*1 | [サポートリージョン](/guide/aws/#サポートリージョン) |　監査ログ転送の承認 |
+| Config | 記録 | aws-controltower-BaselineConfigRecorder | [サポートリージョン](/guide/aws/support-region.html) | 監査ログの記録 |
+| Config | ログ転送 | aws-controltower-BaselineConfigDeliveryChannel | [サポートリージョン](/guide/aws/support-region.html) | 監査ログの転送 |
+| Config | ログ転送承認 | なし*1 | [サポートリージョン](/guide/aws/support-region.html) |　監査ログ転送の承認 |
 
 *1 リソース名はありませんが、ARNは以下の形式になります。
 `arn:aws:config:us-west-2:012345678910:aggregation-authorization/057922233889/us-east-2`
 
 ::: warning ATTENTION
-現時点では、*AWS Config*は[サポートリージョン](/guide/aws/#サポートリージョン)でのみ有効です。
+現時点では、*AWS Config*は[サポートリージョン](/guide/aws/support-region.html)でのみ有効です。
 :::
 
 ### セキュリティ情報集約スタック
@@ -65,11 +65,11 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| CloudWatch<br>Event | ルール | aws-controltower-ConfigComplianceChangeEventRule | [サポートリージョン](/guide/aws/#サポートリージョン) | 準拠状態変更の通知 |
-| SNS | トピック | aws-controltower-SecurityNotifications | [サポートリージョン](/guide/aws/#サポートリージョン) | 情報の配信 |
-| SNS | サブスクリプション | ランダム*1 | [サポートリージョン](/guide/aws/#サポートリージョン) | 情報の配信 |
-| Lambda | 関数 | aws-controltower-NotificationForwarder | [サポートリージョン](/guide/aws/#サポートリージョン) | 情報の転送 |
-| CloudWatch<br>Logs | ロググループ | /aws/lambda/aws-controltower-NotificationForwarder | [サポートリージョン](/guide/aws/#サポートリージョン) | 関数ログの確認 |
+| CloudWatch<br>Event | ルール | aws-controltower-ConfigComplianceChangeEventRule | [サポートリージョン](/guide/aws/support-region.html) | 準拠状態変更の通知 |
+| SNS | トピック | aws-controltower-SecurityNotifications | [サポートリージョン](/guide/aws/support-region.html) | 情報の配信 |
+| SNS | サブスクリプション | ランダム*1 | [サポートリージョン](/guide/aws/support-region.html) | 情報の配信 |
+| Lambda | 関数 | aws-controltower-NotificationForwarder | [サポートリージョン](/guide/aws/support-region.html) | 情報の転送 |
+| CloudWatch<br>Logs | ロググループ | /aws/lambda/aws-controltower-NotificationForwarder | [サポートリージョン](/guide/aws/support-region.html) | 関数ログの確認 |
 
 *1 リソース名はランダム文字列が付与されますが、エンドポイントは以下のLambdaになります。
 `arn:aws:lambda:us-east-2:012345678910:function:aws-controltower-NotificationForwarder`
@@ -108,11 +108,11 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/#サポートリージョン) | ポリシー[[1.4]]()<br>準拠のため |
-| Config | ルール | orbit-CMKBackingKeyRotationEnabled | [サポートリージョン](/guide/aws/#サポートリージョン) | ポリシー[[2.8]]()<br>準拠のため |
-| Config | ルール | orbit-VpcFlowLogsEnabled | [サポートリージョン](/guide/aws/#サポートリージョン) | ポリシー[[2.9]]()<br>準拠のため |
-| Config | ルール | orbit-DisallowSpecifiedPort | [サポートリージョン](/guide/aws/#サポートリージョン) | ポリシー[[4.1/4.2]]()<br>準拠のため |
-| Config | ルール | orbit-VpcDefaultSecurityGroupClosed | [サポートリージョン](/guide/aws/#サポートリージョン) | ポリシー[[4.3]]()<br>準拠のため |
+| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[1.4]]()<br>準拠のため |
+| Config | ルール | orbit-CMKBackingKeyRotationEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.8]]()<br>準拠のため |
+| Config | ルール | orbit-VpcFlowLogsEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.9]]()<br>準拠のため |
+| Config | ルール | orbit-DisallowSpecifiedPort | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.1/4.2]]()<br>準拠のため |
+| Config | ルール | orbit-VpcDefaultSecurityGroupClosed | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.3]]()<br>準拠のため |
 
 ### セキュリティポリシー逸脱検出スタック
 ---

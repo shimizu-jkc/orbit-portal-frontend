@@ -35,7 +35,7 @@ AWSアカウント内の脅威の検知、および通知には、以下のサ�
     - [「Amazon SNS料金」](https://aws.amazon.com/jp/sns/pricing/)    
 
 ## アーキテクチャ
-脅威検知、および通知をする仕組みは、[「ベースラインのアーキテクチャ」](/guide/aws/reference/baseline#アーキテクチャ)を参照してください。
+脅威検知、および通知をする仕組みは、[「ベースラインのアーキテクチャ」](/guide/aws/reference/baseline.html#アーキテクチャ)を参照してください。
 
 ## 検知元となるデータソース
 *Amazon GuardDuty*は、下記のデータソースを分析して識別処理を行います。
@@ -59,7 +59,7 @@ VPCやRoute53のリソースは、プロジェクトで必ず利用するサー�
 :::
 
 ## 検知した脅威の通知
-*Amazon GuardDuty*で検知した脅威については、OrBITベースラインにおける[脅威検知スタック](/guide/aws/reference/baseline#脅威検知スタック)のSNSトピック `orbit-AggregateGuardDutyNotification`を購読することで通知を受け取ることができます。
+*Amazon GuardDuty*で検知した脅威については、OrBITベースラインにおける[脅威検知スタック](/guide/aws/reference/baseline.html#脅威検知スタック)のSNSトピック `orbit-AggregateGuardDutyNotification`を購読することで通知を受け取ることができます。
 
 SNSトピックのサブスクライバについては、プロジェクト側で自由に設定が可能です。
 ここでは一例として、EメールとAWS Chatbotを利用してSlackへ転送した際の文面を紹介します。

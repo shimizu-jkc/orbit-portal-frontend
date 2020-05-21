@@ -45,7 +45,7 @@ SSOを利用すると、以下のようなポータル画面が提供され、�
 この例の場合、ユーザーは`TestProject dev`,`TestProject2 dev`,`TestProject3 dev`の3つのプロジェクトアカウントに所属しています。また、`TestProject dev`のプロジェクトアカウントには、`AdministratorAccess`権限でアクセスが可能です。
 
 ::: tip INFO
-実際のポータル画面には、プロジェクトアカウントのアカウントIDとルートユーザのEメールアドレスも表示されます。このEメールアドレスはプロジェクト側でご利用頂くことも可能です。詳細は[「ルートユーザーのEメールアドレス」](/guide/aws/service/account-management#ルートユーザーのeメールアドレス)を参照して下さい。
+実際のポータル画面には、プロジェクトアカウントのアカウントIDとルートユーザのEメールアドレスも表示されます。このEメールアドレスはプロジェクト側でご利用頂くことも可能です。詳細は[「ルートユーザーのEメールアドレス」](/guide/aws/service/account-management.html#ルートユーザーのeメールアドレス)を参照して下さい。
 :::
 
 ## IAMユーザーとの関係
@@ -77,7 +77,7 @@ SSOユーザーとIAMユーザーのハイブリッド運用も可能です。
 SSOを利用すると、ユーザーが所属しているプロジェクトアカウント、および割り当てられたアクセス権限をポータル画面にて一覧で確認し、アカウントへアクセスすることが可能です。
 
 このポータル画面を**SSOポータル**と呼びます。
-> 本サイト([OrBITポータル](/guide/common/introduction#_3-orbitポータル))とは異なりますのでご注意ください。
+> 本サイト([OrBITポータル](/guide/common/introduction.html#_3-orbitポータル))とは異なりますのでご注意ください。
 
 SSOポータルへは以下からアクセスすることが可能です。
 [https://d-9267100edb.awsapps.com/start/](https://d-9267100edb.awsapps.com/start/)
@@ -94,7 +94,7 @@ SSOユーザーの登録が完了すると、指定したEメールアドレス�
 
 ::: warning ATTENTION
 招待メールの期限は7日間です。
-もし期限を過ぎてしまった場合は、[問い合わせ窓口](/support/contact)よりお問い合わせください。
+もし期限を過ぎてしまった場合は、[問い合わせ窓口](/support/contact.html)よりお問い合わせください。
 :::
 
 ### パスワードポリシー
@@ -202,14 +202,14 @@ OrBITの実運用が進むにつれ、アクセス権限は変更される可能
 |  - | - | - |
 | OrBIT運用チーム*1 | SecurityAuditorAccess | :heavy_check_mark: | :heavy_check_mark: |
 
-*1 OrBIT運用チームでは、インシデントの発生時に要因の調査や解析を支援することがあるため、すべてのプロジェクトに対して`SecurityAuditorAccess`を持ちます。詳細は[「セキュリティエスカレーション」](/guide/aws/service/monitoring#セキュリティエスカレーション)をご覧ください。
+*1 OrBIT運用チームでは、インシデントの発生時に要因の調査や解析を支援することがあるため、すべてのプロジェクトに対して`SecurityAuditorAccess`を持ちます。詳細は[「セキュリティエスカレーション」](/guide/aws/service/monitoring.html#セキュリティエスカレーション)をご覧ください。
 
 ### 各種申請
 ---
 SSOユーザーの登録、削除、および役割を変更する際は、以下のフォームから申請することができます。
-- [「ユーザーの登録申請フォーム」](/request/regist-user)
-- [「ユーザーの情報変更申請フォーム」](/request/update-user)
-- [「ユーザーの削除申請フォーム」](/request/unregist-user)
+- [「ユーザーの登録申請フォーム」](/request/regist-user.html)
+- [「ユーザーの情報変更申請フォーム」](/request/update-user.html)
+- [「ユーザーの削除申請フォーム」](/request/unregist-user.html)
 
 ## ユーザーIDの棚卸
 OrBITでは、定期的にSSOを利用しているすべてのプロジェクトアカウントに対して、下記要件にてユーザーIDの棚卸をお願いしています。ユーザーIDの棚卸は、不要な認証情報の流出を防ぐためにも重要ですので、ご協力をお願いします。

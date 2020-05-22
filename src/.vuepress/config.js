@@ -19,7 +19,7 @@ module.exports = {
     //lastUpdated: "Last Updated",
     //Navigator Setting
     nav: [
-      { text: "おしらせ", link: "/information/" },
+      { text: "おしらせ", link: "/information/summary" },
       { 
         text: "ユーザーガイド", 
         items: [
@@ -166,37 +166,3 @@ module.exports = {
     docsBranch: "master"
   }
 };
-
-// functions
-function getGuideSidebarForAWS() {
-  return [
-    {
-      title: "ユーザーガイド(AWS)",
-      collapsable: true,
-      children: [
-        "",
-        "account-management",
-        "billing",
-        "id-management",
-        "security",
-        "threat-detection",
-        "monitoring",
-        "audit",
-        "baseline",        
-        "faq"
-      ]
-    }
-  ]
-}
-
-function getGuideSidebarForGCP() {
-  return [
-    {
-      title: "ユーザーガイド(GCP)",
-      collapsable: false,
-      children: [
-        "",
-      ]
-    }
-  ]
-}

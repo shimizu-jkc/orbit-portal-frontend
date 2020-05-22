@@ -2,6 +2,9 @@ module.exports = {
   title: "OrBIT Portal",
   description: "OrBITは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
   dest: "release",
+  head: [
+    ['link', { rel: 'icon', href: '/img/favicon.ico' }]
+  ],
   markdown: {
     toc: {
       includeLevel: [2, 3]
@@ -15,7 +18,7 @@ module.exports = {
     "@vuepress/medium-zoom"
   ],
   themeConfig: {
-    logo: "/img/logo.jpg",
+    logo: "/img/logo_trim.jpg",
     //lastUpdated: "Last Updated",
     //Navigator Setting
     nav: [

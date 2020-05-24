@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /img/logo.jpg
+heroImage: /img/main.png
 actionText: ようこそ
 actionLink: /guide/common/introduction
 features:

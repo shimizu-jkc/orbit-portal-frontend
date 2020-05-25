@@ -9,7 +9,7 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 ## 合算した請求アラート機能の提供を開始しました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
-<Badge text="AWS" type="tip" vertical="bottom"/>
+<Badge text="AWS" type="note" vertical="bottom"/>
 投稿日 : 2020/5/21(木)
 
 　本日より、プロジェクトが所有する複数のアカウントを跨いだ請求アラートが利用可能になりました。

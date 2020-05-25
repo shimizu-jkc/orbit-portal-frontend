@@ -139,13 +139,16 @@ export default {
       &:hover
         background-color lighten($accentColor, 10%)
   .actions
-    margin-left 13rem
-    margin-right 13rem
     display flex
     flex-wrap wrap
-    align-items stretch
-    align-content start
-    justify-content space-around
+    align-items center
+    align-content center
+    justify-content center
+  .action
+    flex-grow 0
+    flex-basis auto
+    max-width 50%
+    margin 30px
   .features
     border-top 1px solid $borderColor
     padding 1.2rem 0

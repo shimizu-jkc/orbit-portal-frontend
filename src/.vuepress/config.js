@@ -21,6 +21,7 @@ module.exports = {
     logo: "/img/logo.png",
     //lastUpdated: "Last Updated",
     //Navigator Setting
+    activeHeaderLinks: false,
     nav: [
       { text: "おしらせ", link: "/information/summary" },
       { 

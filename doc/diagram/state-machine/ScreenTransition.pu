@@ -1,0 +1,162 @@
+@startuml
+hide empty description
+title ポータル画面遷移
+
+state "ログイン" as login
+	login: ユーザ名
+	login: パスワード
+state "トップページ" as top
+
+[*] --> login
+login --> top
+top -right-> プロジェクト関連
+top -left-> アカウント関連
+top -down-> 管理者作業関連
+top --> カタログ関連
+
+state プロジェクト関連 {
+	state "プロジェクトの新規登録" as pcreate
+		pcreate: プロジェクト名
+		pcreate: 代表者Eメールアドレス
+		pcreate: 事業部名
+		pcreate: 予算
+		pcreate: メンバー(部署,名前,アドレス)
+	state "プロジェクト情報の確認(取得前)" as pget
+		pget: プロジェクト名
+		pget: 代表者Eメールアドレス
+	state "プロジェクト情報の確認(取得後)" as pget2
+		pget2: プロジェクト名
+		pget2: 代表者Eメールアドレス
+		pget2: 事業部名
+		pget2: 予算
+		pget2: メンバー(部署,名前,アドレス)
+	state "プロジェクト情報の編集" as pupdate
+		pupdate: 代表者Eメールアドレス
+		pupdate: 事業部名
+		pupdate: 予算
+		pupdate: メンバー(部署,名前,アドレス)		
+	state "プロジェクトの登録解除" as pdelete
+		pdelete: プロジェクト名
+		pdelete: 代表者Eメールアドレス
+	state "確認ダイアログ" as pconfirm
+		note right of pconfirm : [キャンセル]ボタンの場合は\n元画面へ遷移
+	state "読み込み中" as pload
+	[*] --> pcreate
+	[*] --> pget
+	[*] --> pdelete
+	pcreate --> pconfirm : [登録する]ボタン
+	pget --> pload : [確認する]ボタン
+	pget2 --> pupdate : [編集]ボタン
+	pupdate --> pconfirm : [更新する]ボタン
+	pdelete --> pconfirm : [解除する]ボタン
+	pconfirm --> pload : [OK]ボタン
+	pload --> pget2 : 完了
+}
+
+state アカウント関連 {
+	state "アカウント払い出しの申請" as acreate
+		acreate: プロジェクト名
+		acreate: 代表者Eメールアドレス
+		acreate: 利用目的
+		acreate: OW部門コード
+		acreate: OW科目コード
+		acreate: プロジェクトコード
+		acreate: プロジェクトサブコード
+		acreate: 実運用開始日
+		acreate: 実運用終了日
+		acreate: 役割の割り当て(アドレス、役割)
+	state "アカウント情報の確認(取得前)" as aget
+		aget: プロジェクト名
+		aget: アカウントID
+	state "アカウント情報の確認(取得後)" as aget2
+		aget2: プロジェクト名
+		aget2: アカウントID
+		aget2: アカウント名
+		aget2: アカウントEメールアドレス
+		aget2: ステータス
+		aget2: 利用目的
+		aget2: OW部門コード
+		aget2: OW科目コード
+		aget2: プロジェクトコード
+		aget2: プロジェクトサブコード
+		aget2: 実運用開始日
+		aget2: 実運用終了日
+		aget2: 役割の割り当て(アドレス、役割)
+	state "アカウント情報の編集" as aupdate
+		aupdate: OW部門コード
+		aupdate: OW科目コード
+		aupdate: プロジェクトコード
+		aupdate: プロジェクトサブコード
+		aupdate: 実運用開始日
+		aupdate: 実運用終了日
+		aupdate: 役割の割り当て(アドレス、役割)
+	state "アカウント削除の申請" as adelete
+		adelete: プロジェクト名
+		adelete: アカウントID
+	state "確認ダイアログ" as aconfirm
+		note right of aconfirm : [キャンセル]ボタンの場合は\n元画面へ遷移
+	state "読み込み中" as aload
+	[*] --> acreate
+	[*] --> aget
+	[*] --> adelete
+	acreate --> aconfirm : [申請する]ボタン
+	aget --> aload : [確認する]ボタン
+	aget2 --> aupdate : [編集]ボタン
+	aupdate --> aconfirm : [更新する]ボタン
+	adelete --> aconfirm : [申請する]ボタン
+	aconfirm --> aload : [OK]ボタン
+	aload --> aget2 : 完了
+}
+
+state 管理者作業関連 {
+	state "作業の依頼" as tcreate
+		tcreate: 連絡先Eメールアドレス
+		tcreate: 作業種別
+		tcreate: 作業内容
+	state "作業状況の確認(取得前)" as tget
+		tget: プロジェクト名
+		tget: アカウントID	
+	state "作業状況の確認(一覧)" as tget2
+		tget2: プロジェクト名
+		tget2: アカウントID	
+		tget2: 依頼日
+		tget2: 更新日
+		tget2: 連絡先Eメールアドレス
+		tget2: 作業種別
+		tget2: 作業状況
+	state "作業状況の確認(詳細)" as tget3
+		tget3: プロジェクト名
+		tget3: アカウントID	
+		tget3: チケットID	
+		tget3: 依頼日
+		tget3: 更新日
+		tget3: 連絡先Eメールアドレス
+		tget3: 作業種別
+		tget3: 作業状況
+		tget3: 作業内容
+	state "作業内容の編集" as tupdate
+		tupdate: 連絡先Eメールアドレス
+		tupdate: 作業内容
+	state "確認ダイアログ" as tconfirm
+		note right of tconfirm : [キャンセル]ボタンの場合は\n元画面へ遷移
+	state "読み込み中" as tload
+	[*] --> tcreate
+	[*] --> tget
+	tcreate --> tconfirm : [依頼する]ボタン
+	tget --> tload : [確認する]ボタン
+	tload --> tget2 : 完了(確認する)
+	tget2 --> tget3 : [詳細]ボタン
+	tget3 --> tupdate : [編集]ボタン
+	tupdate --> tconfirm : [更新する]ボタン
+	tconfirm --> tload : [OK]ボタン
+	tload --> tget3 : 完了(確認する以外)
+}
+
+state カタログ関連 {
+	state "カタログ一覧" as list
+	state "カタログ詳細" as detail
+	[*] --> list
+	list --> detail : [詳細]ボタン
+	detail --> list : [戻る]ボタン
+}
+@enduml

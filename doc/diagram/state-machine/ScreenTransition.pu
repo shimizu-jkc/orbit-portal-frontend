@@ -54,17 +54,20 @@ state プロジェクト関連 {
 }
 
 state アカウント関連 {
-	state "アカウント払い出しの申請" as acreate
+	state "アカウント払い出しの申請(認証前)" as acreate
 		acreate: プロジェクト名
 		acreate: 代表者Eメールアドレス
-		acreate: 利用目的
-		acreate: OW部門コード
-		acreate: OW科目コード
-		acreate: プロジェクトコード
-		acreate: プロジェクトサブコード
-		acreate: 実運用開始日
-		acreate: 実運用終了日
-		acreate: 役割の割り当て(アドレス、役割)
+	state "アカウント払い出しの申請(認証後)" as acreate2
+		acreate2: プロジェクト名
+		acreate2: 代表者Eメールアドレス
+		acreate2: 利用目的
+		acreate2: OW部門コード
+		acreate2: OW科目コード
+		acreate2: プロジェクトコード
+		acreate2: プロジェクトサブコード
+		acreate2: 実運用開始日
+		acreate2: 実運用終了日
+		acreate2: 役割の割り当て(アドレス、役割)
 	state "アカウント情報の確認(取得前)" as aget
 		aget: プロジェクト名
 		aget: アカウントID
@@ -99,20 +102,25 @@ state アカウント関連 {
 	[*] --> acreate
 	[*] --> aget
 	[*] --> adelete
-	acreate --> aconfirm : [申請する]ボタン
+	acreate --> aload : [認証する]ボタン
+	aload --> acreate2 : 完了(認証)
+	acreate2 --> aconfirm : [申請する]ボタン
 	aget --> aload : [確認する]ボタン
 	aget2 --> aupdate : [編集]ボタン
 	aupdate --> aconfirm : [更新する]ボタン
 	adelete --> aconfirm : [申請する]ボタン
 	aconfirm --> aload : [OK]ボタン
-	aload --> aget2 : 完了
+	aload --> aget2 : 完了(認証意外)
 }
 
 state 管理者作業関連 {
-	state "作業の依頼" as tcreate
-		tcreate: 連絡先Eメールアドレス
-		tcreate: 作業種別
-		tcreate: 作業内容
+	state "作業の依頼(認証前)" as tcreate
+		tcreate: プロジェクト名
+		tcreate: アカウントID
+	state "作業の依頼(認証後)" as tcreate2
+		tcreate2: 連絡先Eメールアドレス
+		tcreate2: 作業種別
+		tcreate2: 作業内容
 	state "作業状況の確認(取得前)" as tget
 		tget: プロジェクト名
 		tget: アカウントID	
@@ -142,14 +150,16 @@ state 管理者作業関連 {
 	state "読み込み中" as tload
 	[*] --> tcreate
 	[*] --> tget
-	tcreate --> tconfirm : [依頼する]ボタン
+	tcreate --> tload : [認証する]ボタン
+	tload --> tcreate2 : 完了(認証する)
+	tcreate2 --> tconfirm : [依頼する]ボタン
 	tget --> tload : [確認する]ボタン
 	tload --> tget2 : 完了(確認する)
 	tget2 --> tget3 : [詳細]ボタン
 	tget3 --> tupdate : [編集]ボタン
 	tupdate --> tconfirm : [更新する]ボタン
 	tconfirm --> tload : [OK]ボタン
-	tload --> tget3 : 完了(確認する以外)
+	tload --> tget3 : 完了(更新する)
 }
 
 state カタログ関連 {

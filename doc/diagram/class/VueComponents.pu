@@ -1,0 +1,243 @@
+@startuml
+title Vueコンポーネント構成
+
+package "Library" {
+	class axios {
+		+void get()
+		+void post()
+		+void put()
+		+void delete()
+	}
+}
+package "CommonComponent" {
+	class Loading {
+		+String message
+	}
+	class Notification {
+		+String status
+		+String message
+	}
+	class Confirm {
+		+String title
+		+String message
+		-Button OK
+		-Button キャンセル
+	}
+}
+
+package "FormPartsComponent" {
+	class ProjectBasicAuth {
+		~Input projectName
+		~Input projectEmail
+	}
+	class BtnGetProject {
+		+String text
+	}
+	BtnGetProject -left-> Loading : use
+	BtnGetProject -left-> Notification : use
+	BtnGetProject -left-> axios : use
+	class ProjectInfo {
+		~Select division
+		~InputNumber budget
+		~FormPartsComponent Member
+	}
+	ProjectInfo --> Member : use
+	class Member {
+		~Input department
+		~Input name
+		~Input email
+	}
+	class AccountBasicAuth {
+		~Input projectName
+		~Input accountId
+	}
+	class BtnGetAccount {
+		+String text
+	}
+	BtnGetAccount -left-> Loading : use
+	BtnGetAccount -left-> Notification : use
+	BtnGetAccount -left-> axios : use
+	class AccountInfo {
+		~Input accountId
+		~Input accountName
+		~Input accountEmail
+		~Input status	
+		~Select env
+		~FormPartsComponent BillingInfo
+		~FormPartsComponent OpsInfo
+		~FormPartsComponent MemberRole
+	}
+	AccountInfo --> BillingInfo : use
+	AccountInfo --> OpsInfo : use
+	AccountInfo --> MemberRole : use
+	class BillingInfo {
+		~Input billingOWDepartmentCode
+		~Input billingOWUsageCode
+		~Input billingProjectCode
+		~Input billingProjectSubCode
+	}
+	class OpsInfo {
+		~DatePicker startOperationDate
+		~DatePicker expireOperationDate
+	}
+	class MemberRole {
+		~Select name
+		~Input email
+		~Select role	
+	}
+	class TicketList {
+		~FormPartsComponent "Array<TicketItem>"
+		-Input projectName
+		-Input accountId
+	}
+	TicketList --> TicketItem : use
+	class TicketItem {
+		-Input createdAt
+		-Input updatedAt
+		-Input status
+		-Input ticketEmail
+		-Input type
+		-Button 詳細
+	}
+	class TicketInfo {
+		-Input ticketId
+		-Input createdAt
+		-Input updatedAt
+		-Input ticketEmail
+		-Input type
+		-Input status
+		~FormPartsComponent content
+	}
+	TicketInfo --> TicketContent : use
+	class TicketContent {
+		~TextArea note
+	}
+	class TicketContentReqKeyPair {
+	}
+	class TicketContentReqAuditLog {
+		~Select service
+		~DatePicker startDate
+		~DatePicker endDate
+	}
+	class TicketContentReqChangeSupport {
+		~Select expectedPlan
+	}
+	class TicketContentReqOther {
+	}
+	TicketContent <|-down- TicketContentReqKeyPair
+	TicketContent <|-down- TicketContentReqAuditLog
+	TicketContent <|-down- TicketContentReqChangeSupport
+	TicketContent <|-down- TicketContentReqOther
+}
+package "ScreenComponent" {
+	class FormCreateProject {
+		-Button 登録する
+		-FormPartsComponent ProjectBasicAuth
+		-FormPartsComponent ProjectInfo
+	}
+	FormCreateProject -down-> ProjectBasicAuth : use
+	FormCreateProject --> ProjectInfo : use
+
+	class FormGetProject {
+		-FormPartsComponent BtnGetProject<確認する>
+		-Button 編集
+		-FormPartsComponent ProjectBasicAuth
+		-FormPartsComponent ProjectInfo
+	}
+	FormGetProject --> BtnGetProject : use
+	FormGetProject --> ProjectBasicAuth : use
+	FormGetProject --> ProjectInfo : use
+
+	class FormUpdateProject {
+		-Button 更新する
+		-Button キャンセル		
+		-FormPartsComponent ProjectBasicAuth
+		-FormPartsComponent ProjectInfo
+	}
+	FormUpdateProject --> ProjectBasicAuth : use
+	FormUpdateProject --> ProjectInfo : use
+
+	class FormDeleteProject {
+		-Button 削除する
+		-FormPartsComponent ProjectBasicAuth
+	}
+	FormDeleteProject --> ProjectBasicAuth : use
+	
+	class FormCreateAccount {
+		-FormPartsComponent BtnGetProject<認証する>
+		-Button 申請する
+		-FormPartsComponent BtnGetProject
+		-FormPartsComponent ProjectBasicAuth
+		-FormPartsComponent AccountInfo
+	}
+	FormGetProject --> BtnGetProject : use
+	FormCreateAccount --> ProjectBasicAuth : use
+	FormCreateAccount --> AccountInfo : use
+	
+	class FormGetAccount {
+		-FormPartsComponent BtnGetAccount<確認する>
+		-Button 編集
+		-FormPartsComponent AccountBasicAuth
+		-FormPartsComponent AccountInfo
+	}
+	FormGetProject --> BtnGetAccount : use
+	FormGetAccount --> AccountBasicAuth : use
+	FormGetAccount --> AccountInfo : use
+
+	class FormUpdateAccount {
+		-Button 更新する
+		-Button キャンセル
+		-FormPartsComponent AccountBasicAuth
+		-FormPartsComponent AccountInfo
+	}
+	FormGetAccount --> AccountBasicAuth : use
+	FormGetAccount --> AccountInfo : use
+	
+	class FormDeleteAccount {
+		-Button 削除する	
+		-FormPartsComponent AccountBasicAuth
+	}
+	FormDeleteAccount --> AccountBasicAuth : use
+	
+	class FormCreateTicket {
+		-FormPartsComponent BtnGetAccount<認証する>
+		-Button 依頼する
+		-FormPartsComponent AccountBasicAuth
+		-FormPartsComponent TicketInfo
+	}
+	FormGetProject --> BtnGetProject : use
+	FormCreateTicket --> AccountBasicAuth : use
+	FormCreateTicket --> TicketInfo : use
+
+	class FormGetTickets {
+		-Button 確認する
+		-FormPartsComponent AccountBasicAuth
+		-FormPartsComponent TicketList
+	}
+	FormGetTickets --> AccountBasicAuth : use
+	FormGetTickets --> TicketList : use
+
+	class FormGetTicket {
+		-Button 編集
+		-FormPartsComponent TicketInfo
+	}
+	FormGetTicket --> TicketInfo : use
+	
+	class FormUpdateTicket {
+		-Button 更新する
+		-Button キャンセル
+		-FormPartsComponent TicketInfo
+	}
+	FormUpdateTicket --> TicketInfo : use
+
+	class AppCatalogList {
+		-"Array<Button> 詳細"
+		-FormPartsComponent AppCatalogItem
+	}
+	AppCatalogList -right-> AppCatalogItem : use	
+	class AppCatalogItem
+}
+ScreenComponent -down-> CommonComponent : use
+ScreenComponent -down-> axios : use
+
+@enduml

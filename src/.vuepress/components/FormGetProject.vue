@@ -1,9 +1,6 @@
 <template>
-  <div id="GetProject">
-    <p-basic/>
-    <el-row>
-      <el-button type="primary" @click="onGetBtnClick($event)">確認する</el-button>
-    </el-row>
+  <div id="FormGetProject">
+    <p-basic action="確認" @success="onEventSuccess()"/>
   </div>
 </template>
 
@@ -11,12 +8,14 @@
 import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
   
 export default {
+  name: "FormGetProject",
   components: {
-    'p-basic': ProjectBasicAuth
+    "p-basic": ProjectBasicAuth
   },
   methods: {
-    onGetBtnClick(event) {
-      console.log(event)
+    onEventSuccess() {
+      this.$store.dispatch("getProject");
+      this.$router.push("/request/show-project");
     }
   }
 }

@@ -8,3 +8,5 @@ next: false
 OrBITの利用を止める際は、こちらからプロジェクトの登録解除の申請を行ってください。
 
 ---
+<br>
+<FormDeleteProject/>

@@ -100,7 +100,7 @@
           resource: '',
           desc: ''
         }
-      }
+      };
     },
     methods: {
       onSubmit() {

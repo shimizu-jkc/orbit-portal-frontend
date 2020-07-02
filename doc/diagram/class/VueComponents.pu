@@ -1,20 +1,106 @@
 @startuml
 title Vueコンポーネント構成
 
-package "Library" {
-	class axios {
+package "api" {
+	class ProjectAPI {
 		+void get()
 		+void post()
 		+void put()
 		+void delete()
 	}
+	class AccountAPI {
+		+void get()
+		+void post()
+		+void put()
+		+void delete()
+	}
+	class TicketAPI {
+		+void get()
+		+void post()
+		+void put()
+	}	
+	package "library"{
+		class axios
+	}
+	ProjectAPI --> axios : use
+	AccountAPI --> axios : use
+	TicketAPI --> axios : use
 }
+
+package "store" {
+	class Store {
+		#state
+		#getters
+		#actions
+		#mutations
+	}
+	class ProjectStore {
+		-String projectName
+		-String projectEmail
+		-String division
+		-Number budget
+		-"Array<Object> members"
+		-Object result
+		+"Promise actions.get()"
+		+"Promise actions.post()"
+		+"Promise actions.put()"
+		+"Promise actions.delete()"
+	}
+	ProjectStore --> ProjectAPI : use
+	class AccountStore {
+		-String projectName
+		-String accountId
+		-String accountName
+		-String accountEmail
+		-String status	
+		-String env
+		-String billingOWDepartmentCode
+		-String billingOWUsageCode
+		-String billingProjectCode
+		-String billingProjectSubCode
+		-Number startOperationDate
+		-Number expireOperationDate
+		-"Array<Object> roles"
+		-Object result
+		+"Promise actions.get()"
+		+"Promise actions.post()"
+		+"Promise actions.put()"
+		+"Promise actions.delete()"
+	}
+	AccountStore --> AccountAPI : use
+	class TicketStore {
+		-String ticketId
+		-Number createdAt
+		-Number updatedAt
+		-String ticketEmail
+		-String type
+		-String status
+		-Object content
+		-Object result
+		+"Promise actions.get()"
+		+"Promise actions.post()"
+		+"Promise actions.put()"
+	}
+	TicketStore --> TicketAPI : use
+	class CacheStore {
+		-String authProjectName
+		-String authProjectEmail
+		-String authAccountId
+	}
+	Store <|-- ProjectStore 
+	Store <|-- AccountStore 
+	Store <|-- TicketStore
+	Store <|-- CacheStore
+}
+
 package "CommonComponent" {
 	class Loading {
+		+Boolean visible
 		+String message
 	}
 	class Notification {
 		+String status
+		+String title
 		+String message
 	}
 	class Confirm {
@@ -29,35 +115,45 @@ package "FormPartsComponent" {
 	class ProjectBasicAuth {
 		~Input projectName
 		~Input projectEmail
-	}
-	class BtnGetProject {
 		+String text
+		-"Button :text"
 	}
-	BtnGetProject -left-> Loading : use
-	BtnGetProject -left-> Notification : use
-	BtnGetProject -left-> axios : use
+	ProjectBasicAuth -left-> Loading : use
+	ProjectBasicAuth -left-> Notification : use
+	ProjectBasicAuth --> CacheStore: use
 	class ProjectInfo {
+		#String operation
+		~Input projectName
+		~Input projectEmail
 		~Select division
 		~InputNumber budget
-		~FormPartsComponent Member
+		~FormPartsComponent MemberList
 	}
-	ProjectInfo --> Member : use
-	class Member {
+	ProjectInfo --> MemberList : use
+	ProjectInfo --> ProjectStore : use
+	class MemberList {
+		#Boolean readOnly
+		~FormPartsComponent "Array<MemberItem>"
+	}
+	MemberList --> MemberItem : use
+	MemberList --> ProjectStore : use
+	class MemberItem {
 		~Input department
 		~Input name
 		~Input email
 	}
+	
 	class AccountBasicAuth {
 		~Input projectName
 		~Input accountId
-	}
-	class BtnGetAccount {
 		+String text
+		-"Button :text"
 	}
-	BtnGetAccount -left-> Loading : use
-	BtnGetAccount -left-> Notification : use
-	BtnGetAccount -left-> axios : use
+	AccountBasicAuth -left-> Loading : use
+	AccountBasicAuth -left-> Notification : use
+	AccountBasicAuth -> CacheStore : use
 	class AccountInfo {
+		~Input projectName
 		~Input accountId
 		~Input accountName
 		~Input accountEmail
@@ -65,11 +161,12 @@ package "FormPartsComponent" {
 		~Select env
 		~FormPartsComponent BillingInfo
 		~FormPartsComponent OpsInfo
-		~FormPartsComponent MemberRole
+		~FormPartsComponent MemberRoles
 	}
 	AccountInfo --> BillingInfo : use
 	AccountInfo --> OpsInfo : use
-	AccountInfo --> MemberRole : use
+	AccountInfo --> MemberRoles : use
+	AccountInfo --> AccountStore : use
 	class BillingInfo {
 		~Input billingOWDepartmentCode
 		~Input billingOWUsageCode
@@ -80,17 +177,19 @@ package "FormPartsComponent" {
 		~DatePicker startOperationDate
 		~DatePicker expireOperationDate
 	}
-	class MemberRole {
+	class MemberRoles {
 		~Select name
 		~Input email
 		~Select role	
 	}
+
 	class TicketList {
 		~FormPartsComponent "Array<TicketItem>"
 		-Input projectName
 		-Input accountId
 	}
 	TicketList --> TicketItem : use
+	TicketList --> TicketStore : use
 	class TicketItem {
 		-Input createdAt
 		-Input updatedAt
@@ -109,6 +208,7 @@ package "FormPartsComponent" {
 		~FormPartsComponent content
 	}
 	TicketInfo --> TicketContent : use
+	TicketInfo --> TicketStore : use
 	class TicketContent {
 		~TextArea note
 	}
@@ -124,6 +224,7 @@ package "FormPartsComponent" {
 	}
 	class TicketContentReqOther {
 	}
+	TicketContent --> TicketStore : use
 	TicketContent <|-down- TicketContentReqKeyPair
 	TicketContent <|-down- TicketContentReqAuditLog
 	TicketContent <|-down- TicketContentReqChangeSupport
@@ -139,12 +240,10 @@ package "ScreenComponent" {
 	FormCreateProject --> ProjectInfo : use
 
 	class FormGetProject {
-		-FormPartsComponent BtnGetProject<確認する>
 		-Button 編集
 		-FormPartsComponent ProjectBasicAuth
 		-FormPartsComponent ProjectInfo
 	}
-	FormGetProject --> BtnGetProject : use
 	FormGetProject --> ProjectBasicAuth : use
 	FormGetProject --> ProjectInfo : use
 
@@ -164,23 +263,18 @@ package "ScreenComponent" {
 	FormDeleteProject --> ProjectBasicAuth : use
 	
 	class FormCreateAccount {
-		-FormPartsComponent BtnGetProject<認証する>
 		-Button 申請する
-		-FormPartsComponent BtnGetProject
 		-FormPartsComponent ProjectBasicAuth
 		-FormPartsComponent AccountInfo
 	}
-	FormGetProject --> BtnGetProject : use
 	FormCreateAccount --> ProjectBasicAuth : use
 	FormCreateAccount --> AccountInfo : use
 	
 	class FormGetAccount {
-		-FormPartsComponent BtnGetAccount<確認する>
 		-Button 編集
 		-FormPartsComponent AccountBasicAuth
 		-FormPartsComponent AccountInfo
 	}
-	FormGetProject --> BtnGetAccount : use
 	FormGetAccount --> AccountBasicAuth : use
 	FormGetAccount --> AccountInfo : use
 
@@ -200,12 +294,10 @@ package "ScreenComponent" {
 	FormDeleteAccount --> AccountBasicAuth : use
 	
 	class FormCreateTicket {
-		-FormPartsComponent BtnGetAccount<認証する>
 		-Button 依頼する
 		-FormPartsComponent AccountBasicAuth
 		-FormPartsComponent TicketInfo
 	}
-	FormGetProject --> BtnGetProject : use
 	FormCreateTicket --> AccountBasicAuth : use
 	FormCreateTicket --> TicketInfo : use
 
@@ -238,6 +330,6 @@ package "ScreenComponent" {
 	class AppCatalogItem
 }
 ScreenComponent -down-> CommonComponent : use
-ScreenComponent -down-> axios : use
+
 
 @enduml

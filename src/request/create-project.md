@@ -10,4 +10,3 @@ OrBITを利用する際は、以下に必要事項を入力の上、プロジェ
 ---
 <br>
 <FormCreateProject/>
-<Footer/>

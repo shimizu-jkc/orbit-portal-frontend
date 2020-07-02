@@ -41,16 +41,19 @@ state プロジェクト関連 {
 	state "確認ダイアログ" as pconfirm
 		note right of pconfirm : [キャンセル]ボタンの場合は\n元画面へ遷移
 	state "読み込み中" as pload
+	state "解除完了" as pgoodbye
 	[*] --> pcreate
 	[*] --> pget
 	[*] --> pdelete
 	pcreate --> pconfirm : [登録する]ボタン
 	pget --> pload : [確認する]ボタン
 	pget2 --> pupdate : [編集]ボタン
+	pupdate --> pget2 : [戻る]ボタン
 	pupdate --> pconfirm : [更新する]ボタン
 	pdelete --> pconfirm : [解除する]ボタン
 	pconfirm --> pload : [OK]ボタン
 	pload --> pget2 : 完了
+	pload -right-> pgoodbye : 完了(登録解除)
 }
 
 state アカウント関連 {
@@ -99,6 +102,7 @@ state アカウント関連 {
 	state "確認ダイアログ" as aconfirm
 		note right of aconfirm : [キャンセル]ボタンの場合は\n元画面へ遷移
 	state "読み込み中" as aload
+	state "削除完了" as agoodbye
 	[*] --> acreate
 	[*] --> aget
 	[*] --> adelete
@@ -107,10 +111,12 @@ state アカウント関連 {
 	acreate2 --> aconfirm : [申請する]ボタン
 	aget --> aload : [確認する]ボタン
 	aget2 --> aupdate : [編集]ボタン
+	aupdate --> aget2 : [戻る]ボタン
 	aupdate --> aconfirm : [更新する]ボタン
 	adelete --> aconfirm : [申請する]ボタン
 	aconfirm --> aload : [OK]ボタン
-	aload --> aget2 : 完了(認証意外)
+	aload --> aget2 : 完了(確認・更新)
+	aload -left-> agoodbye : 完了(削除)
 }
 
 state 管理者作業関連 {
@@ -157,9 +163,10 @@ state 管理者作業関連 {
 	tload --> tget2 : 完了(確認する)
 	tget2 --> tget3 : [詳細]ボタン
 	tget3 --> tupdate : [編集]ボタン
+	tupdate --> tget3 : [戻る]ボタン
 	tupdate --> tconfirm : [更新する]ボタン
 	tconfirm --> tload : [OK]ボタン
-	tload --> tget3 : 完了(更新する)
+	tload --> tget3 : 完了(依頼・更新)
 }
 
 state カタログ関連 {
@@ -167,6 +174,7 @@ state カタログ関連 {
 	state "カタログ詳細" as detail
 	[*] --> list
 	list --> detail : [詳細]ボタン
+	detail --> detail : [DL]ボタン
 	detail --> list : [戻る]ボタン
 }
 @enduml

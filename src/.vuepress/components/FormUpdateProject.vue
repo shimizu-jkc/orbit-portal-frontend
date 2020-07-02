@@ -1,10 +1,11 @@
 <template>
-  <div id="FormDeleteProject">
-    <p-info operation="delete"/>
+  <div id="FormUpdateProject">
+    <p-info operation="update"/>
     <el-row>
-      <el-button type="primary" @click="onClickDelete()">解除する</el-button>
+      <el-button @click="onClickCancel()">戻る</el-button>
+      <el-button type="primary" @click="onClickUpdate()">更新する</el-button>
     </el-row>
-    <loading :show="loading" message="解除中です"/>
+    <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm
       :visible="dialog.visible" 
@@ -23,7 +24,7 @@ import Confirm from './common/Confirm.vue'
 import ProjectInfo from './FormParts/ProjectInfo.vue'
 
 export default {
-  name: "FormDeleteProject",
+  name: "FormUpdateProject",
   components: {
     loading: Loading,
     confirm: Confirm,
@@ -41,9 +42,12 @@ export default {
     }
   },
   methods: {
-    onClickDelete() {
-      this.dialog.title = "登録解除の確認";
-      this.dialog.message = "本当にプロジェクトの登録を解除してもよろしいですか？";
+    onClickCancel() {
+      this.$router.push("/request/show-project");
+    },
+    onClickUpdate() {
+      this.dialog.title = "更新の確認";
+      this.dialog.message =  "本当にプロジェクトの情報を更新してもよろしいですか？";
       this.dialog.visible = true;
     },
     onEventOk() {
@@ -53,10 +57,10 @@ export default {
         this.loading = false;
         this.$refs.notification.notify({
           status: "success",
-          title: "登録解除の完了",
-          message: "プロジェクトの登録を解除しました。"
+          title: "更新の完了",
+          message: "プロジェクトの情報を更新しました。"
         });
-        this.$router.push('/request/goodbye');
+        this.$router.push("/request/show-project");
       }, 2000);
     }
   }

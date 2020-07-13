@@ -13,6 +13,7 @@ package "api" {
 		+void post()
 		+void put()
 		+void delete()
+		+void getFileUrl()
 	}
 	class TicketAPI {
 		+void get()
@@ -66,6 +67,7 @@ package "store" {
 		+"Promise actions.post()"
 		+"Promise actions.put()"
 		+"Promise actions.delete()"
+		+"Promise actions.getFileUrl()"
 	}
 	AccountStore --> AccountAPI : use
 	class TicketStore {
@@ -114,7 +116,6 @@ package "CommonComponent" {
 package "FormPartsComponent" {
 	class ProjectBasicAuth {
 		~Input projectName
-		~Input projectEmail
 		+String text
 		-"Button :text"
 	}
@@ -233,34 +234,33 @@ package "FormPartsComponent" {
 package "ScreenComponent" {
 	class FormCreateProject {
 		-Button 登録する
-		-FormPartsComponent ProjectBasicAuth
 		-FormPartsComponent ProjectInfo
 	}
-	FormCreateProject -down-> ProjectBasicAuth : use
 	FormCreateProject --> ProjectInfo : use
 
 	class FormGetProject {
-		-Button 編集
 		-FormPartsComponent ProjectBasicAuth
-		-FormPartsComponent ProjectInfo
 	}
 	FormGetProject --> ProjectBasicAuth : use
-	FormGetProject --> ProjectInfo : use
+
+	class FormShowProject {
+		-Button 編集
+		-FormPartsComponent ProjectInfo
+	}
+	FormShowProject --> ProjectInfo : use
 
 	class FormUpdateProject {
 		-Button 更新する
 		-Button キャンセル		
-		-FormPartsComponent ProjectBasicAuth
 		-FormPartsComponent ProjectInfo
 	}
-	FormUpdateProject --> ProjectBasicAuth : use
 	FormUpdateProject --> ProjectInfo : use
 
 	class FormDeleteProject {
 		-Button 削除する
-		-FormPartsComponent ProjectBasicAuth
+		-FormPartsComponent ProjectInfo
 	}
-	FormDeleteProject --> ProjectBasicAuth : use
+	FormDeleteProject --> ProjectInfo : use
 	
 	class FormCreateAccount {
 		-Button 申請する
@@ -271,27 +271,28 @@ package "ScreenComponent" {
 	FormCreateAccount --> AccountInfo : use
 	
 	class FormGetAccount {
-		-Button 編集
 		-FormPartsComponent AccountBasicAuth
-		-FormPartsComponent AccountInfo
 	}
 	FormGetAccount --> AccountBasicAuth : use
-	FormGetAccount --> AccountInfo : use
+
+	class FormShowAccount {
+		-Button 編集
+		-FormPartsComponent AccountInfo
+	}
+	FormShowAccount --> AccountInfo : use
 
 	class FormUpdateAccount {
 		-Button 更新する
 		-Button キャンセル
-		-FormPartsComponent AccountBasicAuth
 		-FormPartsComponent AccountInfo
 	}
-	FormGetAccount --> AccountBasicAuth : use
-	FormGetAccount --> AccountInfo : use
+	FormUpdateAccount --> AccountInfo : use
 	
 	class FormDeleteAccount {
 		-Button 削除する	
-		-FormPartsComponent AccountBasicAuth
+		-FormPartsComponent AccountInfo
 	}
-	FormDeleteAccount --> AccountBasicAuth : use
+	FormDeleteAccount --> AccountInfo : use
 	
 	class FormCreateTicket {
 		-Button 依頼する
@@ -302,18 +303,20 @@ package "ScreenComponent" {
 	FormCreateTicket --> TicketInfo : use
 
 	class FormGetTickets {
-		-Button 確認する
 		-FormPartsComponent AccountBasicAuth
-		-FormPartsComponent TicketList
 	}
 	FormGetTickets --> AccountBasicAuth : use
-	FormGetTickets --> TicketList : use
 
-	class FormGetTicket {
+	class FormShowTickets {
+		-FormPartsComponent TicketList
+	}
+	FormShowTickets --> TicketList : use
+
+	class FormShowTicket {
 		-Button 編集
 		-FormPartsComponent TicketInfo
 	}
-	FormGetTicket --> TicketInfo : use
+	FormShowTicket --> TicketInfo : use
 	
 	class FormUpdateTicket {
 		-Button 更新する

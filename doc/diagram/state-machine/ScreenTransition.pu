@@ -23,7 +23,6 @@ state プロジェクト関連 {
 		pcreate: メンバー(部署,名前,アドレス)
 	state "プロジェクト情報の確認(取得前)" as pget
 		pget: プロジェクト名
-		pget: 代表者Eメールアドレス
 	state "プロジェクト情報の確認(取得後)" as pget2
 		pget2: プロジェクト名
 		pget2: 代表者Eメールアドレス

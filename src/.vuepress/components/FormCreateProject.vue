@@ -15,7 +15,7 @@
           ></el-checkbox>
         </el-col>
       </el-form-item>
-      <p-info :operation="operation" />
+      <p-info operation="create" />
       <el-form-item>
         <el-button type="primary" @click="onClickCreate()">登録する</el-button>
       </el-form-item>

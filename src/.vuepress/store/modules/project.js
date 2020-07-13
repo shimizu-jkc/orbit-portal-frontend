@@ -19,7 +19,7 @@ const state = () => ({
 // Getters
 const getters = {};
 
-// Actons
+// Actions
 const actions = {
   async getProject(context) {
     const result = await api.get();

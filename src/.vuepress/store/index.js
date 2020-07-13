@@ -11,7 +11,7 @@ export default new Vuex.Store({
   modules: {
     p: project,
     a: account,
-    ticket: ticket,
+    t: ticket,
     c: cache
   },
   strict: process.env.NODE_ENV !== 'production'

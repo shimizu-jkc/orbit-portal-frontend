@@ -57,27 +57,26 @@ module.exports = {
         text: "各種申請", 
         items: [
           { 
-            text: "クラウド環境関連", 
+            text: "プロジェクト関連", 
             items: [            
-              { text: "払い出し申請", link: "/request/create-env" },
-              { text: "設定変更申請", link: "/request/update-env" },
-              { text: "解約申請", link: "/request/destroy-env" }
+              { text: "新規登録", link: "/request/create-project" },
+              { text: "プロジェクト情報の確認", link: "/request/get-project" },
+              { text: "登録解除", link: "/request/delete-project" }
             ],
           },
           {
-            text: "ユーザー関連", 
+            text: "アカウント関連", 
             items: [
-              { text: "登録申請", link: "/request/regist-user" },
-              { text: "情報変更申請", link: "/request/update-user" },
-              { text: "削除申請", link: "/request/unregist-user" }
+              { text: "払い出し申請", link: "/request/create-account" },
+              { text: "アカウント情報の確認", link: "/request/get-account" },
+              { text: "削除申請", link: "/request/delete-account" }
             ]
           },
           {
-            text: "作業依頼", 
+            text: "管理者作業関連", 
             items: [
-              { text: "サポートプラン変更", link: "/request/update-support" },
-              { text: "監査ログ確認", link: "/request/analyze-auditlog" },
-              { text: "その他", link: "/request/other" }
+              { text: "作業の依頼", link: "/request/create-ticket" },
+              { text: "作業状況の確認", link: "/request/get-ticket" }
             ]
           }
         ]
@@ -160,7 +159,35 @@ module.exports = {
             "info/release"
           ]
         }
-      ]
+      ],
+      "/request/": [
+        {
+          title: "プロジェクト関連",
+          collapsable: false,
+          children: [
+            ["create-project", "新規登録"],
+            ["get-project", "プロジェクト情報の確認"],
+            ["delete-project", "登録の解除"],
+          ]
+        },
+        {
+          title: "アカウント関連",
+          collapsable: false,
+          children: [
+            ["create-account", "払い出しの依頼"],
+            ["get-account", "アカウント情報の確認"],
+            ["delete-account", "アカウントの削除"]
+          ]
+        },
+        {
+          title: "管理者作業関連",
+          collapsable: false,
+          children: [
+            ["create-ticket", "作業の依頼"],
+            ["get-ticket", "作業状況の確認"]
+          ]
+        },
+      ]  
     },
     // GitHub setting
     repo: "jkc-cloud/orbit-doc-UserManual",

@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="form" label-position="top" label-width="150px" >
+  <el-form ref="form" :model="form">
     <el-form-item label="申請する前に">
       <el-col><el-checkbox label="プロジェクトとしての体制が構築されている。" v-model="form.agreement1"></el-checkbox></el-col>
       <el-col><el-checkbox label="クラウドの利用に関して決裁が完了している。" v-model="form.agreement2"></el-checkbox></el-col>
@@ -100,7 +100,7 @@
           resource: '',
           desc: ''
         }
-      }
+      };
     },
     methods: {
       onSubmit() {

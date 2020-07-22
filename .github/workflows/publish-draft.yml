@@ -33,7 +33,7 @@ jobs:
         env:
           SLACK_USERNAME: "[Portal] Deploy Success"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
-          SLACK_ICON: 'src/.vuepress/public/img/logo.png'
+          SLACK_ICON: 'https://github.com/jkc-cloud/orbit-portal-frontend/blob/draft/src/.vuepress/public/img/logo.png'
       - name: Slack Notification Failure
         if: failure()
         uses: rtCamp/action-slack-notify@master

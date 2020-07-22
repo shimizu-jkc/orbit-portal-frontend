@@ -3,9 +3,10 @@ on:
   push:
     branches:
       - draft
+      - wip-cicd
     paths-ignore:
       - "README.md"
-      - "figure/*"
+      - "doc/*"
 jobs:
   publish:
     name: Publish portal of draft.
@@ -25,14 +26,14 @@ jobs:
       - name: Deploy
         uses: ItsKarma/aws-cli@v1.70.0
         with:
-          args: s3 sync --delete --acl bucket-owner-read --exact-timestamps release/ s3://test.orbit.jvckenwood-dev.com/
+          args: s3 sync --delete --acl bucket-owner-read --exact-timestamps release/ s3://orbit.jvckenwood-dev.com/
       - name: Slack Notification Success
         if: success()
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_USERNAME: "[Portal] Deploy Success"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
-          SLACK_ICON: 'https://avatars0.githubusercontent.com/u/44036562?s=100'
+          SLACK_ICON: 'src/.vuepress/public/img/logo.png'
       - name: Slack Notification Failure
         if: failure()
         uses: rtCamp/action-slack-notify@master

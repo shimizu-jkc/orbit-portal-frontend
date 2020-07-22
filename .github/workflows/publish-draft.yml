@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - draft
-      - wip-cicd
     paths-ignore:
       - "README.md"
       - "doc/*"
@@ -31,14 +30,14 @@ jobs:
         if: success()
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_USERNAME: "[Portal] Deploy Success"
+          SLACK_USERNAME: "[OrbitPortal] Deploy Success"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
-          SLACK_ICON: 'https://github.com/jkc-cloud/orbit-portal-frontend/blob/draft/src/.vuepress/public/img/logo.png'
+          SLACK_ICON: 'https://avatars0.githubusercontent.com/u/44036562?s=100'
       - name: Slack Notification Failure
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_USERNAME: "[Portal] Deploy Failure"
+          SLACK_USERNAME: "[OrbitPortal] Deploy Failure"
           SLACK_WEBHOOK: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
           SLACK_ICON: 'https://avatars0.githubusercontent.com/u/44036562?s=100'
           SLACK_COLOR: "#FF0000"

@@ -1,9 +1,9 @@
 <template>
   <div id="FormShowProject">
-    <p-info operation="show"/>
-    <el-row>
+    <el-row type="flex" justify="end">
       <el-button type="primary" @click="onClickEdit()">編集する</el-button>
     </el-row>
+    <p-info operation="show" :id="id"/>
   </div>
 </template>
 
@@ -15,9 +15,17 @@ export default {
   components: {
     "p-info": ProjectInfo
   },
+  data() {
+    return {
+      id: this.$route.query.id,
+    };
+  },
   methods: {
     onClickEdit() {
-      this.$router.push("/request/update-project");
+      this.$router.push({
+        path: "update-project.html",
+        query: { id: this.id }
+      });
     }
   }
 }

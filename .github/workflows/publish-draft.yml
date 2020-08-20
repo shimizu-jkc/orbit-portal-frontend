@@ -11,9 +11,6 @@ jobs:
   publish:
     name: Publish portal of draft.
     runs-on: ubuntu-latest
-    env:
-      BASE_URL: https://api.orbit.jvckenwood-dev.com/organization/v1,
-      API_KEY: Ov5R17LWDN1anc2It1LUge42YbAhFNp5rsxog045
     steps:
       - uses: actions/checkout@v2.1.0
       - uses: actions/setup-node@v1.4.2
@@ -24,13 +21,13 @@ jobs:
           aws-access-key-id: ${{ secrets.ORBIT_SS_DEV_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.ORBIT_SS_DEV_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: PreBuild
+      - name: CreateEnvJson
         uses: schdck/create-env-json@v1
         id: create-env
         with:
           file-name: "src/.vuepress/env.json"
-          BASE_URL: $BASE_URL
-          API_KEY: $API_KEY
+          BASE_URL: "https://api.orbit.jvckenwood-dev.com/organization/v1"
+          API_KEY: "Ov5R17LWDN1anc2It1LUge42YbAhFNp5rsxog045"
       - name: Build
         run: npm install && npm run build
       - name: Deploy

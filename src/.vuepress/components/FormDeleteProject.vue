@@ -1,18 +1,27 @@
 <template>
   <div id="FormDeleteProject">
-    <p-info operation="delete"/>
-    <el-row>
-      <el-button type="primary" @click="onClickDelete()">解除する</el-button>
-    </el-row>
-    <loading :show="loading" message="解除中です"/>
-    <notification ref="notification"/>
-    <confirm
-      :visible="dialog.visible" 
-      :title="dialog.title"
-      :message="dialog.message"
-      @ok="dialog.visible=false; onEventOk()"
-      @cancel="dialog.visible=false"
-    />
+    <div id="preAuth" v-if="!completeAuth">
+      <p-basic action="認証" @success="onEventSuccess($event)"/>
+      <notification ref="notification"/>
+    </div>
+    <div id="postAuth" v-else>
+      <el-row type="flex" justify="end">
+        <el-button @click="completeAuth=false">キャンセル</el-button>
+        <el-button type="danger" @click="onClickDelete()">解除する</el-button>
+      </el-row>
+      <p-info operation="delete" :id="id" />
+      <loading :show="loading" message="解除中です"/>
+      <notification ref="notification"/>
+      <confirm
+        :id="dialog.id"
+        :title="dialog.title"
+        :message="dialog.message"
+        :visible="dialog.visible" 
+        :cancelable="dialog.cancelable"
+        @ok="dialog.visible=false; onEventOk($event)"
+        @cancel="dialog.visible=false"
+      />
+      </div>
   </div>
 </template>
 
@@ -20,6 +29,7 @@
 import Loading from './common/Loading.vue'
 import Notification from './common/Notification.vue'
 import Confirm from './common/Confirm.vue'
+import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
 import ProjectInfo from './FormParts/ProjectInfo.vue'
 
 export default {
@@ -28,36 +38,61 @@ export default {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
+    "p-basic": ProjectBasicAuth,
     "p-info": ProjectInfo
   },
   data() {
     return {
       loading: false,
       dialog: {
+        id: "",
         visible: false,
+        cancelable: true,
         title: "",
         message: ""
-      }
+      },
+      completeAuth: false,
+      id: ""
     }
   },
   methods: {
+    async onEventSuccess(event) {
+      this.id = event.id;
+      this.completeAuth = true;
+    },
     onClickDelete() {
+      this.dialog.id = "CONFIRM_DELETE";
+      this.dialog.cancelable = true;
       this.dialog.title = "登録解除の確認";
-      this.dialog.message = "本当にプロジェクトの登録を解除してもよろしいですか？";
+      this.dialog.message ="本当にプロジェクトの登録を解除してもよろしいですか？";
       this.dialog.visible = true;
     },
-    onEventOk() {
-      this.dialog.visible = false;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.$refs.notification.notify({
-          status: "success",
-          title: "登録解除の完了",
-          message: "プロジェクトの登録を解除しました。"
-        });
-        this.$router.push('/request/goodbye');
-      }, 2000);
+    async onEventOk(event) {
+      switch(event.id){
+        case "CONFIRM_DELETE": {      
+          this.loading = true;
+          try{
+            await this.$store.dispatch("reqDeleteProject", { id: this.id });
+            this.$refs.notification.notify({
+              status: "success",
+              title: this.$page.title,
+              message: "プロジェクトの登録を解除しました。"
+            });
+            this.$router.push({
+              path: "goodbye.html"
+            });
+          }catch(e){
+            this.$refs.notification.notify({
+              status: "error",
+              title: this.$page.title,
+              message: e.message
+            });
+          }finally{
+            this.loading = false;
+          }
+        }
+        default: break;
+      }
     }
   }
 }

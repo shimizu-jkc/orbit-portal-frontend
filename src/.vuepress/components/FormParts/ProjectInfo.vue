@@ -1,77 +1,102 @@
 <template>
   <div id="ProjectInfo">
-    <el-form label-position="top">
-      <div id="BasicInfo" v-show="isShowBasicInfo()">
-        <el-form-item label="プロジェクト名">
-          <el-input 
-            type="text"
-            placeholder="プロジェクトの名称を入力してください"
-            v-model="projectName"
-            v-if="isEditable('projectName')"
-            minlength=1
-            maxlength=20
-            show-word-limit
-          ></el-input>
-          <span v-else>
-            {{result.projectName}}
-            <span class="attention" v-show="operation=='update'">プロジェクト名は編集できません</span>
-          </span>
-        </el-form-item>
-        <el-form-item label="代表者Eメールアドレス">
-          <el-input 
-            type="text"
-            v-if="isEditable('projectEmail')"
-            placeholder="プロジェクト代表者のEメールアドレスを入力してください"
-            v-model="projectEmail"
-          ></el-input>
-          <span v-else>{{result.projectEmail}}</span>
-        </el-form-item>
-      </div>
-      <div id="ExtInfo" v-show="isShowExtInfo()">
-        <el-form-item label="事業部">
-          <el-select class="select"
-            v-model="division" 
-            v-if="isEditable('division')"
-            placeholder="所属する事業部を選択してください。"
-          >
-            <el-option label="コーポレート" value="CORP"></el-option>
-            <el-option label="AM事業部" value="AM"></el-option>
-            <el-option label="MS事業部" value="MS"></el-option>
-            <el-option label="PS事業部" value="PS"></el-option>
-            <el-option label="DX事業部" value="DX"></el-option>
-          </el-select>
-          <span v-else>
-            {{result.division}}
-            <span class="attention" v-show="operation=='update'">事業部は編集できません</span>
-          </span>
-        </el-form-item>
-        <el-form-item label="予算">
-          <el-input-number class="input-number" 
+    <el-form 
+      inline-message
+      status-icon
+      label-width="25%"
+      :label-position="isEditable('page')?'top':'left'"
+    >
+      <el-form-item label="プロジェクト名">
+        <el-input 
+          type="text"
+          placeholder="プロジェクトの名称を入力してください"
+          v-model="projectId"
+          v-if="isEditable('projectName')"
+          minlength=1
+          maxlength=20
+          show-word-limit
+        ></el-input>
+        <span class="form-item" v-else>
+          {{project.ProjectId}}
+          <span class="attention" v-show="operation=='update'">※プロジェクト名は変更できません</span>
+        </span>
+      </el-form-item>
+      <el-form-item label="代表者Eメールアドレス">
+        <el-input 
+          type="text"
+          v-if="isEditable('projectEmail')"
+          placeholder="プロジェクト代表者のEメールアドレスを入力してください"
+          v-model="projectEmail"
+        ></el-input>
+        <span class="form-item" v-else>
+          {{project.ProjectEmail}}
+        </span>
+      </el-form-item>
+      <el-form-item label="事業部">
+        <el-select 
+          class="select"
+          v-model="division" 
+          v-if="isEditable('division')"
+          placeholder="所属する事業部を選択してください。"
+        >
+          <el-option label="コーポレート" value="CORP"></el-option>
+          <el-option label="AM事業部" value="AM"></el-option>
+          <el-option label="MS事業部" value="MS"></el-option>
+          <el-option label="PS事業部" value="PS"></el-option>
+          <el-option label="DX事業部" value="DX"></el-option>
+        </el-select>
+        <span class="form-item" v-else>
+          {{getDispDivisionName(project.DivisionName)}}
+          <span class="attention" v-show="operation=='update'">※事業部は変更できません</span>
+        </span>
+      </el-form-item>
+      <el-form-item label="クラウド利用の予算(月額)">
+        <div id="EditableBudget" v-if="isEditable('budget')">
+          <el-input-number 
+            class="input-number"
             v-model="budget"
-            v-if="isEditable('budget')"
-            placeholder="予定している月額のクラウド利用料金を入力してください。"
-            controls-position="right"
+            placeholder="予定している月毎のクラウド利用料金を入力してください。"
             :step="10"
             :min="0" 
             :max="10000"
           ></el-input-number>
-          <span v-else>{{result.budget}}</span>
-        </el-form-item>
-        <members :readOnly="!isEditable('members')" />
-      </div>
+          <span> USD </span>
+        </div>
+        <span class="form-item" v-else>
+          {{project.Budget}} USD
+        </span>
+      </el-form-item>
+      <el-form-item label="プロジェクトメンバー">
+        <div class="form-item">
+          <members :readOnly="!isEditable('members')" :id="id"/>
+        </div>
+      </el-form-item>
+      <el-form-item label="所有アカウント" v-if="isReadOnly">
+        <span class="form-item" v-for="account in project.AccountIds">
+          {{account}}
+        </span>
+      </el-form-item>
+      <el-form-item label="登録日" v-if="isReadOnly">
+        <span class="form-item">{{epochSecToJST(project.CreatedAt)}}</span>
+      </el-form-item>
+      <el-form-item label="最終更新日" v-if="isReadOnly">
+        <span class="form-item">{{epochSecToJST(project.UpdatedAt)}}</span>
+      </el-form-item>
       <br>
     </el-form>
   </div>
 </template>
 
 <script>
-import MemberList from './MemberList'
+import MemberList from './MemberList';
+import Util from "../../mixins/util";
 
 export default {
   name: "ProjectInfo",
-  components :{
+  components : {
     members: MemberList
   },
+  mixins: [Util],
   props: {
     operation: {
       type: String,
@@ -79,68 +104,79 @@ export default {
       validator(value){
         return ["create","get","show","update","delete"].indexOf(value) !== -1;
       }
+    },
+    id: {
+      type: String,
+      default: ""
     }
   },
   data() {
-    return {
-      result : {
-        projectName: this.$store.state.p.result.projectName,
-        projectEmail: this.$store.state.p.result.projectEmail,
-        division: this.$store.state.p.result.division,
-        budget: this.$store.state.p.result.budget
-      }
-    }
+    return {}
   },
   computed: {
-    projectName: {
-      get() { return this.$store.state.p.projectName},
-      set(value){ this.$store.commit('setProjectName', value) }
+    //for display
+    project() {
+      const project = this.$store.getters.getProjectById(this.id);
+      if(!project && this.needProject){
+        this.$router.push({ path: "get-project.html" });
+        return this.$store.getters.getDummyProject();
+      }else{
+        return project;
+      }
+    },
+    //Store processing
+    projectId: {
+      get() { return this.$store.state.p.createParams.ProjectId },
+      set(value){ this.$store.commit('setCreateParams', {name: "ProjectId", val: value}) }
     },
     projectEmail: {
-      get() { return this.$store.state.p.projectEmail},
-      set(value){ this.$store.commit('setProjectEmail', value) }
+      get() { return this.$store.state.p[this.isUpdate ? "updateParams":"createParams"].ProjectEmail },
+      set(value){ this.$store.commit(this.isUpdate ? "setUpdateParams":"setCreateParams", {name: "ProjectEmail", val: value}) }
     },
     division: {
-      get() { return this.$store.state.p.division},
-      set(value){ this.$store.commit('setDivision', value) }
+      get() { return this.$store.state.p.createParams.DivisionName },
+      set(value){ this.$store.commit('setCreateParams', {name: "DivisionName", val: value}) }
     },
     budget: {
-      get() { return this.$store.state.p.budget},
-      set(value){ this.$store.commit('setBudget', value) }
-    }
-  },
-  methods:{
-    isShowBasicInfo(){
-      switch(this.operation){
-        default : return true;
-      };
+      get() { return this.$store.state.p[this.isUpdate ? "updateParams":"createParams"].Budget },
+      set(value){ this.$store.commit(this.isUpdate ? "setUpdateParams":"setCreateParams", {name: "Budget", val: value}) }
     },
-    isShowExtInfo(){
-      switch(this.operation){
-        case "create":
-        case "show":
-        case "update": return true;
-        default: return false;
-      };    
+    isEditable(){
+      return (target) => {
+        switch(this.operation){
+          case "create": return true;
+          case "update": {
+            switch(target){
+              case "page":
+              case "projectEmail":
+              case "budget":
+              case "members": return true;
+              default: return false;
+            }
+          }
+          case "get":
+          case "show":  
+          case "delete":
+          default: return false;
+        }
+      }
     },
-    isEditable(target){
-      switch(this.operation){
-        case "create": return true;
-        case "update":
-          switch(target){
-            case "projectEmail":
-            case "budget":
-            case "members": return true;
-            default: return false;
-          }
-        case "get":
-        case "delete":
-          switch(target){
-            case "projectName":
-            case "projectEmail": return true;
-            default: return false;
-          }
-        default: return false;
+    isReadOnly(){ return this.isShow || this.isDelete },
+    needProject() { return this.isShow || this.isUpdate },
+    isCreate(){ return this.operation === "create" },
+    isShow(){ return this.operation === "show" },
+    isUpdate(){ return this.operation === "update" },
+    isDelete(){ return this.operation === "delete" }
+   },
+   methods:{
+    getDispDivisionName(val){
+      switch(val){
+        case "CORP": return "コーポレート";
+        case "AM": return "AM事業部";
+        case "MS": return "MS事業部";
+        case "PS": return "PS事業部";
+        case "DX": return "DX事業部";
+        default : return "不明";
       }
     }
   }
@@ -148,14 +184,18 @@ export default {
 </script>
 
 <style>
-.select {
-  width: 60%
-}
-.input-number {
+.el-select {
   width: 30%
 }
+.el-input-number {
+  width: 15%
+}
 .attention {
+  margin-left: 1.5em;
   font-size: 80%;
   color: red;
+}
+.form-item {
+  padding: 0 16px;
 }
 </style>

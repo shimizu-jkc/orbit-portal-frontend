@@ -1,3 +1,7 @@
+const webpack = require('webpack');
+const { config } = require('dotenv');
+config();
+
 module.exports = {
   title: "OrBITポータル",
   description: "OrBITは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
@@ -167,7 +171,7 @@ module.exports = {
           children: [
             ["create-project", "新規登録"],
             ["get-project", "プロジェクト情報の確認"],
-            ["delete-project", "登録の解除"],
+            ["delete-project", "登録解除"],
           ]
         },
         {
@@ -194,6 +198,14 @@ module.exports = {
     repoLabel: "GitHub",
     docsRepo: "jkc-cloud/orbit-doc-UserManuals",
     docsDir: "src",
-    docsBranch: "master"
+    docsBranch: "master",
+    // Webpack setting
+    configureWebpack: () => {  
+      return {  
+        plugins: [  
+          new webpack.EnvironmentPlugin(["BASE_URL","API_KEY"])  
+        ]  
+      }  
+    }
   }
 };

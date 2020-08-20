@@ -16,26 +16,37 @@ export default {
   methods: {
     notify(prop){
       switch(prop.status){
-        case "success":
+        case "success": {
+          this.$notify({
+            title: prop.title || this.title,
+            message: prop.message || this.message, 
+            type: "success",
+            duration: 5000
+          });
+          break;
+        }
         case "warning": {
           this.$notify({
             title: prop.title || this.title,
             message: prop.message || this.message, 
-            type: prop.status || this.status
+            type: "warning",
+            duration: 0
           });
           break;
         }
         case "error": {
           this.$notify.error({
             title: prop.title || this.title,
-            message: prop.message || this.message
+            message: prop.message || this.message,
+            duration: 0
           });
           break;
         }
         case "info": {
           this.$notify.info({
             title: prop.title || this.title,
-            message: prop.message || this.message
+            message: prop.message || this.message,
+            duration: 10000
           });
           break;
         }

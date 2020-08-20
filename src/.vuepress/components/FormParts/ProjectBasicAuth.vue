@@ -11,13 +11,6 @@
           show-word-limit
         ></el-input>
       </el-form-item>
-      <el-form-item label="代表者Eメールアドレス">
-        <el-input 
-          type="text"
-          placeholder="プロジェクト代表者のEメールアドレスを入力してください"
-          v-model="projectEmail"
-        ></el-input>
-      </el-form-item>
       <br>
       <el-form-item>
         <el-button type="primary" @click="onClickGet()">{{action}}する</el-button>
@@ -54,26 +47,26 @@ export default {
       get() { return this.$store.state.c.authProjectName},
       set(value){ this.$store.commit('setAuthProjectName', value) }
     },
-    projectEmail: {
-      get() { return this.$store.state.c.authProjectEmail},
-      set(value){ this.$store.commit('setAuthProjectEmail', value) }
-    },
     message(){
       return this.action + "中です";
     }
   },
   methods: {
-    onClickGet() {
+    async onClickGet() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
+      try{
+        await this.$store.dispatch("reqGetProject", {id: this.projectName});
+        this.$emit("success", { id: this.projectName });
+      }catch(e){
         this.$refs.notification.notify({
-          status: "success",
-          title: "処理完了",
-          message: "正常に処理が完了しました。"
+          status: "error",
+          title: this.$page.title,
+          message: e.message
         });
-        this.$emit("success");
-      }, 1000);
+        this.$emit("failed");
+      }finally{
+        this.loading = false;
+      }
     }
   }
 }

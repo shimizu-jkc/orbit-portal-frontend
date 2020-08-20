@@ -45,11 +45,6 @@ export default {
     return {
       loading: false,
       dialog: {
-        visible: false,
-        title: "登録解除の確認",
-        message: "本当にプロジェクトの登録を解除してもよろしいですか？"
-      },
-      dialog: {
         id: "",
         visible: false,
         cancelable: true,

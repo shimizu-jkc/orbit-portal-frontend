@@ -8,20 +8,17 @@
         <iframe 
           class="catalog-inline" 
           frameborder="0" 
-          src="/catalog/items/user-management/overview">
+          src="/overview.html">
         </iframe>
       </el-tab-pane>
       <el-tab-pane label="使い方" name="manual">
         <iframe 
           class="catalog-inline" 
           frameborder="0" 
-          src="/catalog/items/user-management/manual"></iframe>
+          src="/manual.html"></iframe>
       </el-tab-pane>
       <el-tab-pane label="アーキテクチャ" name="arch">
-        <iframe 
-          class="catalog-inline" 
-          frameborder="0" 
-          src="/catalog/items/user-management/architecture"></iframe>
+        <img src="/img/baseline_architecture.png#" alt=""/>
       </el-tab-pane>
       <el-tab-pane label="API仕様" name="api">
         <iframe 
@@ -33,19 +30,19 @@
         <iframe 
           class="catalog-inline" 
           frameborder="0" 
-          src="/catalog/items/user-management/download"></iframe>
+          src="/download.html"></iframe>
       </el-tab-pane>
       <el-tab-pane label="リリースノート" name="release">
         <iframe 
           class="catalog-inline" 
           frameborder="0" 
-          src="/catalog/items/user-management/release"></iframe>
+          src=""></iframe>
       </el-tab-pane>
       <el-tab-pane label="ヒント" name="tips">
         <iframe 
           class="catalog-inline" 
           frameborder="0" 
-          src="/catalog/items/user-management/tips"></iframe>
+          src="/tips.html"></iframe>
       </el-tab-pane>
     </el-tabs>
   </div>

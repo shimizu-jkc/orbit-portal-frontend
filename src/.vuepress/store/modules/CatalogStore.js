@@ -7,7 +7,7 @@ const state = () => ({
       Genre: "API",
       Vender: "AWS",
       Version: "v0.9.7 β",
-      Link: "items/user-management/index"
+      Link: "items/user-management"
     },
     {
       Name: "負荷試験",
@@ -15,7 +15,7 @@ const state = () => ({
       Genre: "テスト",
       Vender: "AWS",
       Version: "v0.9.0 α",
-      Link: "items/loadtestr/index"
+      Link: "items/loadtest"
     }
   ]
 });

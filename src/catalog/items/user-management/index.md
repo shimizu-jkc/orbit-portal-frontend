@@ -49,7 +49,14 @@ SMSによる本人検証には対応していません。
 * ユーザ検索機能における、複数条件を指定する際の優先度表現。
 * 非VPC環境へのLambda関数デプロイ。
 * 同一AWSアカウントにおける本カタログの複数デプロイ。
+
+## 作成者
+技術開発部 要素技術グループ クラウド基盤開発チーム  清水
+Email : shimizu.yusuke53@jvckenwood.com
+TEL(内線) : 841-24721  
+TEL(外線) : 045-444-5721  
 :::
+
 ::: tab 使い方
 ## 利用手順
 本カタログはAWSサービスの一つである、CloudFormationから利用することができます。  
@@ -319,12 +326,4 @@ resource "aws_cloudformation_stack" "user_management" {
 :::
 
 ::::
-
-### 作成者
----
-技術開発部 要素技術グループ クラウド基盤開発チーム  清水
-Email : shimizu.yusuke53@jvckenwood.com
-TEL(内線) : 841-24721  
-TEL(外線) : 045-444-5721  
-
 <Footer/>

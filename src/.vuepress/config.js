@@ -15,7 +15,8 @@ module.exports = {
   },
   plugins: [
     "@vuepress/back-to-top",
-    "@vuepress/medium-zoom"
+    "@vuepress/medium-zoom",
+    'tabs' 
   ],
   themeConfig: {
     logo: "/img/logo.png",

@@ -18,7 +18,8 @@ const state = () => ({
     ]
   },
   updateParams: {},
-  results: []
+  results: [],
+  currentOwnerProjectId: ""
 });
 
 // Getters
@@ -35,8 +36,8 @@ const getters = {
   getProjectById: (state) => (id) => {
     return state.results.find(r => r.ProjectId === id);
   },
-  isEdited: (state) => (id) => {
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(state.results.find(r => r.ProjectId === id)));
+  isEdited: (state, getters) => (id) => {
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id)));
   }
 };
 
@@ -77,7 +78,6 @@ const mutations = {
     state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.ProjectId === id)||{}));
   },
   setUpdateParams(state, param){
-    console.log(param)
     switch(param.name){
       case "Member::Department" : state.updateParams.Members[param.index].Department = param.val; break;
       case "Member::Name"       : state.updateParams.Members[param.index].Name = param.val; break;
@@ -87,7 +87,6 @@ const mutations = {
       case "Member::DELETE"     : state.updateParams.Members.splice(param.index, 1); break;
       default                   : state.updateParams[param.name] = param.val;
     }
-    console.log(state)
   },
   setResult(state, val){
     if(val){
@@ -95,6 +94,9 @@ const mutations = {
     }else{
       state.results = [];
     }
+  },
+  setCurrentOwnerProjectId(state, val){
+    state.currentOwnerProjectId = val;
   }
 }
 

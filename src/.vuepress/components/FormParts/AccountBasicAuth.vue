@@ -1,5 +1,5 @@
 <template>
-  <div id="ProjectBasicAuth">
+  <div id="AccountBasicAuth">
     <el-form label-position="top">
       <el-form-item label="プロジェクト名">
         <el-input 
@@ -8,6 +8,16 @@
           v-model="projectName"
           minlength=1
           maxlength=20
+          show-word-limit
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="クラウド環境ID">
+        <el-input 
+          type="text"
+          placeholder="クラウド環境のIDを入力してください"
+          v-model="accountId"
+          minlength=12
+          maxlength=12
           show-word-limit
         ></el-input>
       </el-form-item>
@@ -26,7 +36,7 @@ import Loading from '../common/Loading.vue'
 import Notification from '../common/Notification.vue'
 
 export default {
-  name: "ProjectBasicAuth",
+  name: "AccountBasicAuth",
   components: {
     loading: Loading,
     notification: Notification
@@ -47,6 +57,10 @@ export default {
       get() { return this.$store.state.c.tmp.ProjectId},
       set(value){ this.$store.commit('setTmpProjectId', value) }
     },
+    accountId: {
+      get() { return this.$store.state.c.tmp.AccountId},
+      set(value){ this.$store.commit('setTmpAccountId', value) }
+    },
     message(){
       return this.action + "中です";
     }
@@ -56,8 +70,10 @@ export default {
       this.loading = true;
       try{
         await this.$store.dispatch("reqGetProject", {id: this.projectName});
-        this.$store.commit("setAuthProjectId", this.projectName);
-        this.$emit("success", { id: this.projectName });
+        this.$store.commit('setAuthProjectId', this.projectName);
+        await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectName});
+        this.$store.commit('setAuthAccountId', this.accountId);
+        this.$emit("success", { id: this.accountId });
       }catch(e){
         this.$refs.notification.notify({
           status: "error",

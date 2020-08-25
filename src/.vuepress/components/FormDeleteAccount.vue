@@ -1,16 +1,16 @@
 <template>
-  <div id="FormDeleteProject">
+  <div id="FormDeleteAccount">
     <div id="preAuth" v-if="!completeAuth">
-      <p-basic action="認証" @success="onEventSuccess($event)"/>
+      <a-basic action="認証" @success="onEventSuccess($event)"/>
     </div>
     <div id="postAuth" v-else>
       <el-row type="flex" justify="end">
         <el-button @click="completeAuth=false">キャンセル</el-button>
-        <el-button type="danger" @click="onClickDelete()">解除する</el-button>
+        <el-button type="danger" @click="onClickDelete()">削除する</el-button>
       </el-row>
-      <p-info operation="delete" :id="id" />
+      <a-info operation="delete" :id="id" />
     </div>
-    <loading :show="loading" message="解除中です"/>
+    <loading :show="loading" message="削除の申請中です"/>
     <notification ref="notification"/>
     <confirm
       :id="dialog.id"
@@ -28,17 +28,17 @@
 import Loading from './common/Loading.vue'
 import Notification from './common/Notification.vue'
 import Confirm from './common/Confirm.vue'
-import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
-import ProjectInfo from './FormParts/ProjectInfo.vue'
+import AccountBasicAuth from './FormParts/AccountBasicAuth.vue'
+import AccountInfo from './FormParts/AccountInfo.vue'
 
 export default {
-  name: "FormDeleteProject",
+  name: "FormDeleteAccount",
   components: {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    "p-basic": ProjectBasicAuth,
-    "p-info": ProjectInfo
+    "a-basic": AccountBasicAuth,
+    "a-info": AccountInfo
   },
   data() {
     return {
@@ -62,8 +62,8 @@ export default {
     onClickDelete() {
       this.dialog.id = "CONFIRM_DELETE";
       this.dialog.cancelable = true;
-      this.dialog.title = "登録解除の確認";
-      this.dialog.message ="本当にプロジェクトの登録を解除してもよろしいですか？";
+      this.dialog.title = "削除申請の確認";
+      this.dialog.message ="本当にクラウド環境の削除を申請してもよろしいですか？";
       this.dialog.visible = true;
     },
     async onEventOk(event) {
@@ -71,14 +71,19 @@ export default {
         case "CONFIRM_DELETE": {      
           this.loading = true;
           try{
-            await this.$store.dispatch("reqDeleteProject", { id: this.id });
-            this.$refs.notification.notify({
+            await this.$store.dispatch("reqDeleteAccount", { id: this.id });
+            await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
-              message: "プロジェクトの登録を解除しました。"
+              message: "クラウド環境の削除を申請しました。"
+            });
+            this.$refs.notification.notify({
+              status: "info",
+              title: "申請における注意事項",
+              message: "クラウド環境を本当に削除するの確認を、プロジェクト代表者へ連絡しますので、しばらくの間お待ちください。"
             });
             this.$router.push({
-              path: "goodbye.html"
+              path: "get-account.html"
             });
           }catch(e){
             this.$refs.notification.notify({

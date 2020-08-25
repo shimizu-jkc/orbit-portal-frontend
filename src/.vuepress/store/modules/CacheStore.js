@@ -1,8 +1,13 @@
 // Initial state
 const state = () => ({
-  authProjectName: "",
-  authProjectEmail: "",
-  authAccountId: ""
+  tmp: {
+    ProjectId: "",
+    AccountId: ""
+  },
+  auth: {
+    ProjectId: "",
+    AccountId: ""
+  }
 });
 
 // Getters
@@ -13,14 +18,17 @@ const actions = {};
 
 // Mutations
 const mutations = {
-  setAuthProjectName(state, val){
-    state.authProjectName = val;
+  setTmpProjectId(state, val){
+    state.tmp.ProjectId = val;
   },
-  setAuthProjectEmail(state, val){
-    state.authProjectEmail = val;
+  setTmpAccountId(state, val){
+    state.tmp.AccountId = val;
+  },
+  setAuthProjectId(state, val){
+    state.auth.ProjectId = val;
   },
   setAuthAccountId(state, val){
-    state.authAccountId = val;
+    state.auth.AccountId = val;
   }
 };
 

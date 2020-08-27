@@ -12,7 +12,7 @@
       <el-form-item label="クラウド環境ID" v-if="isReadOnly">
         <span class="form-item">{{ticket.OwnerAccountId}}</span>
       </el-form-item>
-      <el-form-item label="管理者作業ID" v-if="isReadOnly">
+      <el-form-item label="作業ID" v-if="isReadOnly">
         <span class="form-item">{{ticket.TicketId}}</span>
       </el-form-item>
       <el-form-item label="連絡先Eメールアドレス">
@@ -25,7 +25,7 @@
         <span class="form-item" v-else>{{ticket.TicketEmail}}</span>
       </el-form-item>
       <el-form-item label="ステータス" v-if="isReadOnly">
-        <span class="form-item">{{getDispStatusName(ticket.Status)}}</span>
+        <span class="form-item">{{getDispName("TicketStatus", ticket.Status)}}</span>
       </el-form-item>
       <el-form-item label="作業種別">
         <el-select 
@@ -34,22 +34,24 @@
           v-if="isEditable('type')"
           placeholder="依頼する作業の種別を選択してください。"
         >
-          <el-option label="CloudFrontキーペアの作成" value="REQ_CF_KEYPAIR"></el-option>
-          <el-option label="監査ログの確認" value="REQ_AUDIT_LOG"></el-option>
-          <el-option label="サポートプランの変更" value="REQ_SUPPORT_PLAN_CHANGE"></el-option>
-          <el-option label="その他の作業" value="REQ_OTHER"></el-option>
+          <el-option
+            v-for="(item, index) in getDispNameSets('TicketType')"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
         <span class="form-item" v-else>
-          {{getDispTypeName(ticket.Type)}}
-          <span class="attention" v-show="operation=='update'">※チケット種別は変更できません</span>
+          {{getDispName("TicketType", ticket.Type)}}
+          <span class="attention" v-show="operation=='update'">※作業種別は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="作業内容">
-        <keypair v-if="type=='REQ_CF_KEYPAIR'"/>
-        <audit v-if="type=='REQ_AUDIT_LOG'"/>
-        <plan v-if="type=='REQ_SUPPORT_PLAN_CHANGE'"/>
-        <other v-if="type=='REQ_OTHER'"/>
-      </el-form-item>
+      <div id="TicketContent">
+        <simple v-if="isShowContent('REQ_CF_KEYPAIR')" type="REQ_CF_KEYPAIR" :readOnly="isReadOnly" :id="id"/>
+        <simple v-if="isShowContent('REQ_OTHER')" type="REQ_OTHER" :readOnly="isReadOnly" :id="id"/>
+        <audit v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
+        <plan v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
+      </div>
       <el-form-item label="登録日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(ticket.CreatedAt)}}</span>
       </el-form-item>
@@ -62,25 +64,24 @@
 </template>
 
 <script>
-import TicketContentCfKeypair from './TicketContentCfKeypair';
-import TicketContentAuditLog from './TicketContentAuditLog';
-import TicketContentPlanChange from './TicketContentPlanChange';
-import TicketContentOther from './TicketContentOther';
+import TicketContentAuditLog from './TicketContent/TicketContentAuditLog';
+import TicketContentPlanChange from './TicketContent/TicketContentPlanChange';
+import TicketContentSimple from './TicketContent/TicketContentSimple';
 import Util from "../../mixins/util";
+import Disp from "../../mixins/disp";
 
 export default {
   name: "TicketInfo",
   components : {
-    keypair: TicketContentCfKeypair,
     audit: TicketContentAuditLog,
     plan: TicketContentPlanChange,
-    other: TicketContentOther
- },
-  mixins: [Util],
+    simple: TicketContentSimple
+  },
+  mixins: [Util, Disp],
   props: {
     operation: {
       type: String,
-      default: "read",
+      default: "show",
       validator(value){
         return ["create","get","show","update","delete"].indexOf(value) !== -1;
       }
@@ -98,7 +99,7 @@ export default {
     ticket() {
       const ticket = this.$store.getters.getTicketById(this.id);
       if(!ticket && this.needTicket){
-        this.$router.push({ path: "get-ticket.html" });
+        this.$router.push({ path: "get-tickets.html" });
         return this.$store.getters.getDummyTicket();
       }else{
         return ticket;
@@ -132,6 +133,11 @@ export default {
         }
       }
     },
+    isShowContent(){
+      return (type) => {
+        return ((this.isReadOnly ? this.ticket.Type : this.type) === type);
+      }
+    },
     needTicket() { return this.isShow || this.isUpdate },
     isReadOnly(){ return this.isShow || this.isDelete },
     isCreate(){ return this.operation === "create" },
@@ -139,26 +145,16 @@ export default {
     isUpdate(){ return this.operation === "update" },
     isDelete(){ return this.operation === "delete" }
    },
-   methods:{
-    getDispStatusName(val){
-      switch(val){
-        case "OPEN"             : return "新規";
-        case "PROCESSING"       : return "作業中";
-        case "COMPLETE"         : return "作業終了";
-        case "CLOSED"           : return "完了";
-        default                 : return "不明な状態";
-      }
-    }
-  }
+   methods: {}
 }
 </script>
 
 <style scoped>
-.el-select {
-  width: 30%
-}
 </style>
 <style>
+.el-select {
+  width: 35%
+}
 .attention {
   margin-left: 1.5em;
   font-size: 80%;

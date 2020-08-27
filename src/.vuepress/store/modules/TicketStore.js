@@ -6,14 +6,27 @@ const state = () => ({
     TicketEmail: "",
     Type: "",
     Content: {
-      REQ_CF_KEYPAIR: {},
-      REQ_AUDIT_LOG: {},
-      REQ_SUPPORT_PLAN_CHANGE: {},
-      REQ_OTHER: {}
+      REQ_CF_KEYPAIR: {
+        Note: ""
+      },
+      REQ_AUDIT_LOG: {
+        Service: "",
+        StartDate: 0,
+        EndDate: 0,
+        Note: ""
+      },
+      REQ_SUPPORT_PLAN_CHANGE: {
+        ExpectedPlan: "",
+        Note: ""
+      },
+      REQ_OTHER: {
+        Note: ""
+      }
     }
   },
   updateParams: {},
-  results: []
+  results: [],
+  result: {}
 });
 
 // Getters
@@ -26,7 +39,11 @@ const getters = {
   getTicketById: (state) => (id) => {
     return state.results.find(r => r.TicketId === id);
   },
-  isTicketEdited: (state) => (id) => {
+  getTicketResult: (state) => () => {
+    return state.result;
+  },
+  isTicketEdited: (state, getters) => (id) => {
+    const ticket = getters.getTicketById(id);
     return (JSON.stringify(state.updateParams) !== JSON.stringify(state.results.find(r => r.TicketId === id)));
   }
 };
@@ -37,9 +54,9 @@ const actions = {
     const result = await (new TicketApi(projectId, accountId)).createTicket(state.createParams);
     commit("setTicketResult", result);
   },
-  async reqGetTickets({commit}, {id, projectId, accountId}) {
+  async reqGetTickets({commit}, {projectId, accountId}) {
     const result = await (new TicketApi(projectId, accountId)).getTickets();
-    commit("setTicketResults", result);
+    commit("setTicketResults", result.Results);
   },
   async reqGetTicket({commit}, {id, projectId, accountId}) {
     const result = await (new TicketApi(projectId, accountId)).getTicket(id);
@@ -56,8 +73,12 @@ const actions = {
 const mutations = {
   setTicketCreateParams(state, param){
     switch(param.name){
-      case "Content" : state.createParams.Content[param.type][param.name] = param.val; break;
-      default        : state.createParams[param.name] = param.val;
+      case "Content::Service"       : state.createParams.Content[param.type].Service = param.val; break;
+      case "Content::StartDate"     : state.createParams.Content[param.type].StartDate = param.val; break;
+      case "Content::EndDate"       : state.createParams.Content[param.type].EndDate = param.val; break;
+      case "Content::ExpectedPlan"  : state.createParams.Content[param.type].ExpectedPlan = param.val; break;
+      case "Content::Note"          : state.createParams.Content[param.type].Note = param.val; break;
+      default                       : state.createParams[param.name] = param.val;
     }
   },
   loadDefaultTicketUpdateParams(state, id){
@@ -65,21 +86,28 @@ const mutations = {
   },
   setTicketUpdateParams(state, param){
     switch(param.name){
-      case "Content" : state.updateParams.Content[param.type][param.name] = param.val; break;
-      default        : state.updateParams[param.name] = param.val;
+      case "Content::Service"       : state.updateParams.Content.Service = param.val; break;
+      case "Content::StartDate"     : state.updateParams.Content.StartDate = param.val; break;
+      case "Content::EndDate"       : state.updateParams.Content.EndDate = param.val; break;
+      case "Content::ExpectedPlan"  : state.updateParams.Content.ExpectedPlan = param.val; break;
+      case "Content::Note"          : state.updateParams.Content.Note = param.val; break;
+      default                       : state.updateParams[param.name] = param.val;
     }
+    console.log(state, param)
   },
   setTicketResults(state, val){
     state.results = val ? val : [];
   },
   setTicketResult(state, val){
     const index = state.results.findIndex(r => r.TicketId === val.TicketId);
-    if (index != -1) {
+    if(index != -1){
+      //update
       state.results.splice(index, 1, val);
-    } else {
-      console.error(`${val.TicketId} is not found.`);
-      state.results = [];
+    }else{
+      //create
+      state.results.push(val);
     }
+    state.result = val;
   }
 }
 

@@ -70,11 +70,13 @@ export default {
       this.loading = true;
       try{
         await this.$store.dispatch("reqGetProject", {id: this.projectName});
-        this.$store.commit('setAuthProjectId', this.projectName);
         await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectName});
+        this.$store.commit('setAuthProjectId', this.projectName);
         this.$store.commit('setAuthAccountId', this.accountId);
-        this.$emit("success", { id: this.accountId });
+        this.$emit("success", { projectId: this.projectName, accountId: this.accountId });
       }catch(e){
+        this.$store.commit('setAuthProjectId', null);
+        this.$store.commit('setAuthAccountId', null);
         this.$refs.notification.notify({
           status: "error",
           title: this.$page.title,

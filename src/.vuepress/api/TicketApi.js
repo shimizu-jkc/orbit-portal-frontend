@@ -9,17 +9,7 @@ export default class TicketApi extends ApiBase {
   }
 
   async createTicket(param){
-    let body = {};
-    ["TicketEmail", "Type", "Content"].forEach(a => {
-      if(param[a]){
-        if(a==="Content"){
-          body[a] = param[a][param.Type];
-        }else{
-          body[a] = param[a];
-        }       
-      }
-    });
-    return await super.post(`/projects/${this.pid}/accounts/${this.aid}/tickets`, body);
+    return await super.post(`/projects/${this.pid}/accounts/${this.aid}/tickets`, this._formatParam(param));
   }
 
   async getTickets(){
@@ -31,21 +21,29 @@ export default class TicketApi extends ApiBase {
   }
 
   async updateTicket(id, param){
-    let body = {};
-    ["TicketEmail", "Type", "Content"].forEach(a => {
-      if(param[a]){
-        body[a] = param[a];
-      }
-    });
-    if(!id || id.length == 0 || Object.keys(body).length == 0){
-      console.error(id, body);
-      throw new Error("不正なパラメータが含まれています。")
-    }
-    return await super.put(`/projects/${this.pid}/accounts/${this.aid}/tickets/${id}`, body);
+    return await super.put(`/projects/${this.pid}/accounts/${this.aid}/tickets/${id}`, this._formatParam(param));
   }
 
   async deleteTicket(id){
     throw new Error("サポートしていないAPIです。")
     //return await super.delete(`/projects/${this.pid}/accounts/${this.aid}/tickets/${id}`);
+  }
+
+  _formatParam(param){
+    let body = {};
+    ["TicketEmail", "Type", "Content"].forEach(a => {
+      if(param[a]){
+        if(a === "Content"){
+          body[a] = param[a][param.Type] || param[a];
+        }else{
+          body[a] = param[a];
+        }       
+      }
+    });
+    if(Object.keys(body).length === 0){
+      console.error(id, body);
+      throw new Error("パラメータが存在しません。")
+    }
+    return body;
   }
 };

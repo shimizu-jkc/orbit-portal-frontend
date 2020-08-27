@@ -16,7 +16,7 @@ export default {
     async onEventSuccess(event) {
       this.$router.push({
         path: "show-project.html",
-        query: { id: event.id }
+        query: { id: event.projectId }
       });
     }
   }

@@ -58,21 +58,19 @@ export default {
       type: String,
       default: ""
     },
+    members: {
+      type: Array,
+      default: []
+    },
     added: {
       type: Boolean,
       default: false
     }
   },
   data(){
-    return {
-      projectId: this.$store.state.c.auth.ProjectId
-    }
+    return {}
   },
   computed: {
-    //Data
-    members(){
-      return this.$store.getters.getProjectById(this.projectId).Members;
-    },
     //Store processing
     name: {
       get(){ return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].MemberRoles[this.index].Name },
@@ -92,7 +90,6 @@ export default {
     isCreate(){ return this.id.length == 0 },
     isUpdate(){ return this.id.length > 0 },
     isEditable(){ return this.isCreate || (this.isUpdate && this.added) }
-
   },
   methods: {
     getMemberName(email){

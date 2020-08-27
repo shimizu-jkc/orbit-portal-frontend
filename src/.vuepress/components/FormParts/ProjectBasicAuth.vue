@@ -57,8 +57,9 @@ export default {
       try{
         await this.$store.dispatch("reqGetProject", {id: this.projectName});
         this.$store.commit("setAuthProjectId", this.projectName);
-        this.$emit("success", { id: this.projectName });
+        this.$emit("success", { projectId: this.projectName });
       }catch(e){
+        this.$store.commit("setAuthProjectId", null);
         this.$refs.notification.notify({
           status: "error",
           title: this.$page.title,

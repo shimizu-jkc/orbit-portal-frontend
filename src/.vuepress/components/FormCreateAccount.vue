@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     onEventSuccess(event) {
-      this.projectId = event.id;
+      this.projectId = event.projectId;
       this.completeAuth = true;
     },
     onClickCreate() {

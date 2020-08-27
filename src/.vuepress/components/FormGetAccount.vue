@@ -16,7 +16,7 @@ export default {
     async onEventSuccess(event) {
       this.$router.push({
         path: "show-account.html",
-        query: { id: event.id }
+        query: { id: event.accountId }
       });
     }
   }

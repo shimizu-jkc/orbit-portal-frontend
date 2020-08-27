@@ -77,7 +77,7 @@ module.exports = {
             text: "管理者作業関連", 
             items: [
               { text: "作業の依頼", link: "/request/create-ticket" },
-              { text: "作業状況の確認", link: "/request/get-ticket" }
+              { text: "作業状況の確認", link: "/request/get-tickets" }
             ]
           }
         ]
@@ -185,7 +185,7 @@ module.exports = {
           collapsable: false,
           children: [
             ["create-ticket", "作業の依頼"],
-            ["get-ticket", "作業状況の確認"]
+            ["get-tickets", "作業状況の確認"]
           ]
         },
       ]  

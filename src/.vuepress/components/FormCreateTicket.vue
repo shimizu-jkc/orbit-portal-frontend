@@ -99,7 +99,7 @@ export default {
             });
             this.$router.push({
               path: "show-ticket.html",
-              query: { id: this.$store.state.t.createParams.TicketId }
+              query: { id: this.$store.getters.getTicketResult().TicketId }
             });
           }catch(e){
             this.$refs.notification.notify({

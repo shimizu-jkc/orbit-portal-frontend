@@ -1,8 +1,8 @@
 // Initial state
 const state = () => ({
   tmp: {
-    ProjectId: "",
-    AccountId: ""
+    ProjectId: "Orbit",
+    AccountId: "g10ebtcyejef"
   },
   auth: {
     ProjectId: "",
@@ -19,16 +19,16 @@ const actions = {};
 // Mutations
 const mutations = {
   setTmpProjectId(state, val){
-    state.tmp.ProjectId = val;
+    state.tmp.ProjectId = val ? val : "";
   },
   setTmpAccountId(state, val){
-    state.tmp.AccountId = val;
+    state.tmp.AccountId = val ? val : "";
   },
   setAuthProjectId(state, val){
-    state.auth.ProjectId = val;
+    state.auth.ProjectId = val ? val : "";
   },
   setAuthAccountId(state, val){
-    state.auth.AccountId = val;
+    state.auth.AccountId = val ? val : "";
   }
 };
 

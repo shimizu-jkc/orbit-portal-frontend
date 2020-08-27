@@ -13,6 +13,7 @@
         :key="index"
         :index="index"
         :id="id"
+        :members="members"
         :added="role.added ? true : false"
       />
       <el-button 
@@ -41,12 +42,14 @@
 
 <script>
 import MemberRoleItem from './MemberRoleItem';
+import Disp from "../../mixins/disp";
 
 export default {
   name : "MemberRoleList",
   components: {
     role: MemberRoleItem
   },
+  mixins: [Disp],
   props: {
     readOnly: {
       type: Boolean,
@@ -70,25 +73,17 @@ export default {
         const account = this.$store.getters.getAccountById(this.id);
         return account ? account.MemberRoles : [];
       }
+    },
+    members() {
+      return this.$store.getters.getProjectById(this.$store.state.c.auth.ProjectId).Members;
     }
   },
   methods: {
     onClickAdd(){
       this.$store.commit((this.id && !this.readOnly) ? "setAccountUpdateParams":"setAccountCreateParams", {name: "MemberRole::ADD"});
     },
-    roleFormatter(row){
-      switch(row.Role){
-        case "PROJECT_MNGR"     : return "プロジェクト責任者";
-        case "COST_MNGR"        : return "請求管理者";
-        case "SECURITY_MNGR"    : return "セキュリティ担当者";
-        case "PRIV_OPERATOR"    : return "特権運用者";
-        case "OPERATOR"         : return "運用者";
-        case "DB_MNGR"          : return "データベース管理者";
-        case "PRIV_DEVELOPER"   : return "特権開発者";
-        case "DEVELOPER"        : return "開発者";
-        case "GUEST"            : return "ゲスト"
-        default                 : return "不明な状態";
-      }
+    roleFormatter(row, column, value) {
+      return this.getDispName("MemberRole", value)
     }
   }
 }

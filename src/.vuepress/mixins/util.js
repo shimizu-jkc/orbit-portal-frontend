@@ -1,5 +1,4 @@
 // Common utility mixin
-
 export default {
   methods: {
     epochSecToJST(epoch) {

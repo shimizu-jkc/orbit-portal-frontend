@@ -62,12 +62,10 @@ export default {
   computed: {
     members() {
       if(!this.id || this.id.length === 0){
-        console.log(this.id, "CREATE")
         //Create
         return this.$store.state.p.createParams.Members;
       }else if(this.id && !this.readOnly){
         //Update
-        console.log(this.id, "UPDATE")
         return this.$store.state.p.updateParams.Members;
       }else{
         //Read

@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     onEventSuccess(event) {
-      this.id = event.id;
+      this.id = event.projectId;
       this.completeAuth = true;
     },
     onClickDelete() {

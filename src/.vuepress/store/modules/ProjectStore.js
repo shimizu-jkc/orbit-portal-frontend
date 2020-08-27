@@ -25,7 +25,7 @@ const state = () => ({
 // Getters
 const getters = {
   getDummyProject: (state) => () => {
-    return  {
+    return {
       ProjectId: "",
       ProjectEmail: "",
       DivisionName: "",
@@ -33,8 +33,8 @@ const getters = {
       Members: []
     };
   },
-  getProjectById: (state) => (id) => {
-    return state.results.find(r => r.ProjectId === id);
+  getProjectById: (state, getters) => (id) => {
+    return state.results.find(r => r.ProjectId === id) || getters.getDummyProject();
   },
   isEdited: (state, getters) => (id) => {
     return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id)));

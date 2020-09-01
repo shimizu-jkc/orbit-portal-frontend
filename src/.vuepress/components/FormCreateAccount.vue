@@ -21,16 +21,16 @@
           ></el-checkbox>
         </el-col>
       </el-form-item>
-      <div id="preAuth" v-if="!completeAuth">
-        <p-basic action="認証" @success="onEventSuccess($event)"/>
-      </div>
-      <div id="postAuth" v-else>
-        <a-info operation="create" id=""/>
-        <el-form-item>
-          <el-button type="primary" @click="onClickCreate()">申請する</el-button>
-        </el-form-item>
-      </div>
     </el-form>
+    <div id="preAuth" v-if="!completeAuth">
+      <auth action="認証" @success="onEventSuccess($event)"/>
+    </div>
+    <div id="postAuth" v-else>
+      <info operation="create" id=""/>
+      <el-row type="flex" justify="start">
+        <el-button type="primary" @click="onClickCreate()">申請する</el-button>
+      </el-row>
+    </div>
     <loading :show="loading" message="申請中です"/>
     <notification ref="notification"/>
     <confirm
@@ -58,8 +58,8 @@ export default {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    "p-basic": ProjectBasicAuth,
-    "a-info": AccountInfo
+    auth: ProjectBasicAuth,
+    info: AccountInfo
   },
   data(){
     return {
@@ -73,15 +73,16 @@ export default {
       },
       agreements: [false, false, false],
       completeAuth: false,
-      projectId: ""
     }
   },
+  computed: {
+    projectId(){ return this.$store.state.c.auth.ProjectId; }, 
+  },
   methods: {
-    onEventSuccess(event) {
-      this.projectId = event.projectId;
+    async onEventSuccess(event) {
       this.completeAuth = true;
     },
-    onClickCreate() {
+    async onClickCreate() {
       if(!this.agreements.every(a => {return a})){
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
@@ -107,17 +108,17 @@ export default {
               title: this.$page.title,
               message: "クラウド環境の利用を申請しました。"
             });
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "info",
               title: "申請における注意事項",
               message: "クラウド環境が利用できるまで、最大5営業日程度掛かる場合があります。\n利用可能になった際にはプロジェクトの代表者へ連絡しますので、しばらくの間お待ちください。"
             });
             this.$router.push({
               path: "show-account.html",
-              query: { id: this.$store.state.a.createParams.AccountId }
+              query: { id: this.$store.getters.getAccountResult().AccountId, operation: "create" }
             });
           }catch(e){
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "error",
               title: this.$page.title,
               message: e.message

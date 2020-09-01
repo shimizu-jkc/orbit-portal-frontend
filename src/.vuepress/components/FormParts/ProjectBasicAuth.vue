@@ -5,7 +5,7 @@
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
-          v-model="projectName"
+          v-model="projectId"
           minlength=1
           maxlength=20
           show-word-limit
@@ -43,8 +43,8 @@ export default {
     };
   },
   computed: {
-    projectName: {
-      get() { return this.$store.state.c.tmp.ProjectId},
+    projectId: {
+      get() { return this.$store.state.c.tmp.ProjectId },
       set(value){ this.$store.commit('setTmpProjectId', value) }
     },
     message(){
@@ -55,12 +55,15 @@ export default {
     async onClickGet() {
       this.loading = true;
       try{
-        await this.$store.dispatch("reqGetProject", {id: this.projectName});
-        this.$store.commit("setAuthProjectId", this.projectName);
-        this.$emit("success", { projectId: this.projectName });
+        const needAuth = this.$store.getters.needProjectAuth(); 
+        if(needAuth){
+          await this.$store.dispatch("reqGetProject", {id: this.projectId});
+          this.$store.commit("setAuthProjectId", this.projectId);
+        }
+        this.$emit("success", { projectId: this.projectId, changed: needAuth });
       }catch(e){
-        this.$store.commit("setAuthProjectId", null);
-        this.$refs.notification.notify({
+        //this.$store.commit("clearProjectCache");
+        await this.$refs.notification.notify({
           status: "error",
           title: this.$page.title,
           message: e.message

@@ -1,6 +1,6 @@
 <template>
   <div id="FormShowTickets">
-    <t-list/>
+    <list/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import TicketList from './FormParts/TicketList.vue'
 export default {
   name: "FormShowTickets",
   components: {
-    "t-list": TicketList
+    list: TicketList
   }
 }
 </script>

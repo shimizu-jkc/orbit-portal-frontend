@@ -14,7 +14,7 @@
         </el-option>
       </el-select>
       <span class="form-item" v-else>
-        {{getDispName("ServiceForAudit", content.Service)}}
+        {{getDispName("ServiceForAudit", service)}}
       </span>
     </el-form-item>
     <el-form-item label="確認期間">
@@ -28,9 +28,9 @@
         </el-date-picker>
       </div>
       <div id="ReadOnlyAuditDate" v-else>
-        <span class="form-item">{{epochSecToJST(content.StartDate)}}</span>
+        <span class="form-item">{{epochSecToJST(startDate)}}</span>
         <span class="form-item">～</span>
-        <span class="form-item">{{epochSecToJST(content.EndDate)}}</span>
+        <span class="form-item">{{epochSecToJST(endDate)}}</span>
       </div>
     </el-form-item>
     <el-form-item label="備考">
@@ -41,7 +41,7 @@
         :rows="2"
         placeholder="連絡事項がある場合は、こちらにご記入ください。">
       </el-input>
-      <span class="form-item" v-else>{{content.Note}}</span>
+      <span class="form-item" v-else>{{note}}</span>
     </el-form-item>
   </div>
 </template>
@@ -72,43 +72,53 @@ export default {
   computed: {
     //for Display
     content() {
-      if(this.id.length > 0){
+      if(this.hasId){
         return this.$store.getters.getTicketById(this.id).Content;
       }else{
         return this.$store.getters.getDummyTicket();
       }
     },
+    //ReadOnly
+    startDate: {
+      get(){ return this.content.StartDate; }
+    },
+    endDate: {
+      get(){ return this.content.EndDate; }
+    },
     //Store processing
     service: {
       get(){
-        if(this.isUpdate){
+        if(this.hasId && this.readOnly){
+          return this.content.Service;
+        }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.Service;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Service 
         }
       },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Service", val: value}) }
+      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Service", val: value}) }
     },
     date: {
-      get(){ return this.isUpdate ? [this.$store.state.t.updateParams.Content.StartDate * 1000, this.$store.state.t.updateParams.Content.EndDate * 1000] : this.dateSet; },
+      get(){ return this.hasId ? [this.$store.state.t.updateParams.Content.StartDate * 1000, this.$store.state.t.updateParams.Content.EndDate * 1000] : this.dateSet; },
       set(value){
         this.dateSet = value;
-        this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::StartDate", val: this.DateToEpochSec(value ? value[0] : 0)});
-        this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::EndDate", val: this.DateToEpochSec(value ? value[1] : 0)});
+        this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::StartDate", val: this.DateToEpochSec(value ? value[0] : 0)});
+        this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::EndDate", val: this.DateToEpochSec(value ? value[1] : 0)});
       }
     },
     note: {
       get(){
-        if(this.isUpdate){
+        if(this.hasId && this.readOnly){
+          return this.content.Note;
+        }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Note 
         }
       },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}) }
+      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}) }
     },
-    isCreate(){ return this.id.length === 0 },
-    isUpdate(){ return this.id.length > 0 }
+    hasId(){ return this.id.length > 0 }
   },
   methods: {}
 }

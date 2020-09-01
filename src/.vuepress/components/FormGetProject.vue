@@ -1,6 +1,6 @@
 <template>
   <div id="FormGetProject">
-    <p-basic action="確認" @success="onEventSuccess($event)"/>
+    <auth action="確認" @success="onEventSuccess($event)"/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
 export default {
   name: "FormGetProject",
   components: {
-    "p-basic": ProjectBasicAuth
+    auth: ProjectBasicAuth
   },
   methods: {
     async onEventSuccess(event) {

@@ -4,8 +4,8 @@ import AccountApi from '../../api/AccountApi'
 const state = () => ({
   createParams: {
     Env: "",
-    BillingOWDepartmentCode: "",
-    BillingOWUsageCode: "",
+    BillingOWDepartmentCode: "0000000", //for test
+    BillingOWUsageCode: "11111-2222", //for test
     BillingProjectCode: "",
     BillingProjectSubCode: "",
     StartOperationDate: "",
@@ -20,7 +20,8 @@ const state = () => ({
     ]
   },
   updateParams: {},
-  results: []
+  results: [],
+  result: {}
 });
 
 // Getters
@@ -28,14 +29,18 @@ const getters = {
   getDummyAccount: (state) => () => {
     return  {
       AccountId: "",
+      Status: "WAITING_CONFIRM",
       MemberRoles: []
     };
   },
   getAccountById: (state) => (id) => {
     return state.results.find(r => r.AccountId === id);
   },
-  isAccountEdited: (state) => (id) => {
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(state.results.find(r => r.AccountId === id)));
+  getAccountResult: (state) => () => {
+    return state.result;
+  },
+  isAccountEdited: (state, getters) => (id) => {
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getAccountById(id))) || false;
   }
 };
 
@@ -50,14 +55,15 @@ const actions = {
     commit("setAccountResult", result);
   },
   async reqUpdateAccount({commit, state, getters}, {id}) {
-    const projectId = getters.getAccountById(id).OwnerProjectId;
-    const result = await (new AccountApi(projectId)).updateAccount(id, state.updateParams);
+    const account = getters.getAccountById(id);
+    const result = await (new AccountApi(account.OwnerProjectId)).updateAccount(id, state.updateParams);
     commit("setAccountResult", result);
   },
   async reqDeleteAccount({commit, getters}, {id}) {
-    const projectId = getters.getAccountById(id).OwnerProjectId;
-    await (new AccountApi(projectId)).deleteAccount(id);
-    commit("setAccountResult", null);
+    const account = getters.getAccountById(id);
+    await (new AccountApi(account.OwnerProjectId)).deleteAccount(id);
+    commit("clearAccountResult", id);
+    commit("clearAccountCache");
   }
 };
 
@@ -73,9 +79,6 @@ const mutations = {
       default                       : state.createParams[param.name] = param.val;
     }
   },
-  loadDefaultAccountUpdateParams(state, id){
-    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.AccountId === id)||{}));
-  },
   setAccountUpdateParams(state, param){
     switch(param.name){
       case "MemberRole::Email"      : state.updateParams.MemberRoles[param.index].Email = param.val; break;
@@ -86,12 +89,26 @@ const mutations = {
       default                       : state.updateParams[param.name] = param.val;
     }
   },
+  loadDefaultAccountUpdateParams(state, id){
+    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.AccountId === id)||{}));
+  },
   setAccountResult(state, val){
-    if(val){
-      state.results[0] = val; //Not fix
+    const index = state.results.findIndex(r => r.AccountId === val.AccountId);
+    if(index != -1){
+      //update
+      state.results.splice(index, 1, val);
     }else{
-      state.results = [];
+      //create
+      state.results.push(val);
     }
+    state.result = val;
+  },
+  clearAccountResult(state, id){
+    const index = state.results.findIndex(r => r.AccountId === id);
+    if(index != -1){
+      state.results.splice(index, 1);
+    }
+    state.result = {};
   }
 }
 

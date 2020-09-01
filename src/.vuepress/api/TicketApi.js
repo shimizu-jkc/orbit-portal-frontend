@@ -9,7 +9,7 @@ export default class TicketApi extends ApiBase {
   }
 
   async createTicket(param){
-    return await super.post(`/projects/${this.pid}/accounts/${this.aid}/tickets`, this._formatParam(param));
+    return await super.post(`/projects/${this.pid}/accounts/${this.aid}/tickets`, this._formatParam(param, true));
   }
 
   async getTickets(){
@@ -29,9 +29,12 @@ export default class TicketApi extends ApiBase {
     //return await super.delete(`/projects/${this.pid}/accounts/${this.aid}/tickets/${id}`);
   }
 
-  _formatParam(param){
+  _formatParam(param, isCreate=false){
+    const createOnly = isCreate ? [] : [];
+    const editable =  ["TicketEmail", "Type", "Content"];
     let body = {};
-    ["TicketEmail", "Type", "Content"].forEach(a => {
+
+    editable.concat(createOnly).forEach(a => {
       if(param[a]){
         if(a === "Content"){
           body[a] = param[a][param.Type] || param[a];

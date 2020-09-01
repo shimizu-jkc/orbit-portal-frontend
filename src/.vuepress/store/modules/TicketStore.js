@@ -42,10 +42,15 @@ const getters = {
   getTicketResult: (state) => () => {
     return state.result;
   },
+  getTicketList: (state) => () => {
+    return state.results;
+  },
   isTicketEdited: (state, getters) => (id) => {
-    const ticket = getters.getTicketById(id);
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(state.results.find(r => r.TicketId === id)));
-  }
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getTicketById(id))) || false;
+  },
+  isTicketLoaded: (state, getters) => (id) => {
+    return getters.getTicketById(id).Content ? true : false;
+  },
 };
 
 // Actions
@@ -81,9 +86,6 @@ const mutations = {
       default                       : state.createParams[param.name] = param.val;
     }
   },
-  loadDefaultTicketUpdateParams(state, id){
-    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.TicketId === id) || {}));
-  },
   setTicketUpdateParams(state, param){
     switch(param.name){
       case "Content::Service"       : state.updateParams.Content.Service = param.val; break;
@@ -93,7 +95,9 @@ const mutations = {
       case "Content::Note"          : state.updateParams.Content.Note = param.val; break;
       default                       : state.updateParams[param.name] = param.val;
     }
-    console.log(state, param)
+  },
+  loadDefaultTicketUpdateParams(state, id){
+    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.TicketId === id) || {}));
   },
   setTicketResults(state, val){
     state.results = val ? val : [];
@@ -108,6 +112,10 @@ const mutations = {
       state.results.push(val);
     }
     state.result = val;
+  },
+  clearTicketResults(state){
+    state.results = [];
+    state.result = {};
   }
 }
 

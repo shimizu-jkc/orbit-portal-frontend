@@ -4,42 +4,45 @@
       inline-message
       status-icon
       label-width="25%"
-      :label-position="isEditable('page')?'top':'left'"
+      :label-position="isEditableAttr('page')?'top':'left'"
     >
-      <el-form-item label="所属プロジェクト名" v-if="isReadOnly">
-        <span class="form-item">{{account.OwnerProjectId}}</span>
+      <el-form-item label="クラウド環境ID" v-show="isExist">
+        <span class="form-item">{{accountId}}</span>
       </el-form-item>
-      <el-form-item label="クラウド環境ID" v-if="isReadOnly">
-        <span class="form-item">{{account.AccountId}}</span>
+      <el-form-item label="プロジェクト名">
+        <span class="form-item">{{projectId}}</span>
       </el-form-item>
-      <el-form-item label="クラウド環境名" v-if="isReadOnly">
-        <span class="form-item">{{account.AccountName}}</span>
+      <el-form-item label="クラウド環境名" v-show="isExist">
+        <span class="form-item">{{accountName}}</span>
       </el-form-item>
-      <el-form-item label="クラウド環境Eメールアドレス" v-if="isReadOnly">
-        <span class="form-item">{{account.AccountEmail}}</span>
+      <el-form-item label="クラウド環境Eメールアドレス" v-show="isExist">
+        <span class="form-item">{{accountEmail}}</span>
       </el-form-item>
-      <el-form-item label="ステータス" v-if="isReadOnly">
-        <span class="form-item">{{getDispStatusName(account.Status)}}</span>
+      <el-form-item label="ステータス" v-show="isExist">
+        <span class="form-item">{{getDispName("AccountStatus", status)}}</span>
       </el-form-item>
       <el-form-item label="利用目的">
         <el-select 
           class="select-env"
-          v-model="env" 
-          v-if="isEditable('env')"
+          v-model="env"
+          v-if="isEditableAttr('Env')"
           placeholder="利用目的を選択してください。"
         >
-          <el-option label="本番" value="PRD"></el-option>
-          <el-option label="ステージング" value="STG"></el-option>
-          <el-option label="開発" value="DEV"></el-option>
-          <el-option label="概念検証" value="POC"></el-option>
-        </el-select>
+         <el-option
+            v-for="(item, index) in getDispNameSets('Env')"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select> 
         <span class="form-item" v-else>
-          {{getDispEnvName(account.Env)}}
-          <span class="attention" v-show="operation=='update'">※利用目的は変更できません</span>
+          {{getDispName("Env", env)}}
+          <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="申請ファイル" v-if="isCreate">
+      <el-form-item label="申請ファイル">
         <el-upload
+          v-if="isEditable"
           class="file-upload"
           multiple
           action=""
@@ -50,16 +53,19 @@
         >
           <el-button size="mini" type="primary">ファイルを選択</el-button>
         </el-upload>
+        <div v-for="file in fileList" class="form-item">
+          <el-button type="text" @click="onClickFileLink(file)" >{{file}}</el-button>
+        </div>
       </el-form-item>
       <el-form-item label="OW部門コード">
         <el-input 
           type="text"
           placeholder="利用料金の配賦先となるOneWorldの部門コードを入力してください"
           v-model="billingOWDepartmentCode"
-          v-if="isEditable('billingOWDepartmentCode')"
+          v-if="isEditableAttr('BillingOWDepartmentCode')"
         ></el-input>
         <span class="form-item" v-else>
-          {{account.BillingOWDepartmentCode}}
+          {{billingOWDepartmentCode}}
         </span>
       </el-form-item>
       <el-form-item label="OW科目コード">
@@ -67,10 +73,10 @@
           type="text"
           placeholder="利用料金の配賦先となるOneWorldの科目コードを入力してください"
           v-model="billingOWUsageCode"
-          v-if="isEditable('billingOWUsageCode')"
+          v-if="isEditableAttr('BillingOWUsageCode')"
         ></el-input>
         <span class="form-item" v-else>
-          {{account.BillingOWUsageCode}}
+          {{billingOWUsageCode}}
         </span>
       </el-form-item>
       <el-form-item label="プロジェクトコード">
@@ -78,10 +84,10 @@
           type="text"
           placeholder="利用料金の配賦先となるプロジェクトコードを入力してください"
           v-model="billingProjectCode"
-          v-if="isEditable('billingProjectCode')"
+          v-if="isEditableAttr('BillingProjectCode')"
         ></el-input>
         <span class="form-item" v-else>
-          {{account.BillingProjectCode}}
+          {{billingProjectCode}}
         </span>
       </el-form-item>
       <el-form-item label="プロジェクトサブコード">
@@ -89,59 +95,41 @@
           type="text"
           placeholder="利用料金の配賦先となるプロジェクトサブコードを入力してください"
           v-model="billingProjectSubCode"
-          v-if="isEditable('billingProjectSubCode')"
+          v-if="isEditableAttr('BillingProjectSubCode')"
         ></el-input>
         <span class="form-item" v-else>
-          {{account.BillingProjectSubCode}}
+          {{billingProjectSubCode}}
         </span>
       </el-form-item>
       <el-form-item label="実運用予定日">
-        <div id="EditableOpsDate" v-if="isEditable('operationDate')">
-          <el-row>
-            <el-col :span="2">
-              <span class="date-label">開始予定日</span>
-            </el-col>
-            <el-col :span="6">
-              <el-date-picker
-                v-model="startOperationDate"
-                type="date"
-                placeholder="日付を選択してください。"
-                format="yyyy年M月d日"
-                :picker-options="pickerOptions"
-              >
-              </el-date-picker>
-            </el-col>
-            <el-col :span="2">
-              <span class="date-label">終了予定日</span>
-            </el-col>
-            <el-col :span="6">
-              <el-date-picker
-                v-model="expireOperationDate"
-                type="date"
-                placeholder="日付を選択してください。"
-                format="yyyy年M月d日"
-                :picker-options="pickerOptions"
-              >
-              </el-date-picker>
-            </el-col>
-          </el-row>
+        <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
+          <el-date-picker
+            v-model="operationDate"
+            type="daterange"
+            range-separator="～"
+            start-placeholder="開始予定日"
+            end-placeholder="終了予定日"
+            format="yyyy年M月d日"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+           <span class="attention">※5営業日以降から選択できます。</span>
         </div>
         <div id="ReadOnlyOpsDate" v-else>
-          <span class="form-item">{{epochSecToJST(account.StartOperationDate)}}</span>
+          <span class="form-item">{{epochSecToJST(startOperationDate)}}</span>
           <span class="form-item">～</span>
-          <span class="form-item">{{epochSecToJST(account.ExpireOperationDate)}}</span>
+          <span class="form-item">{{epochSecToJST(expireOperationDate)}}</span>
         </div>
       </el-form-item>
-      <el-form-item label="役割">
+      <el-form-item label="プロジェクトメンバーの役割">
         <div class="form-item">
-          <roles :readOnly="!isEditable('memberRoles')" :id="id"/>
+          <roles :readOnly="!isEditableAttr('MemberRoles')" :id="id"/>
         </div>
       </el-form-item>
       <el-form-item label="登録日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(account.CreatedAt)}}</span>
+        <span class="form-item">{{epochSecToJST(createdAt)}}</span>
       </el-form-item>
       <el-form-item label="最終更新日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(account.UpdatedAt)}}</span>
+        <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -151,111 +139,165 @@
 <script>
 import MemberRoleList from './MemberRoleList';
 import Util from "../../mixins/util";
+import Disp from "../../mixins/disp";
 
 export default {
   name: "AccountInfo",
   components : {
     roles: MemberRoleList
   },
-  mixins: [Util],
+  mixins: [Util, Disp],
   props: {
-    operation: {
-      type: String,
-      default: "read",
-      validator(value){
-        return ["create","get","show","update","delete"].indexOf(value) !== -1;
-      }
-    },
     id: {
       type: String,
       default: ""
+    },
+    operation: {
+      type: String,
+      default: "show",
+      validator(value){
+        return ["create","show","update","delete"].indexOf(value) !== -1;
+      }
     }
   },
   data() {
     return {
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now();
-        },
-        shortcuts: [
-          {
-            text: '明日',
-            onClick(picker){
-              const date = new Date();
-              date.setTime(date.getTime() + 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          },
-          {
-            text: '５営業日後',
-            onClick(picker){
-              const date = new Date();
-              switch(date.getDay){
-                case 0  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 5); 
-                case 6  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 6); 
-                default : date.setTime(date.getTime() + 3600 * 1000 * 24 * 7); 
-              }
-              picker.$emit('pick', date);
-            }
+          const date = new Date();
+          switch(date.getDay){
+            case 0  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 5); 
+            case 6  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 6); 
+            default : date.setTime(date.getTime() + 3600 * 1000 * 24 * 7); 
           }
-        ]
+          return time.getTime() < date.getTime();
+        }
       },
+      dateSet: "",
       fileList: []
     }
   },
   computed: {
     //for display
     account() {
-      const account = this.$store.getters.getAccountById(this.id);
-      if(!account && this.needAccount){
-        this.$router.push({ path: "get-account.html" });
-        return this.$store.getters.getDummyAccount();
+      if(this.id.length > 0){
+        const account = this.$store.getters.getAccountById(this.id);
+        if(!account){
+          this.$router.push({ path: "get-account.html" });
+          return this.$store.getters.getDummyAccount();
+        }else{
+          return account;
+        }
       }else{
-        return account;
+        return this.$store.getters.getDummyAccount();
+      }
+    },   
+    //Store processing
+    getter() {
+      return (attr, readOnly=false) => {
+        if(this.isCreate && !readOnly){
+          return this.$store.state.a.createParams[attr];
+        }else if(this.isUpdate && this.isEditableAttr(attr)){
+          return this.$store.state.a.updateParams[attr];
+        }else{
+          return this.account[attr];
+        }
       }
     },
-    //Store processing
-    env: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].Env },
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "Env", val: value}) }
+    setter() {
+      return (val) => {
+        if(this.isCreate){ 
+          this.$store.commit("setAccountCreateParams", val);
+        }else if(this.isUpdate){ 
+          this.$store.commit("setAccountUpdateParams", val);
+        }else{
+          console.error(`${val} is not editable.`);
+        }
+      }
     },
-    billingOWDepartmentCode: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].BillingOWDepartmentCode },
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "BillingOWDepartmentCode", val: value}) }
+    //Authenticated value
+    projectId: {
+      get() { return this.isCreate ? this.$store.state.c.auth.ProjectId : this.getter("OwnerProjectId", true) },
     },
-    billingOWUsageCode: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].BillingOWUsageCode },
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "BillingOWUsageCode", val: value}) }
+    //ReadOnly value
+    accountId: {
+      get() { return this.getter("AccountId", true); }
     },
-    billingProjectCode: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].BillingProjectCode },
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "BillingProjectCode", val: value}) }
+    accountName: {
+      get() { return this.getter("AccountName", true); }
     },
-    billingProjectSubCode: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].BillingProjectSubCode },
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "BillingProjectSubCode", val: value}) }
+    accountEmail: {
+      get() { return this.getter("AccountEmail", true); }
+    },
+    status: {
+      get() { return this.getter("Status", true); },
     },
     startOperationDate: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].StartOperationDate * 1000}, //From msec to sec
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "StartOperationDate", val: this.DateToEpochSec(value)}) }
+      get() { return this.getter("StartOperationDate", true); },
     },
     expireOperationDate: {
-      get() { return this.$store.state.a[this.isUpdate ? "updateParams":"createParams"].ExpireOperationDate * 1000 }, //From msec to sec
-      set(value){ this.$store.commit(this.isUpdate ? "setAccountUpdateParams":"setAccountCreateParams", {name: "ExpireOperationDate", val: this.DateToEpochSec(value)}) }
+      get() { return this.getter("ExpireOperationDate", true); },
     },
-    isEditable(){
+    createdAt: {
+      get() { return this.getter("CreatedAt", true); },
+    },
+    updatedAt: {
+      get() { return this.getter("UpdatedAt", true); },
+    },
+    //Editable value
+    env: {
+      get() { return this.getter("Env"); },
+      set(value){ this.setter({ name: "Env", val: value }); }
+    },
+    billingOWDepartmentCode: {
+      get() { return this.getter("BillingOWDepartmentCode"); },
+      set(value){ this.setter({ name: "BillingOWDepartmentCode", val: value }); }
+    },
+    billingOWUsageCode: {
+      get() { return this.getter("BillingOWUsageCode"); },
+      set(value){ this.setter({ name: "BillingOWUsageCode", val: value }); }
+    },
+    billingProjectCode: {
+      get() { return this.getter("BillingProjectCode"); },
+      set(value){ this.setter({ name: "BillingProjectCode", val: value }); }
+    },
+    billingProjectSubCode: {
+      get() { return this.getter("BillingProjectSubCode"); },
+      set(value){ this.setter({ name: "BillingProjectSubCode", val: value }); }
+    },
+    operationDate: {
+      get(){ return this.isUpdate ? [this.$store.state.a.updateParams.StartOperationDate * 1000, this.$store.state.a.updateParams.ExpireOperationDate * 1000] : this.dateSet; },
+      set(value){
+        this.dateSet = value;
+        this.setter({ name: "StartOperationDate", val: this.DateToEpochSec(value ? value[0] : 0) });
+        this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(value ? value[1] : 0) });
+      }
+    },
+    isEditableAttr(){
       return (target) => {
         switch(this.operation){
-          case "create": return true;
-          case "update": {
+          case "create": {
             switch(target){
               case "page":
-              case "billingOWDepartmentCode":
-              case "billingOWUsageCode":
-              case "billingProjectCode":
-              case "billingProjectSubCode":
-              case "operationDate":
-              case "memberRoles": return true;
+              case "Env":
+              case "BillingOWDepartmentCode":
+              case "BillingOWUsageCode":
+              case "BillingProjectCode":
+              case "BillingProjectSubCode":
+              case "OperationDate":
+              case "MemberRoles": return true;
+              default: return false;
+            }
+          }
+          case "update": {
+            switch(target){
+              //case "page":
+              case "BillingOWDepartmentCode":
+              case "BillingOWUsageCode":
+              case "BillingProjectCode":
+              case "BillingProjectSubCode":
+              case "OperationDate":
+              case "MemberRoles": return true;
               default: return false;
             }
           }
@@ -265,43 +307,10 @@ export default {
           default: return false;
         }
       }
-    },
-    isReadOnly(){ return this.isShow || this.isDelete },
-    needAccount() { return this.isShow || this.isUpdate },
-    isCreate(){ return this.operation === "create" },
-    isShow(){ return this.operation === "show" },
-    isUpdate(){ return this.operation === "update" },
-    isDelete(){ return this.operation === "delete" }
+    }
    },
    methods:{
-    getDispEnvName(val){
-      switch(val){
-        case "PRD": return "本番";
-        case "STG": return "ステージング";
-        case "DEV": return "開発";
-        case "POC": return "概念検証";
-        default : return "不明";
-      }
-    },
-    getDispStatusName(val){
-      switch(val){
-        case "WAITING_CONFIRM"  : return "承認待ち";
-        case "CONFIRM"          : return "承認済み";
-        case "REJECT"           : return "却下";
-        case "PREPARING"        : return "準備中";
-        case "CREATE_START"     : return "作成開始";
-        case "CREATING"         : return "作成中";
-        case "CREATE_FAILED"    : return "作成失敗";
-        case "CREATE_COMPLETED" : return "作成済み";
-        case "AVAILABLE"        : return "有効";
-        case "WAITING_DELETE"   : return "削除待ち";
-        case "DELETE_START"     : return "削除中";
-        case "DELETE_COMPLETED" : return "削除済み";
-        default                 : return "不明な状態";
-      }
-    },
     getFileUrl(val){
-      console.log(val);
       return "";
     },
     handleFileExceed(files, fileList){

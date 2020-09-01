@@ -4,34 +4,33 @@
       inline-message
       status-icon
       label-width="25%"
-      :label-position="isEditable('page')?'top':'left'"
+      :label-position="isEditableAttr('page')?'top':'left'"
     >
-      <el-form-item label="プロジェクト名" v-if="isReadOnly">
-        <span class="form-item">{{ticket.OwnerProjectId}}</span>
+      <el-form-item label="作業ID" v-show="isExist">
+        <span class="form-item">{{ticketId}}</span>
       </el-form-item>
-      <el-form-item label="クラウド環境ID" v-if="isReadOnly">
-        <span class="form-item">{{ticket.OwnerAccountId}}</span>
+      <el-form-item label="プロジェクト名">
+        <span class="form-item">{{projectId}}</span>
       </el-form-item>
-      <el-form-item label="作業ID" v-if="isReadOnly">
-        <span class="form-item">{{ticket.TicketId}}</span>
+      <el-form-item label="クラウド環境ID">
+        <span class="form-item">{{accountId}}</span>
       </el-form-item>
       <el-form-item label="連絡先Eメールアドレス">
         <el-input 
           type="text"
-          v-if="isEditable('email')"
+          v-if="isEditableAttr('TicketEmail')"
           placeholder="作業の連絡先となるEメールアドレスを入力してください"
           v-model="email"
         ></el-input>
-        <span class="form-item" v-else>{{ticket.TicketEmail}}</span>
+        <span class="form-item" v-else>{{email}}</span>
       </el-form-item>
-      <el-form-item label="ステータス" v-if="isReadOnly">
-        <span class="form-item">{{getDispName("TicketStatus", ticket.Status)}}</span>
+      <el-form-item label="ステータス" v-if="isExist">
+        <span class="form-item">{{getDispName("TicketStatus", status)}}</span>
       </el-form-item>
       <el-form-item label="作業種別">
         <el-select 
-          class="select-type"
           v-model="type" 
-          v-if="isEditable('type')"
+          v-if="isEditableAttr('Type')"
           placeholder="依頼する作業の種別を選択してください。"
         >
           <el-option
@@ -42,8 +41,8 @@
           </el-option>
         </el-select>
         <span class="form-item" v-else>
-          {{getDispName("TicketType", ticket.Type)}}
-          <span class="attention" v-show="operation=='update'">※作業種別は変更できません</span>
+          {{getDispName("TicketType", type)}}
+          <span class="attention" v-show="isUpdate">※作業種別は変更できません</span>
         </span>
       </el-form-item>
       <div id="TicketContent">
@@ -52,11 +51,11 @@
         <audit v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
         <plan v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
       </div>
-      <el-form-item label="登録日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(ticket.CreatedAt)}}</span>
+      <el-form-item label="登録日" v-if="isExist">
+        <span class="form-item">{{epochSecToJST(createdAt)}}</span>
       </el-form-item>
-      <el-form-item label="最終更新日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(ticket.UpdatedAt)}}</span>
+      <el-form-item label="最終更新日" v-if="isExist">
+        <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -73,23 +72,23 @@ import Disp from "../../mixins/disp";
 export default {
   name: "TicketInfo",
   components : {
+    simple: TicketContentSimple,
     audit: TicketContentAuditLog,
-    plan: TicketContentPlanChange,
-    simple: TicketContentSimple
+    plan: TicketContentPlanChange
   },
   mixins: [Util, Disp],
   props: {
+    id: {
+      type: String,
+      default: ""
+    },
     operation: {
       type: String,
       default: "show",
       validator(value){
-        return ["create","get","show","update","delete"].indexOf(value) !== -1;
+        return ["create","show","update","delete"].indexOf(value) !== -1;
       }
     },
-    id: {
-      type: String,
-      default: ""
-    }
   },
   data() {
     return {}
@@ -97,32 +96,84 @@ export default {
   computed: {
     //for display
     ticket() {
-      const ticket = this.$store.getters.getTicketById(this.id);
-      if(!ticket && this.needTicket){
-        this.$router.push({ path: "get-tickets.html" });
-        return this.$store.getters.getDummyTicket();
+      if(this.id.length > 0){
+        const ticket = this.$store.getters.getTicketById(this.id);
+        if(!ticket){
+          this.$router.push({ path: "get-tickets.html" });
+          return this.$store.getters.getDummyTicket();
+        }else{
+          return ticket;
+        }
       }else{
-        return ticket;
+        return this.$store.getters.getDummyTicket();
+      }
+    },    
+    //Store processing
+    getter() {
+      return (attr, readOnly=false) => {
+        if(this.isCreate && !readOnly){
+          return this.$store.state.t.createParams[attr];
+        }else if(this.isUpdate && this.isEditableAttr(attr)){
+          return this.$store.state.t.updateParams[attr];
+        }else{
+          return this.ticket[attr];
+        }
       }
     },
-    //Store processing
+    setter(){
+      return (val) => {
+        if(this.isCreate){ 
+          this.$store.commit("setTicketCreateParams", val);
+        }else if(this.isUpdate){ 
+          this.$store.commit("setTicketUpdateParams", val);
+        }else{
+          console.error(`${val} is not editable.`);
+        }
+      }
+    },
+    //Authenticated value
+    projectId: {
+      get() { return this.isCreate ? this.$store.state.c.auth.ProjectId : this.getter("OwnerProjectId", true) },
+    },
+    accountId: {
+      get() { return this.isCreate ? this.$store.state.c.auth.AccountId : this.getter("OwnerAccountId", true) },
+    },
+    //ReadOnly value
+    ticketId: { 
+      get() { return this.getter("TicketId", true); }
+    },
+    status: {
+      get() { return this.getter("Status", true); },
+    },
+    createdAt: {
+      get() { return this.getter("CreatedAt", true); },
+    },
+    updatedAt: {
+      get() { return this.getter("UpdatedAt", true); },
+    },   
+    //Editable value
     email: {
-      get() { return this.$store.state.t[this.isUpdate ? "updateParams":"createParams"].TicketEmail },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {name: "TicketEmail", val: value}) }
+      get() { return this.getter("TicketEmail"); },
+      set(value){ this.setter({ name: "TicketEmail", val: value }); }
     },
     type: {
-      get() { return this.$store.state.t[this.isUpdate ? "updateParams":"createParams"].Type },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {name: "Type", val: value}) }
+      get() { return this.getter("Type"); },
+      set(value){ this.setter({ name: "Type", val: value }); }
     },
-    isEditable(){
+    //Check processing
+    isEditableAttr(){
       return (target) => {
         switch(this.operation){
-          case "create": return true;
+          case "create": 
+              case "page":
+              case "TicketEmail":
+              case "Type":
+              case "Content": return true;
           case "update": {
             switch(target){
-              case "page":
-              case "email":
-              case "content": return true;
+              //case "page":
+              case "TicketEmail":
+              case "Content": return true;
               default: return false;
             }
           }
@@ -135,15 +186,9 @@ export default {
     },
     isShowContent(){
       return (type) => {
-        return ((this.isReadOnly ? this.ticket.Type : this.type) === type);
+        return (this.type === type);
       }
-    },
-    needTicket() { return this.isShow || this.isUpdate },
-    isReadOnly(){ return this.isShow || this.isDelete },
-    isCreate(){ return this.operation === "create" },
-    isShow(){ return this.operation === "show" },
-    isUpdate(){ return this.operation === "update" },
-    isDelete(){ return this.operation === "delete" }
+    }
    },
    methods: {}
 }

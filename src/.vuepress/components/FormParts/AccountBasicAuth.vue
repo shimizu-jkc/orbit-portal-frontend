@@ -5,7 +5,7 @@
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
-          v-model="projectName"
+          v-model="projectId"
           minlength=1
           maxlength=20
           show-word-limit
@@ -53,7 +53,7 @@ export default {
     };
   },
   computed: {
-    projectName: {
+    projectId: {
       get() { return this.$store.state.c.tmp.ProjectId},
       set(value){ this.$store.commit('setTmpProjectId', value) }
     },
@@ -69,15 +69,25 @@ export default {
     async onClickGet() {
       this.loading = true;
       try{
-        await this.$store.dispatch("reqGetProject", {id: this.projectName});
-        await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectName});
-        this.$store.commit('setAuthProjectId', this.projectName);
-        this.$store.commit('setAuthAccountId', this.accountId);
-        this.$emit("success", { projectId: this.projectName, accountId: this.accountId });
+        const needProjectAuth = this.$store.getters.needProjectAuth(); 
+        if(needProjectAuth){
+          await this.$store.dispatch("reqGetProject", {id: this.projectId});
+          this.$store.commit("setAuthProjectId", this.projectId);
+        }
+        const needAccountAuth = this.$store.getters.needAccountAuth(); 
+        if(needAccountAuth){
+          await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectId});
+          this.$store.commit('setAuthAccountId', this.accountId);
+        }
+        this.$emit("success", { 
+          projectId: this.projectId, 
+          accountId: this.accountId,
+          changed: (needProjectAuth | needAccountAuth)
+        });
       }catch(e){
-        this.$store.commit('setAuthProjectId', null);
-        this.$store.commit('setAuthAccountId', null);
-        this.$refs.notification.notify({
+        //this.$store.commit("clearProjectCache");
+        //this.$store.commit("clearAccountCache");
+        await this.$refs.notification.notify({
           status: "error",
           title: this.$page.title,
           message: e.message

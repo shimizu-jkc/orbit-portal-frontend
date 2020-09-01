@@ -7,19 +7,19 @@
             label="作業の実施には、最大5営業日程度掛かることがあります。" 
             v-model="agreements[0]"
           ></el-checkbox>
-        </el-col>
+         </el-col>
       </el-form-item>
-      <div id="preAuth" v-if="!completeAuth">
-        <a-basic action="認証" @success="onEventSuccess($event)"/>
-      </div>
-      <div id="postAuth" v-else>
-        <t-info operation="create" id=""/>
-        <el-form-item>
-          <el-button type="primary" @click="onClickCreate()">依頼する</el-button>
-        </el-form-item>
-      </div>
     </el-form>
-    <loading :show="loading" message="依頼中です"/>
+    <div id="preAuth" v-if="!completeAuth">
+      <auth action="認証" @success="onEventSuccess($event)"/>
+    </div>
+    <div id="postAuth" v-else>
+      <info operation="create" id=""/>
+      <el-row type="flex" justify="start">
+        <el-button type="primary" @click="onClickCreate()">依頼する</el-button>
+      </el-row>
+    </div>
+    <loading :show="loading.show" :message="loading.message"/>
     <notification ref="notification"/>
     <confirm
       :id="dialog.id"
@@ -46,12 +46,15 @@ export default {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    "a-basic": AccountBasicAuth,
-    "t-info": TicketInfo
+    auth: AccountBasicAuth,
+    info: TicketInfo
   },
   data(){
     return {
-      loading: false,
+      loading: {
+        show: false,
+        message: ""
+      },
       dialog: {
         id: "",
         visible: false,
@@ -68,10 +71,25 @@ export default {
     accountId(){ return this.$store.state.c.auth.AccountId; } 
   },
   methods: {
-    onEventSuccess(event) {
-      this.completeAuth = true;
+    async onEventSuccess(event) {
+      try{
+        if(event.changed || this.$store.getters.getTicketList().length === 0){
+          this.loading.message = "処理中です";
+          this.loading.show = true;
+          await this.$store.dispatch("reqGetTickets", { projectId: event.projectId, accountId: event.accountId });
+        }
+        this.completeAuth = true;
+      }catch(e){
+        await this.$refs.notification.notify({
+          status: "error",
+          title: this.$page.title,
+          message: e.message
+        });        
+      }finally{
+        this.loading.show = false;
+      }
     },
-    onClickCreate() {
+    async onClickCreate() {
       if(!this.agreements.every(a => {return a})){
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
@@ -89,7 +107,8 @@ export default {
     async onEventOk(event) {
         switch(event.id){
         case "CONFIRM_CREATE": {
-          this.loading = true;
+          this.loading.message = "作業の依頼中です";
+          this.loading.show = true;
           try{
             await this.$store.dispatch("reqCreateTicket", {projectId: this.projectId, accountId: this.accountId});
             await this.$refs.notification.notify({
@@ -99,16 +118,16 @@ export default {
             });
             this.$router.push({
               path: "show-ticket.html",
-              query: { id: this.$store.getters.getTicketResult().TicketId }
+              query: { id: this.$store.getters.getTicketResult().TicketId, operation: "create" }
             });
           }catch(e){
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "error",
               title: this.$page.title,
               message: e.message
             });
           }finally{
-            this.loading = false;
+            this.loading.show = false;
           }
         }
         case "ALERT":

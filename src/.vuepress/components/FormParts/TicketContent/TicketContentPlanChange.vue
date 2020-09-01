@@ -3,7 +3,7 @@
     <el-form-item label="サポートプラン">
       <el-select
         v-model="plan" 
-        v-if="!readOnly"
+        v-if="!this.readOnly"
         placeholder="変更先のサポートプランを選択してください。"
       >
         <el-option
@@ -14,18 +14,18 @@
         </el-option>
       </el-select>
       <span class="form-item" v-else>
-        {{getDispName("SupportPlan", content.ExpectedPlan)}}
+        {{getDispName("SupportPlan", plan)}}
       </span>
     </el-form-item>
     <el-form-item label="備考">
       <el-input
         v-model="note"
-        v-if="!readOnly"
+        v-if="!this.readOnly"
         type="textarea"
         :rows="2"
         placeholder="連絡事項がある場合は、こちらにご記入ください。">
       </el-input>
-      <span class="form-item" v-else>{{content.Note}}</span>
+      <span class="form-item" v-else>{{note}}</span>
     </el-form-item>
   </div>
 </template>
@@ -64,26 +64,29 @@ export default {
     //Store processing
     plan: {
       get(){
-        if(this.isUpdate){
+        if(this.hasId && this.readOnly){
+          return this.content.ExpectedPlan;
+        }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.ExpectedPlan;
         }else{
           return this.$store.state.t.createParams.Content[this.type].ExpectedPlan 
         }
       },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::ExpectedPlan", val: value}) },
+      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::ExpectedPlan", val: value}) },
     },
     note: {
       get(){
-        if(this.isUpdate){
+        if(this.hasId && this.readOnly){
+          return this.content.Note;
+        }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Note 
         }
       },
-      set(value){ this.$store.commit(this.isUpdate ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}) },
+      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}) },
     },
-    isCreate(){ return this.id.length === 0 },
-    isUpdate(){ return this.id.length > 0 }
+    hasId(){ return this.id.length > 0 }
   }
 }
 </script>

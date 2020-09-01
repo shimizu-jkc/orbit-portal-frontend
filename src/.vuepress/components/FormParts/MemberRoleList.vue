@@ -14,7 +14,6 @@
         :index="index"
         :id="id"
         :members="members"
-        :added="role.added ? true : false"
       />
       <el-button 
         class="button-row"
@@ -62,25 +61,26 @@ export default {
   },
   computed: {
     roles() {
-      if(!this.id || this.id.length === 0){
-        //Create
-        return this.$store.state.a.createParams.MemberRoles;
-      }else if(this.id && !this.readOnly){
+      if(this.hasId && this.readOnly){
+        //Read
+        const account = this.$store.getters.getAccountById(this.id);
+        return account ? account.MemberRoles : this.$store.getters.getDummyAccount().MemberRoles;
+      }else if(this.hasId && !this.readOnly){
         //Update
         return this.$store.state.a.updateParams.MemberRoles;
       }else{
-        //Read
-        const account = this.$store.getters.getAccountById(this.id);
-        return account ? account.MemberRoles : [];
+        //Create
+        return this.$store.state.a.createParams.MemberRoles;
       }
     },
     members() {
       return this.$store.getters.getProjectById(this.$store.state.c.auth.ProjectId).Members;
-    }
+    },
+    hasId(){ return this.id.length > 0 }
   },
   methods: {
-    onClickAdd(){
-      this.$store.commit((this.id && !this.readOnly) ? "setAccountUpdateParams":"setAccountCreateParams", {name: "MemberRole::ADD"});
+    async onClickAdd(){
+      this.$store.commit(this.hasId ? "setAccountUpdateParams":"setAccountCreateParams", {name: "MemberRole::ADD"});
     },
     roleFormatter(row, column, value) {
       return this.getDispName("MemberRole", value)

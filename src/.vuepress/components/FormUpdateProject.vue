@@ -1,12 +1,10 @@
 <template>
   <div id="FormUpdateProject">
-    <el-form>
-      <p-info operation="update" :id="id"/>
-      <el-form-item>    
-        <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
-        <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
-      </el-form-item>    
-    </el-form>
+    <el-row type="flex" justify="end">
+      <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
+      <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
+    </el-row>
+    <info operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm
@@ -33,7 +31,7 @@ export default {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    "p-info": ProjectInfo
+    info: ProjectInfo
   },
   data() {
     return {
@@ -50,11 +48,11 @@ export default {
   },
   computed: {
     isEdited() {
-      return this.$store.getters.isEdited(this.id);
+      return this.$store.getters.isProjectEdited(this.id);
     }
   },
   methods: {
-    onClickCancel() {
+    async onClickCancel() {
       if(this.isEdited){
         this.dialog.id = "CONFIRM_CANCEL";
         this.dialog.cancelable = true;
@@ -68,7 +66,7 @@ export default {
         });
       }
     },
-    onClickUpdate() {
+    async onClickUpdate() {
       this.dialog.id = "CONFIRM_UPDATE";
       this.dialog.cancelable = true;
       this.dialog.title = "更新の確認";
@@ -88,7 +86,7 @@ export default {
           this.loading = true;
           try{
             await this.$store.dispatch("reqUpdateProject", {id: this.id});
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
               message: "プロジェクト情報を更新しました。"
@@ -98,7 +96,7 @@ export default {
               query: { id: this.id }
             });
           }catch(e){
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "error",
               title: this.$page.title,
               message: e.message

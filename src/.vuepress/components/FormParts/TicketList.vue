@@ -1,6 +1,12 @@
 <template>
   <div id="TicketList">
-    <el-table :data="tickets">
+    <el-row>
+      <el-col :span="4"><span class="form-item">プロジェクト名</span></el-col>
+      <el-col :span="6"><span>{{projectId}}</span></el-col>
+      <el-col :span="4"><span class="form-item">クラウド環境ID</span></el-col>
+      <el-col :span="6"><span>{{accountId}}</span></el-col>
+    </el-row>
+    <el-table :data="tickets":default-sort="defaultSort">
       <el-table-column sortable prop="TicketId" label="作業ID"></el-table-column>
       <el-table-column sortable prop="TicketEmail" label="連絡先Eメールアドレス"></el-table-column>
       <el-table-column sortable prop="Type" label="作業種別" :formatter="typeFormatter"></el-table-column>
@@ -13,41 +19,60 @@
         </template>
       </el-table-column>
     </el-table>
+    <loading :show="loading" message="情報の取得中です"/>
+    <notification ref="notification"/>
   </div>
 </template>
 
 <script>
+import Loading from '../common/Loading.vue'
+import Notification from '../common/Notification.vue';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
 
 export default {
   name: "TicketList",
-  components: {},
+  components: {
+    loading: Loading,
+    notification: Notification
+  },
   mixins: [Util, Disp],
   data() {
     return {
+      loading: false,
       projectId: this.$store.state.c.auth.ProjectId,
-      accountId: this.$store.state.c.auth.AccountId
+      accountId: this.$store.state.c.auth.AccountId,
+      defaultSort: { prop: "UpdatedAt", order: "descending" }
     };
   },
   computed: {
-    tickets() { return this.$store.state.t.results; }
+    tickets() { return this.$store.getters.getTicketList(); }
   },
   methods: {
     async onClickDetail(ticket){
       try{
-        await this.$store.dispatch("reqGetTicket", {
-          id: ticket.TicketId,
-          projectId: ticket.OwnerProjectId,
-          accountId: ticket.OwnerAccountId
-        });
+        if(!this.$store.getters.isTicketLoaded(ticket.TicketId)){
+          this.loading = true;
+          await this.$store.dispatch("reqGetTicket", {
+            id: ticket.TicketId,
+            projectId: ticket.OwnerProjectId,
+            accountId: ticket.OwnerAccountId
+          });
+        }
         this.$router.push({
           path: "show-ticket.html",
           query: { id: ticket.TicketId },
         });
       }catch(e){
-        console.error(e);
+        await this.$refs.notification.notify({
+          status: "error",
+          title: this.$page.title,
+          message: e.message
+        });
+        this.$store.commit("clearTicketResults")
+        this.$router.push({ path: "get-tickets.html" });
       }finally{
+        this.loading = false;
       }
     },
     typeFormatter(row, column, value) {

@@ -66,8 +66,11 @@ export default {
     //for Display name
     getDispName(attrName, attrValue){
       try{
-        if(!attrName || !attrValue) throw new Error("invalid param");
-        return DispNameTable[attrName].find(d => d.value === attrValue).label;
+        if(!attrName || attrName.length == 0 || !attrValue || attrValue.length == 0){
+          return "";
+        }else{
+          return DispNameTable[attrName].find(d => d.value === attrValue).label;
+        }
       }catch(e){
         console.error(`${attrName}:${attrValue} is invalid`);
         return "不明な表示名"
@@ -75,8 +78,11 @@ export default {
     },
     getDispNameSets(attrName){
       try{
-        if(!attrName) throw new Error("invalid param");
-        return DispNameTable[attrName];
+        if(!attrName || attrName.length == 0){
+          return { value: "", label: "" };   
+        }else{
+          return DispNameTable[attrName];
+        }
       }catch(e){
         console.error(`${attrName} is invalid`);
         return { value: "UNKNOWN", label: "不明な表示名" };   

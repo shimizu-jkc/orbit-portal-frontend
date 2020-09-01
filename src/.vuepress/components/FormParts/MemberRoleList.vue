@@ -74,7 +74,12 @@ export default {
       }
     },
     members() {
-      return this.$store.getters.getProjectById(this.$store.state.c.auth.ProjectId).Members;
+      const project = this.$store.getters.getProjectById(this.$store.state.c.auth.ProjectId);
+      if(project){
+        return project.Members;
+      }else{
+        return this.$store.getters.getDummyProject().Members;
+      }
     },
     hasId(){ return this.id.length > 0 }
   },

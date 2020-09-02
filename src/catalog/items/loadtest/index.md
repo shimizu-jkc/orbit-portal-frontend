@@ -1,4 +1,4 @@
-# 負荷試験カタログ
+# 「負荷試験」カタログ
 
 <ScreenTransitionBtn btnName="一覧に戻る" path="/catalog/list" />
 
@@ -9,7 +9,7 @@
 - システムのボトルネックの把握とパフォーマンスの改善
 - スケールが自動変化するシステムにおけるアクセス増減によるスケール変化の確認
 
-:::: tabs
+:::: tabs cache-lifetime="0" :options="{ useUrlFragment: false }"
  
 ::: tab 概要
 
@@ -162,8 +162,8 @@ $ python3 app.py init
 
 // NG
 ├ input
-│  ├ シナリオ①.jmx
-│  └ シナリオ②.jmx
+│  ├ シナリオ１.jmx
+│  └ シナリオ２.jmx
 
 // OK
 ├ input

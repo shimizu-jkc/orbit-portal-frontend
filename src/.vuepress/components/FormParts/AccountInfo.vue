@@ -165,7 +165,7 @@ export default {
       pickerOptions: {
         disabledDate(time) {
           const date = new Date();
-          switch(date.getDay){
+          switch(date.getDay()){
             case 0  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 5); 
             case 6  : date.setTime(date.getTime() + 3600 * 1000 * 24 * 6); 
             default : date.setTime(date.getTime() + 3600 * 1000 * 24 * 7); 

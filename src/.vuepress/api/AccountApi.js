@@ -25,7 +25,7 @@ export default class AccountApi extends ApiBase {
 
   _formatParam(param, isCreate=false){
     const createOnly = isCreate ? ["Env"] : [];
-    const editable =  ["BillingOWDepartmentCode", "BillingOWUsageCode", "BillingProjectCode",
+    const editable =  ["BillingOWDepartmentCode", "BillingOWUsageCode", "BillingProjectCode", "BillingProjectSubCode",
                        "StartOperationDate", "ExpireOperationDate", "MemberRoles"];
     let body = {};
 

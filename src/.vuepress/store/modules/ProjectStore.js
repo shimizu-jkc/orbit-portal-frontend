@@ -1,4 +1,4 @@
-import ProjectApi from '../../api/ProjectApi'
+import ProjectApi from '../../api/ProjectApi';
 
 // Initial state
 const state = () => ({
@@ -18,25 +18,26 @@ const state = () => ({
     ]
   },
   updateParams: {},
-  results: []
+  results: [],
+  result: {}
 });
 
 // Getters
 const getters = {
   getDummyProject: (state) => () => {
-    return  {
+    return {
       ProjectId: "",
-      ProjectEmail: "",
-      DivisionName: "",
-      Budget: 0,
       Members: []
     };
   },
-  getProjectById: (state) => (id) => {
+  getProjectById: (state, getters) => (id) => {
     return state.results.find(r => r.ProjectId === id);
   },
-  isEdited: (state) => (id) => {
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(state.results.find(r => r.ProjectId === id)));
+  getProjectResult: (state) => () => {
+    return state.result;
+  },
+  isProjectEdited: (state, getters) => (id) => {
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id))) || false;
   }
 };
 
@@ -44,25 +45,26 @@ const getters = {
 const actions = {
   async reqCreateProject({commit, state}) {
     const result = await (new ProjectApi()).createProject(state.createParams);
-    commit("setResult", result);
+    commit("setProjectResult", result);
   },
-  async reqGetProject({commit}, {id}) {
+  async reqGetProject({commit, getters}, {id}) {
     const result = await (new ProjectApi()).getProject(id);
-    commit("setResult", result);
+    commit("setProjectResult", result);
   },
   async reqUpdateProject({commit, state}, {id}) {
     const result = await (new ProjectApi()).updateProject(id, state.updateParams);
-    commit("setResult", result);
+    commit("setProjectResult", result);
   },
   async reqDeleteProject({commit}, {id}) {
     await (new ProjectApi()).deleteProject(id);
-    commit("setResult", null);
+    commit("clearProjectResult", id);
+    commit("clearProjectCache");
   }
 };
 
 // Mutations
 const mutations = {
-  setCreateParams(state, param){
+  setProjectCreateParams(state, param){
     switch(param.name){
       case "Member::Department" : state.createParams.Members[param.index].Department = param.val; break;
       case "Member::Name"       : state.createParams.Members[param.index].Name = param.val; break;
@@ -73,11 +75,7 @@ const mutations = {
       default                   : state.createParams[param.name] = param.val;
     }
   },
-  loadDefaultUpdateParams(state, id){
-    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.ProjectId === id)||{}));
-  },
-  setUpdateParams(state, param){
-    console.log(param)
+  setProjectUpdateParams(state, param){
     switch(param.name){
       case "Member::Department" : state.updateParams.Members[param.index].Department = param.val; break;
       case "Member::Name"       : state.updateParams.Members[param.index].Name = param.val; break;
@@ -87,14 +85,27 @@ const mutations = {
       case "Member::DELETE"     : state.updateParams.Members.splice(param.index, 1); break;
       default                   : state.updateParams[param.name] = param.val;
     }
-    console.log(state)
   },
-  setResult(state, val){
-    if(val){
-      state.results[0] = val; //Not fix
+  loadDefaultUpdateParams(state, id){
+    state.updateParams = JSON.parse(JSON.stringify(state.results.find(r => r.ProjectId === id) || {}));
+  },
+  setProjectResult(state, val){
+    const index = state.results.findIndex(r => r.ProjectId === val.ProjectId);
+    if(index != -1){
+      //update
+      state.results.splice(index, 1, val);
     }else{
-      state.results = [];
+      //create
+      state.results.push(val);
     }
+    state.result = val;
+  },
+  clearProjectResult(state, id){
+    const index = state.results.findIndex(r => r.ProjectId === id);
+    if(index != -1){
+      state.results.splice(index, 1);
+    }
+    state.result = {};
   }
 }
 

@@ -10,7 +10,7 @@ export default {
   name: "ScreenTransitionBtn",
   props: ["btnName", "path"],
   methods: {
-    onClick(){
+    async onClick(){
       this.$router.push({ path: this.path });
     }
   }

@@ -15,11 +15,11 @@
           ></el-checkbox>
         </el-col>
       </el-form-item>
-      <p-info operation="create" />
-      <el-form-item>
-        <el-button type="primary" @click="onClickCreate()">登録する</el-button>
-      </el-form-item>
     </el-form>
+    <info operation="create" />
+    <el-row type="flex" justify="start">
+      <el-button type="primary" @click="onClickCreate()">登録する</el-button>
+    </el-row>
     <loading :show="loading" message="登録中です"/>
     <notification ref="notification"/>
     <confirm
@@ -46,7 +46,7 @@ export default {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    "p-info": ProjectInfo
+    info: ProjectInfo
   },
   data(){
     return {
@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    onClickCreate() {
+    async onClickCreate() {
       if(!this.agreements.every(a => {return a})){
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
@@ -83,17 +83,17 @@ export default {
           this.loading = true;
           try{
             await this.$store.dispatch("reqCreateProject");
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
               message: "プロジェクトを登録しました。"
             });
             this.$router.push({
               path: "show-project.html",
-              query: { id: this.$store.state.p.createParams.ProjectId }
+              query: { id: this.$store.getters.getProjectResult().ProjectId, operation: "create" }
             });
           }catch(e){
-            this.$refs.notification.notify({
+            await this.$refs.notification.notify({
               status: "error",
               title: this.$page.title,
               message: e.message

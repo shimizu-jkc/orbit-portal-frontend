@@ -1,22 +1,22 @@
 <template>
-  <div id="FormDeleteProject">
+  <div id="FormDeleteAccount">
     <auth action="認証" @success="onEventSuccess($event)"/>
   </div>
 </template>
 
 <script>
-import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
+import AccountBasicAuth from './FormParts/AccountBasicAuth.vue'
 
 export default {
-  name: "FormDeleteProject",
+  name: "FormDeleteAccount",
   components: {
-    auth: ProjectBasicAuth
+    auth: AccountBasicAuth
   },
   methods: {
     async onEventSuccess(event) {
       this.$router.push({
-        path: "show-project.html",
-        query: { id: event.projectId, operation: "delete" }
+        path: "show-account.html",
+        query: { id: event.accountId, operation: "delete" }
       });
     }
   }

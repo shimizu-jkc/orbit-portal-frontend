@@ -7,12 +7,7 @@ export default class ProjectApi extends ApiBase {
   }
 
   async createProject(param){
-    if(param.Members){
-      param.Members.forEach(m => {
-        delete m.added; //remove original attribute
-      });
-    };
-    return await super.post(`/projects`, param);
+    return await super.post(`/projects`, this._formatParam(param, true));
   }
 
   async getProject(id){
@@ -20,8 +15,19 @@ export default class ProjectApi extends ApiBase {
   }
 
   async updateProject(id, param){
+    return await super.put(`/projects/${id}`, this._formatParam(param));
+  }
+
+  async deleteProject(id){
+    return await super.delete(`/projects/${id}`);
+  }
+
+  _formatParam(param, isCreate=false){
+    const createOnly = isCreate ? ["ProjectId", "DivisionName"] : [];
+    const editable =  ["ProjectEmail", "Budget", "Members"];
     let body = {};
-    ["ProjectEmail", "Budget", "Members"].forEach(a => {
+
+    editable.concat(createOnly).forEach(a => {
       if(param[a]){
         if(a === "Members"){
           body[a] = param[a].map(m => {
@@ -33,14 +39,10 @@ export default class ProjectApi extends ApiBase {
         }
       }
     });
-    if(!id || id.length == 0 || Object.keys(body).length == 0){
+    if(Object.keys(body).length === 0){
       console.error(id, body);
-      throw new Error("不正なパラメータが含まれています。")
+      throw new Error("パラメータが存在しません。")
     }
-    return await super.put(`/projects/${id}`, body);
-  }
-
-  async deleteProject(id){
-    return await super.delete(`/projects/${id}`);
+    return body;
   }
 };

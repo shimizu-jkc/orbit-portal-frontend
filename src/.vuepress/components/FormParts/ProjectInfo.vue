@@ -3,55 +3,55 @@
     <el-form 
       inline-message
       status-icon
-      label-width="25%"
-      :label-position="isEditable('page')?'top':'left'"
+      label-width="20%"
+      :label-position="isEditableAttr('page')?'top':'left'"
     >
       <el-form-item label="プロジェクト名">
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
           v-model="projectId"
-          v-if="isEditable('projectName')"
+          v-if="isEditableAttr('ProjectId')"
           minlength=1
           maxlength=20
           show-word-limit
         ></el-input>
         <span class="form-item" v-else>
-          {{project.ProjectId}}
-          <span class="attention" v-show="operation=='update'">※プロジェクト名は変更できません</span>
+          {{projectId}}
+          <span class="attention" v-show="isUpdate">※プロジェクト名は変更できません</span>
         </span>
       </el-form-item>
       <el-form-item label="代表者Eメールアドレス">
         <el-input 
           type="text"
-          v-if="isEditable('projectEmail')"
+          v-if="isEditableAttr('ProjectEmail')"
           placeholder="プロジェクト代表者のEメールアドレスを入力してください"
           v-model="projectEmail"
         ></el-input>
         <span class="form-item" v-else>
-          {{project.ProjectEmail}}
+          {{projectEmail}}
         </span>
       </el-form-item>
       <el-form-item label="事業部">
-        <el-select 
-          class="select"
-          v-model="division" 
-          v-if="isEditable('division')"
+        <el-select
+          v-model="divisionName" 
+          v-if="isEditableAttr('DivisionName')"
           placeholder="所属する事業部を選択してください。"
         >
-          <el-option label="コーポレート" value="CORP"></el-option>
-          <el-option label="AM事業部" value="AM"></el-option>
-          <el-option label="MS事業部" value="MS"></el-option>
-          <el-option label="PS事業部" value="PS"></el-option>
-          <el-option label="DX事業部" value="DX"></el-option>
+         <el-option
+            v-for="(item, index) in getDispNameSets('Division')"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
         <span class="form-item" v-else>
-          {{getDispDivisionName(project.DivisionName)}}
-          <span class="attention" v-show="operation=='update'">※事業部は変更できません</span>
+          {{getDispName("Division", divisionName)}}
+          <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
         </span>
       </el-form-item>
       <el-form-item label="クラウド利用の予算(月額)">
-        <div id="EditableBudget" v-if="isEditable('budget')">
+        <div id="EditableBudget" v-if="isEditableAttr('Budget')">
           <el-input-number 
             class="input-number"
             v-model="budget"
@@ -60,27 +60,28 @@
             :min="0" 
             :max="10000"
           ></el-input-number>
-          <span> USD </span>
+          <span> USドル </span>
         </div>
         <span class="form-item" v-else>
-          {{project.Budget}} USD
+          {{budget}} USドル
         </span>
       </el-form-item>
       <el-form-item label="プロジェクトメンバー">
         <div class="form-item">
-          <members :readOnly="!isEditable('members')" :id="id"/>
+          <members :readOnly="!isEditableAttr('Members')" :id="id"/>
         </div>
       </el-form-item>
-      <el-form-item label="所有アカウント" v-if="isReadOnly">
-        <span class="form-item" v-for="account in project.AccountIds">
-          {{account}}
-        </span>
+      <el-form-item label="所有アカウント" v-show="isExist">
+        <div class="form-item" v-for="account in accountIds">
+          <el-button type="text" @click="onClickAccountLink(account)" v-if="isReadOnly">{{account}}</el-button>
+          <span v-else>{{account}}</span>
+        </div>
       </el-form-item>
-      <el-form-item label="登録日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(project.CreatedAt)}}</span>
+      <el-form-item label="登録日" v-if="isExist">
+        <span class="form-item">{{epochSecToJST(createdAt)}}</span>
       </el-form-item>
-      <el-form-item label="最終更新日" v-if="isReadOnly">
-        <span class="form-item">{{epochSecToJST(project.UpdatedAt)}}</span>
+      <el-form-item label="最終更新日" v-if="isExist">
+        <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -90,24 +91,25 @@
 <script>
 import MemberList from './MemberList';
 import Util from "../../mixins/util";
+import Disp from "../../mixins/disp";
 
 export default {
   name: "ProjectInfo",
   components : {
     members: MemberList
   },
-  mixins: [Util],
+  mixins: [Util, Disp],
   props: {
-    operation: {
-      type: String,
-      default: "read",
-      validator(value){
-        return ["create","get","show","update","delete"].indexOf(value) !== -1;
-      }
-    },
     id: {
       type: String,
       default: ""
+    },
+    operation: {
+      type: String,
+      default: "show",
+      validator(value){
+        return ["create","show","update","delete"].indexOf(value) !== -1;
+      }
     }
   },
   data() {
@@ -116,41 +118,88 @@ export default {
   computed: {
     //for display
     project() {
-      const project = this.$store.getters.getProjectById(this.id);
-      if(!project && this.needProject){
-        this.$router.push({ path: "get-project.html" });
-        return this.$store.getters.getDummyProject();
+      if(this.id.length > 0){
+        const project = this.$store.getters.getProjectById(this.id);
+        if(!project){
+          this.$router.push({ path: "get-project.html" });
+          return this.$store.getters.getDummyProject();
+        }else{
+          return project;
+        }
       }else{
-        return project;
+        return this.$store.getters.getDummyProject();
       }
     },
     //Store processing
+    getter() {
+      return (attr, readOnly=false) => {
+        if(this.isCreate && !readOnly){
+          return this.$store.state.p.createParams[attr];
+        }else if(this.isUpdate && this.isEditableAttr(attr)){
+          return this.$store.state.p.updateParams[attr];
+        }else{
+          return this.project[attr];
+        }
+      }
+    },
+    setter() {
+      return (val) => {
+        if(this.isCreate){ 
+          this.$store.commit("setProjectCreateParams", val);
+        }else if(this.isUpdate){ 
+          this.$store.commit("setProjectUpdateParams", val);
+        }else{
+          console.error(`${val} is not editable.`);
+        }
+      }
+    },
+    //ReadOnly value
+    accountIds: {
+      get() { return this.getter("AccountIds", true); },
+    },
+    createdAt: {
+      get() { return this.getter("CreatedAt", true); },
+    },
+    updatedAt: {
+      get() { return this.getter("UpdatedAt", true); },
+    },
+    //Editable value
     projectId: {
-      get() { return this.$store.state.p.createParams.ProjectId },
-      set(value){ this.$store.commit('setCreateParams', {name: "ProjectId", val: value}) }
+      get() { return this.getter("ProjectId"); },
+      set(value){ this.setter({ name: "ProjectId", val: value }); }
     },
     projectEmail: {
-      get() { return this.$store.state.p[this.isUpdate ? "updateParams":"createParams"].ProjectEmail },
-      set(value){ this.$store.commit(this.isUpdate ? "setUpdateParams":"setCreateParams", {name: "ProjectEmail", val: value}) }
+      get() { return this.getter("ProjectEmail"); },
+      set(value){ this.setter({ name: "ProjectEmail", val: value }); }
     },
-    division: {
-      get() { return this.$store.state.p.createParams.DivisionName },
-      set(value){ this.$store.commit('setCreateParams', {name: "DivisionName", val: value}) }
+    divisionName: {
+      get() { return this.getter("DivisionName"); },
+      set(value){ this.setter({ name: "DivisionName", val: value }); }
     },
     budget: {
-      get() { return this.$store.state.p[this.isUpdate ? "updateParams":"createParams"].Budget },
-      set(value){ this.$store.commit(this.isUpdate ? "setUpdateParams":"setCreateParams", {name: "Budget", val: value}) }
+      get() { return this.getter("Budget"); },
+      set(value){ this.setter({ name: "Budget", val: value }); }
     },
-    isEditable(){
+    isEditableAttr(){
       return (target) => {
         switch(this.operation){
-          case "create": return true;
-          case "update": {
+          case "create": {
             switch(target){
               case "page":
-              case "projectEmail":
-              case "budget":
-              case "members": return true;
+              case "ProjectId":
+              case "DivisionName":
+              case "ProjectEmail":
+              case "Budget":
+              case "Members": return true;
+              default: return false;
+            }
+          }
+          case "update": {
+            switch(target){
+              //case "page":
+              case "ProjectEmail":
+              case "Budget":
+              case "Members": return true;
               default: return false;
             }
           }
@@ -160,24 +209,13 @@ export default {
           default: return false;
         }
       }
-    },
-    isReadOnly(){ return this.isShow || this.isDelete },
-    needProject() { return this.isShow || this.isUpdate },
-    isCreate(){ return this.operation === "create" },
-    isShow(){ return this.operation === "show" },
-    isUpdate(){ return this.operation === "update" },
-    isDelete(){ return this.operation === "delete" }
+    }
    },
    methods:{
-    getDispDivisionName(val){
-      switch(val){
-        case "CORP": return "コーポレート";
-        case "AM": return "AM事業部";
-        case "MS": return "MS事業部";
-        case "PS": return "PS事業部";
-        case "DX": return "DX事業部";
-        default : return "不明";
-      }
+    async onClickAccountLink(accountId){
+      this.$store.commit('setTmpProjectId', this.$store.state.c.auth.ProjectId);
+      this.$store.commit('setTmpAccountId', accountId);
+      this.$router.push({ path: "get-account.html" });
     }
   }
 }

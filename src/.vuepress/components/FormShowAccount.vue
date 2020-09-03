@@ -1,11 +1,11 @@
 <template>
-  <div id="FormShowProject">
+  <div id="FormShowAccount">
     <el-row type="flex" justify="end">
-      <el-button type="danger" @click="onClickDelete()" v-show="isDelete">解除する</el-button>
+      <el-button type="danger" @click="onClickDelete()" v-show="isDelete">削除する</el-button>
       <el-button type="primary" @click="onClickEdit()" v-show="isShow">編集する</el-button>
     </el-row>
     <info operation="show" :id="id"/>
-    <loading :show="loading" message="解除中です"/>
+    <loading :show="loading" message="削除の申請中です"/>
     <notification ref="notification"/>
     <confirm
       :id="dialog.id"
@@ -23,16 +23,16 @@
 import Loading from './common/Loading.vue'
 import Notification from './common/Notification.vue'
 import Confirm from './common/Confirm.vue'
-import ProjectInfo from './FormParts/ProjectInfo.vue'
+import AccountInfo from './FormParts/AccountInfo.vue'
 import Disp from "../mixins/disp";
-
+  
 export default {
-  name: "FormShowProject",
+  name: "FormShowAccount",
   components: {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    info: ProjectInfo
+    info: AccountInfo
   },
   mixins: [Disp],
   data() {
@@ -52,15 +52,15 @@ export default {
   methods: {
     async onClickEdit() {
       this.$router.push({
-        path: "update-project.html",
+        path: "update-account.html",
         query: { id: this.id }
       });
     },
     async onClickDelete() {
       this.dialog.id = "CONFIRM_DELETE";
       this.dialog.cancelable = true;
-      this.dialog.title = "登録解除の確認";
-      this.dialog.message ="本当にプロジェクトの登録を解除してもよろしいですか？";
+      this.dialog.title = "削除申請の確認";
+      this.dialog.message ="本当にクラウド環境の削除を申請してもよろしいですか？";
       this.dialog.visible = true;
     },
     async onEventOk(event) {
@@ -68,13 +68,18 @@ export default {
         case "CONFIRM_DELETE": {      
           this.loading = true;
           try{
-            await this.$store.dispatch("reqDeleteProject", { id: this.id });
+            await this.$store.dispatch("reqDeleteAccount", { id: this.id });
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
-              message: "プロジェクトの登録を解除しました。"
+              message: "クラウド環境の削除を申請しました。"
             });
-            this.$router.push({ path: "goodbye.html" });
+            await this.$refs.notification.notify({
+              status: "info",
+              title: "申請における注意事項",
+              message: "クラウド環境の削除について、プロジェクト代表者へ確認します。\n削除までしばらくお待ちください。"
+            });
+            this.$router.push({ path: "get-account.html" });
           }catch(e){
             await this.$refs.notification.notify({
               status: "error",

@@ -66,10 +66,10 @@ module.exports = {
             ],
           },
           {
-            text: "アカウント関連", 
+            text: "クラウド環境関連", 
             items: [
-              { text: "払い出し申請", link: "/request/create-account" },
-              { text: "アカウント情報の確認", link: "/request/get-account" },
+              { text: "利用申請", link: "/request/create-account" },
+              { text: "クラウド環境情報の確認", link: "/request/get-account" },
               { text: "削除申請", link: "/request/delete-account" }
             ]
           },
@@ -77,7 +77,7 @@ module.exports = {
             text: "管理者作業関連", 
             items: [
               { text: "作業の依頼", link: "/request/create-ticket" },
-              { text: "作業状況の確認", link: "/request/get-ticket" }
+              { text: "作業状況の確認", link: "/request/get-tickets" }
             ]
           }
         ]
@@ -172,12 +172,12 @@ module.exports = {
           ]
         },
         {
-          title: "アカウント関連",
+          title: "クラウド環境関連",
           collapsable: false,
           children: [
-            ["create-account", "払い出しの依頼"],
-            ["get-account", "アカウント情報の確認"],
-            ["delete-account", "アカウントの削除"]
+            ["create-account", "利用申請"],
+            ["get-account", "クラウド環境情報の確認"],
+            ["delete-account", "削除申請"]
           ]
         },
         {
@@ -185,7 +185,7 @@ module.exports = {
           collapsable: false,
           children: [
             ["create-ticket", "作業の依頼"],
-            ["get-ticket", "作業状況の確認"]
+            ["get-tickets", "作業状況の確認"]
           ]
         },
       ]  

@@ -1,5 +1,5 @@
 <template>
-  <div id="FormUpdateProject">
+  <div id="FormUpdateAccount">
     <el-row type="flex" justify="end">
       <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
       <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
@@ -23,15 +23,15 @@
 import Loading from './common/Loading.vue'
 import Notification from './common/Notification.vue'
 import Confirm from './common/Confirm.vue'
-import ProjectInfo from './FormParts/ProjectInfo.vue'
+import AccountInfo from './FormParts/AccountInfo.vue'
 
 export default {
-  name: "FormUpdateProject",
+  name: "FormUpdateAccount",
   components: {
     loading: Loading,
     confirm: Confirm,
     notification: Notification,
-    info: ProjectInfo
+    info: AccountInfo
   },
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     isEdited() {
-      return this.$store.getters.isProjectEdited(this.id);
+      return this.$store.getters.isAccountEdited(this.id);
     }
   },
   methods: {
@@ -61,7 +61,7 @@ export default {
         this.dialog.visible = true;
       }else{
         this.$router.push({
-          path: "show-project.html",
+          path: "show-account.html",
           query: { id: this.id }
         });
       }
@@ -70,14 +70,14 @@ export default {
       this.dialog.id = "CONFIRM_UPDATE";
       this.dialog.cancelable = true;
       this.dialog.title = "更新の確認";
-      this.dialog.message = "本当にプロジェクトの情報を更新してもよろしいですか？";
+      this.dialog.message = "本当にクラウド環境の情報を更新してもよろしいですか？";
       this.dialog.visible = true;
     },
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CANCEL": {
           this.$router.push({
-            path: "show-project.html",
+            path: "show-account.html",
             query: { id: this.id }
           });
           break;
@@ -85,14 +85,14 @@ export default {
         case "CONFIRM_UPDATE": {
           this.loading = true;
           try{
-            await this.$store.dispatch("reqUpdateProject", {id: this.id});
+            await this.$store.dispatch("reqUpdateAccount", {id: this.id});
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
-              message: "プロジェクト情報を更新しました。"
+              message: "クラウド環境情報を更新しました。"
             });
             this.$router.push({
-              path: "show-project.html",
+              path: "show-account.html",
               query: { id: this.id }
             });
           }catch(e){
@@ -111,7 +111,7 @@ export default {
     }
   },
   created: function(){
-    this.$store.commit("loadDefaultUpdateParams", this.id);
+    this.$store.commit("loadDefaultAccountUpdateParams", this.id);
   }
 }
 </script>

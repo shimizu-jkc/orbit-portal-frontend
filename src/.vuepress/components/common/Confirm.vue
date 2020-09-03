@@ -47,7 +47,7 @@ export default {
     }
   },
   methods: {
-    onClick(ok){
+    async onClick(ok){
       this.$emit(ok ? "ok": "cancel", { id: this.id });
     }
   }

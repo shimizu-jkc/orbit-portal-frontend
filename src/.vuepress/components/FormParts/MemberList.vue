@@ -1,11 +1,11 @@
 <template>
   <div id="MemberList">
     <div id="EditableMemberList" v-if="!readOnly"> 
-      <el-row :gutter="4">
+      <el-row :gutter="3">
         <span class="member-header">
-          <el-col :span="1">管理者</el-col>
+          <el-col :span="2">管理者</el-col>
           <el-col :span="8">所属部署名</el-col>
-          <el-col :span="6">名前</el-col>
+          <el-col :span="5">名前</el-col>
           <el-col :span="8">Eメールアドレス</el-col>
         </span>
       </el-row>
@@ -14,7 +14,7 @@
         :key="index"
         :index="index"
         :id="id"
-        :added="member.added ? true : false"
+        :disabled="checkDisabled(member)"
       />
       <el-button 
         class="button-row"
@@ -29,13 +29,17 @@
         :data="members" 
         size="small"
       >
-        <el-table-column prop="Admin" label="管理者" width="100" :formatter="adminFormatter"></el-table-column>
+        <el-table-column prop="Admin" label="管理者" align="center" width="80" >
+          <template slot-scope="scope">
+            <i v-if="scope.row.Admin" class="el-icon-check"></i>
+          </template>
+        </el-table-column>
         <el-table-column prop="Department" label="所属部署名"></el-table-column>
         <el-table-column prop="Name" label="名前"></el-table-column>
         <el-table-column prop="Email" label="Eメールアドレス"></el-table-column>
       </el-table>
       <el-row v-else>
-        <span class="form-item">メンバーが登録されていません。</span>
+        <span class="form-item">プロジェクトメンバーが登録されていません。</span>
       </el-row>
     </div>
   </div>
@@ -61,27 +65,31 @@ export default {
   },
   computed: {
     members() {
-      if(!this.id || this.id.length === 0){
-        console.log(this.id, "CREATE")
-        //Create
-        return this.$store.state.p.createParams.Members;
-      }else if(this.id && !this.readOnly){
-        //Update
-        console.log(this.id, "UPDATE")
-        return this.$store.state.p.updateParams.Members;
-      }else{
+      if(this.hasId && this.readOnly){
         //Read
         const project = this.$store.getters.getProjectById(this.id);
-        return project ? project.Members : [];
+        return project ? project.Members : this.$store.getters.getDummyProject().Members;
+      }else if(this.hasId && !this.readOnly){
+        //Update
+        return this.$store.state.p.updateParams.Members;
+      }else{
+        //Create
+        return this.$store.state.p.createParams.Members;
       }
-    }
+    },
+    hasId(){ return this.id.length > 0 }
   },
   methods: {
-    onClickAdd(){
-      this.$store.commit((this.id && !this.readOnly) ? "setUpdateParams":"setCreateParams", {name: "Member::ADD"});
+    checkDisabled(member){
+      return {
+        admin: false,
+        department: false,
+        name: false,
+        email: (this.hasId && !member.added)
+      };
     },
-    adminFormatter(row, column){
-      return row.Admin ? "はい" : "いいえ";
+    async onClickAdd(){
+      this.$store.commit(this.hasId ? "setProjectUpdateParams":"setProjectCreateParams", {name: "Member::ADD"});
     }
   }
 }

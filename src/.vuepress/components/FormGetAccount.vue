@@ -1,22 +1,22 @@
 <template>
-  <div id="FormGetProject">
+  <div id="FormGetAccount">
     <auth action="確認" @success="onEventSuccess($event)"/>
   </div>
 </template>
 
 <script>
-import ProjectBasicAuth from './FormParts/ProjectBasicAuth.vue'
+import AccountBasicAuth from './FormParts/AccountBasicAuth.vue'
 
 export default {
-  name: "FormGetProject",
+  name: "FormGetAccount",
   components: {
-    auth: ProjectBasicAuth
+    auth: AccountBasicAuth
   },
   methods: {
     async onEventSuccess(event) {
       this.$router.push({
-        path: "show-project.html",
-        query: { id: event.projectId }
+        path: "show-account.html",
+        query: { id: event.accountId }
       });
     }
   }

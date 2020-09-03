@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    onClickDetail(catalog) {
+    async onClickDetail(catalog) {
       this.$router.push({ path: catalog.Link });
     }
   }

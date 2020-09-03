@@ -76,8 +76,8 @@ export default class ApiBase {
         case "NotSupported"         : msg = `サポートしていないパラメータが含まれています。`; break;
         case "Unauthorized"         : msg = `認証に失敗しました。`; break;
         case "AccessBlocked"        : msg = `アクセスが禁止されています。`; break;
-        case "AccessDenied"         : 
-        case "Forbidden"            : msg = `${this.dispName}にアクセスする権限がありません。`; break;
+        case "AccessDenied"         : msg = `${this.dispName}にアクセスする権限がありません。`; break;
+        case "Forbidden"            : msg = `${this.dispName}のリソースに対する操作が禁止されています。`; break;
         case "NotVerified"          : msg = `不正なAPIキーです。`; break;
         case "RequestExpired"       : msg = `リクエストの有効期限が切れています。`; break;
         case "TokenExpired"         : msg = `認証トークンの有効期限が切れています。`; break;

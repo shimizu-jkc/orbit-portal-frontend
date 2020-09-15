@@ -1,6 +1,6 @@
 module.exports = {
   title: "OrBITポータル",
-  description: "OrBITは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
+  description: "このページはダミーページです。現在、1stリリースに向け、内容を鋭意調整中です。",
   dest: "release",
   head: [
     ['link', { rel: 'icon', href: '/img/favicon.ico' }]
@@ -22,8 +22,10 @@ module.exports = {
     logo: "/img/logo.png",
     //lastUpdated: "Last Updated",
     //Navigator Setting
+    search: false,
     activeHeaderLinks: false,
     nav: [
+      /*
       { text: "おしらせ", link: "/information/summary" },
       { 
         text: "ユーザーガイド", 
@@ -97,6 +99,7 @@ module.exports = {
           { text: "お問い合わせ", link: "/support/contact" }
         ]
       },
+      */
     ],
     //Sidebar Setting
     sidebarDepth: 1,
@@ -191,10 +194,12 @@ module.exports = {
       ]  
     },
     // GitHub setting
+    /*
     repo: "jkc-cloud/orbit-doc-UserManual",
     repoLabel: "GitHub",
     docsRepo: "jkc-cloud/orbit-doc-UserManuals",
     docsDir: "src",
     docsBranch: "master"
+    */
   }
 };

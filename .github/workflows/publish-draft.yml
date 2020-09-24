@@ -2,7 +2,6 @@ name: Publish for orbit portal of draft.
 on:
   push:
     branches:
-      - wip-*
       - draft
     paths-ignore:
       - "README.md"

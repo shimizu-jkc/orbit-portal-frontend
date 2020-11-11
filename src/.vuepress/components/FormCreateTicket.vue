@@ -1,19 +1,19 @@
 <template>
   <div id="FormCreateTicket">
-    <el-form>
-      <el-form-item label="依頼する前の確認">
-        <el-col>
-          <el-checkbox 
-            label="作業の実施には、最大5営業日程度掛かることがあります。" 
-            v-model="agreements[0]"
-          ></el-checkbox>
-         </el-col>
-      </el-form-item>
-    </el-form>
     <div id="preAuth" v-if="!completeAuth">
       <auth action="認証" @success="onEventSuccess($event)"/>
     </div>
     <div id="postAuth" v-else>
+      <el-form>
+        <el-form-item label="依頼する前の確認">
+          <el-col>
+            <el-checkbox 
+              label="作業の実施には、最大5営業日程度掛かることがあります。" 
+              v-model="agreements[0]"
+            ></el-checkbox>
+          </el-col>
+        </el-form-item>
+      </el-form>
       <info operation="create" id=""/>
       <el-row type="flex" justify="start">
         <el-button type="primary" @click="onClickCreate()">依頼する</el-button>

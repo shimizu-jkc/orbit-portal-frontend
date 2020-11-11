@@ -30,7 +30,7 @@ export default class AccountApi extends ApiBase {
     let body = {};
 
     editable.concat(createOnly).forEach(a => {
-      if(param[a]){
+      if(param.hasOwnProperty(a)){
         if(a === "MemberRoles"){
           body[a] = param[a].map(m => {
             delete m.added; //remove original attribute

@@ -35,7 +35,7 @@ export default class TicketApi extends ApiBase {
     let body = {};
 
     editable.concat(createOnly).forEach(a => {
-      if(param[a]){
+      if(param.hasOwnProperty(a)){
         if(a === "Content"){
           body[a] = param[a][param.Type] || param[a];
         }else{

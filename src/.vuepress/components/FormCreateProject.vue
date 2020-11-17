@@ -82,11 +82,11 @@ export default {
         return;
       }
       if(!this.$store.state.p.createParams.Members.length){
-        showAlertDialog("メンバーを登録してください。");
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
         return;
       }
       if(!this.$store.state.p.createParams.Members.some(m => m.Admin)){
-        showAlertDialog("少なくとも1人の管理者が必要です。");
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
         return;
       }
       showConfirmDialog("プロジェクトを登録します。よろしいですか？");

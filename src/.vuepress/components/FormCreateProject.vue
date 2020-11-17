@@ -72,7 +72,7 @@ export default {
       };
       const showConfirmDialog = (message) => {
         this.dialog.id = "CONFIRM_CREATE";
-        this.dialog.cancelable = false;
+        this.dialog.cancelable = true;
         this.dialog.title = "登録の確認";
         this.dialog.message = message;
         this.dialog.visible = true;

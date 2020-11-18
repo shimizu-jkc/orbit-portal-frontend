@@ -63,19 +63,33 @@ export default {
   },
   methods: {
     async onClickCreate() {
-      if(!this.agreements.every(a => {return a})){
+      const showAlertDialog = (message) => {
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
         this.dialog.title = "登録の警告";
-        this.dialog.message = "「登録する前の確認」がチェックされていません。";
+        this.dialog.message = message;
         this.dialog.visible = true;
-      }else{
+      };
+      const showConfirmDialog = (message) => {
         this.dialog.id = "CONFIRM_CREATE";
         this.dialog.cancelable = true;
         this.dialog.title = "登録の確認";
-        this.dialog.message = "プロジェクトを登録します。よろしいですか？";
+        this.dialog.message = message;
         this.dialog.visible = true;
+      };
+      if(!this.agreements.every(a => {return a})){
+        showAlertDialog("「登録する前の確認」がチェックされていません。");
+        return;
       }
+      if(!this.$store.state.p.createParams.Members.length){
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
+        return;
+      }
+      if(!this.$store.state.p.createParams.Members.some(m => m.Admin)){
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
+        return;
+      }
+      showConfirmDialog("プロジェクトを登録します。よろしいですか？");
     },
     async onEventOk(event) {
       switch(event.id){

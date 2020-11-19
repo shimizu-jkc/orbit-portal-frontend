@@ -101,17 +101,13 @@ export default {
         showAlertDialog("「申請する前の確認」がチェックされていません。");
         return;
       }
-      if(!this.$store.state.a.createParams.MemberRoles.length){
-        showAlertDialog("少なくとも1人以上のプロジェクトメンバーの役割を登録してください。");
-        return;
-      }
       const pmCount = this.$store.state.a.createParams.MemberRoles.filter(m => m.Role === "PROJECT_MNGR").length;
       if(pmCount === 0){
-        showAlertDialog("プロジェクトメンバーの1人を「プロジェクト責任者」にしてください。");
+        showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
         return;
       }
       if(pmCount > 1){
-        showAlertDialog("「プロジェクト責任者」は1人だけ登録してください。");
+        showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
         return;
       }
       showConfirmDialog("クラウド環境の利用を申請します。よろしいですか？");

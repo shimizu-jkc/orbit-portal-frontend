@@ -83,19 +83,34 @@ export default {
       this.completeAuth = true;
     },
     async onClickCreate() {
-      if(!this.agreements.every(a => {return a})){
+      const showAlertDialog = (message) => {
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
         this.dialog.title = "申請の警告";
-        this.dialog.message = "「申請する前の確認」がチェックされていません。";
+        this.dialog.message = message;
         this.dialog.visible = true;
-      }else{
+      };
+      const showConfirmDialog = (message) => {
         this.dialog.id = "CONFIRM_CREATE";
         this.dialog.cancelable = true;
         this.dialog.title = "申請の確認";
-        this.dialog.message = "クラウド環境の利用を申請します。よろしいですか？";
+        this.dialog.message = message;
         this.dialog.visible = true;
+      };
+      if(!this.agreements.every(a => {return a})){
+        showAlertDialog("「申請する前の確認」がチェックされていません。");
+        return;
       }
+      const pmCount = this.$store.state.a.createParams.MemberRoles.filter(m => m.Role === "PROJECT_MNGR").length;
+      if(pmCount === 0){
+        showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
+        return;
+      }
+      if(pmCount > 1){
+        showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
+        return;
+      }
+      showConfirmDialog("クラウド環境の利用を申請します。よろしいですか？");
     },
     async onEventOk(event) {
         switch(event.id){

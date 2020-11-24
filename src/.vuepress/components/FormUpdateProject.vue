@@ -67,11 +67,29 @@ export default {
       }
     },
     async onClickUpdate() {
-      this.dialog.id = "CONFIRM_UPDATE";
-      this.dialog.cancelable = true;
-      this.dialog.title = "更新の確認";
-      this.dialog.message = "本当にプロジェクトの情報を更新してもよろしいですか？";
-      this.dialog.visible = true;
+      const showAlertDialog = (message) => {
+        this.dialog.id = "ALERT";
+        this.dialog.cancelable = false;
+        this.dialog.title = "更新の警告";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      const showConfirmDialog = (message) => {
+        this.dialog.id = "CONFIRM_UPDATE";
+        this.dialog.cancelable = true;
+        this.dialog.title = "更新の確認";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      if(!this.$store.state.p.updateParams.Members.length){
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
+        return;
+      }
+      if(!this.$store.state.p.updateParams.Members.some(m => m.Admin)){
+        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
+        return;
+      }
+      showConfirmDialog("本当にプロジェクトの情報を更新してもよろしいですか？");
     },
     async onEventOk(event) {
       switch(event.id){

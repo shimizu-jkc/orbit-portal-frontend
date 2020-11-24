@@ -67,11 +67,30 @@ export default {
       }
     },
     async onClickUpdate() {
-      this.dialog.id = "CONFIRM_UPDATE";
-      this.dialog.cancelable = true;
-      this.dialog.title = "更新の確認";
-      this.dialog.message = "本当にクラウド環境の情報を更新してもよろしいですか？";
-      this.dialog.visible = true;
+      const showAlertDialog = (message) => {
+        this.dialog.id = "ALERT";
+        this.dialog.cancelable = false;
+        this.dialog.title = "更新の警告";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      const showConfirmDialog = (message) => {
+        this.dialog.id = "CONFIRM_UPDATE";
+        this.dialog.cancelable = true;
+        this.dialog.title = "更新の確認";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      const pmCount = this.$store.state.a.updateParams.MemberRoles.filter(m => m.Role === "PROJECT_MNGR").length;
+      if(pmCount === 0){
+        showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
+        return;
+      }
+      if(pmCount > 1){
+        showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
+        return;
+      }
+      showConfirmDialog("本当にクラウド環境の情報を更新してもよろしいですか？");
     },
     async onEventOk(event) {
       switch(event.id){

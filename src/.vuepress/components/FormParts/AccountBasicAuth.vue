@@ -1,6 +1,6 @@
 <template>
   <div id="AccountBasicAuth">
-    <el-form label-position="top">
+    <el-form label-position="top" @submit.native.prevent>
       <el-form-item label="プロジェクト名">
         <el-input 
           type="text"
@@ -9,6 +9,7 @@
           minlength=1
           maxlength=20
           show-word-limit
+          @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
       <el-form-item label="クラウド環境ID">
@@ -19,11 +20,12 @@
           minlength=12
           maxlength=12
           show-word-limit
+          @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
       <br>
       <el-form-item>
-        <el-button type="primary" @click="onClickGet()">{{action}}する</el-button>
+        <el-button type="primary" :disabled="!isValid" @click="onClickGet()">{{action}}する</el-button>
       </el-form-item>
     </el-form>
     <loading :show="loading" :message="message"/>
@@ -63,6 +65,9 @@ export default {
     },
     message(){
       return this.action + "中です";
+    },
+    isValid(){
+      return (this.projectId !== "") && (this.accountId !== "");
     }
   },
   methods: {

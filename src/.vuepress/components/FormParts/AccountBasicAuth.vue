@@ -1,6 +1,6 @@
 <template>
   <div id="AccountBasicAuth">
-    <el-form label-position="top">
+    <el-form label-position="top" @submit.native.prevent>
       <el-form-item label="プロジェクト名">
         <el-input 
           type="text"
@@ -19,6 +19,7 @@
           minlength=12
           maxlength=12
           show-word-limit
+          @keypress.enter.native="onClickGet()"
         ></el-input>
       </el-form-item>
       <br>

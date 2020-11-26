@@ -67,7 +67,7 @@ export default {
       return this.action + "中です";
     },
     isValid(){
-      return !!this.projectId && !!this.accountId;
+      return (this.projectId !== "") && (this.accountId !== "");
     }
   },
   methods: {

@@ -52,7 +52,7 @@ export default {
       return this.action + "中です";
     },
     isValid(){
-      return !!this.projectId;
+      return this.projectId !== "";
     }
   },
   methods: {

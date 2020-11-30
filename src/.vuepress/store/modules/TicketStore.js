@@ -1,29 +1,32 @@
 import TicketApi from '../../api/TicketApi'
 
+// parameter schema
+const schema = {
+  TicketEmail: "",
+  Type: "",
+  Content: {
+    REQ_CF_KEYPAIR: {
+      Note: ""
+    },
+    REQ_AUDIT_LOG: {
+      Service: "",
+      StartDate: 0,
+      EndDate: 0,
+      Note: ""
+    },
+    REQ_SUPPORT_PLAN_CHANGE: {
+      ExpectedPlan: "",
+      Note: ""
+    },
+    REQ_OTHER: {
+      Note: ""
+    }
+  }
+};
+
 // Initial state
 const state = () => ({
-  createParams: {
-    TicketEmail: "",
-    Type: "",
-    Content: {
-      REQ_CF_KEYPAIR: {
-        Note: ""
-      },
-      REQ_AUDIT_LOG: {
-        Service: "",
-        StartDate: 0,
-        EndDate: 0,
-        Note: ""
-      },
-      REQ_SUPPORT_PLAN_CHANGE: {
-        ExpectedPlan: "",
-        Note: ""
-      },
-      REQ_OTHER: {
-        Note: ""
-      }
-    }
-  },
+  createParams: { ...schema },
   updateParams: {},
   results: [],
   result: {}
@@ -116,6 +119,9 @@ const mutations = {
   clearTicketResults(state){
     state.results = [];
     state.result = {};
+  },
+  clearTicketCreateParams(state){
+    state.createParams = { ...schema };
   }
 }
 

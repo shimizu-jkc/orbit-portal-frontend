@@ -127,9 +127,6 @@ export default {
         default: break;
       }
     }
-  },
-  created: function(){
-    this.$store.commit("loadDefaultUpdateParams", this.id);
   }
 }
 </script>

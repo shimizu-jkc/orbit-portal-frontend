@@ -102,6 +102,7 @@ export default {
               title: this.$page.title,
               message: "プロジェクトを登録しました。"
             });
+            this.$store.commit("clearProjectCreateParams");
             this.$router.push({
               path: "show-project.html",
               query: { id: this.$store.getters.getProjectResult().ProjectId, operation: "create" }

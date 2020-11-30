@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
 import ProjectStore from './modules/ProjectStore'
 import AccountStore from './modules/AccountStore'
 import TicketStore from './modules/TicketStore'
@@ -16,5 +17,8 @@ export default new Vuex.Store({
     c: CacheStore,
     x: CatalogStore
   },
-  strict: process.env.NODE_ENV !== 'production'
+  strict: process.env.NODE_ENV !== 'production',
+  plugins: [createPersistedState({
+    paths: ['p', 'a', 't', 'c']
+  })]
 });

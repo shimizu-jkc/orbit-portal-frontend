@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     async onClickEdit() {
+      this.$store.commit("loadDefaultTicketUpdateParams", this.id);
       this.$router.push({
         path: "update-ticket.html",
         query: { id: this.id }

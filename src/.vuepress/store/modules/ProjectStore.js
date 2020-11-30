@@ -1,22 +1,25 @@
 import ProjectApi from '../../api/ProjectApi';
 
+// parameter schema
+const schema = {
+  ProjectId: "",
+  ProjectEmail: "",
+  DivisionName: "",
+  Budget: 0,
+  Members: [
+    {
+      Department: "",
+      Name: "",
+      Email: "",
+      Admin: false,
+      added: false
+    }
+  ]
+};
+
 // Initial state
 const state = () => ({
-  createParams: {
-    ProjectId: "",
-    ProjectEmail: "",
-    DivisionName: "",
-    Budget: 0,
-    Members: [
-      {
-        Department: "",
-        Name: "",
-        Email: "",
-        Admin: false,
-        added: false
-      }
-    ]
-  },
+  createParams: { ...schema },
   updateParams: {},
   results: [],
   result: {}
@@ -106,6 +109,9 @@ const mutations = {
       state.results.splice(index, 1);
     }
     state.result = {};
+  },
+  clearProjectCreateParams(state){
+    state.createParams = { ...schema };
   }
 }
 

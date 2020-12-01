@@ -20,8 +20,16 @@ export default (isServer) => {
     },
     strict: process.env.NODE_ENV !== 'production',
     // only client side
-    plugins: isServer ? [] : [createPersistedState({
-      paths: ['p', 'a', 't', 'c']
-    })]
+    plugins: isServer ? [] : [
+      createPersistedState({
+        key: 'OrbitPortal',
+        paths: ['p', 'a', 't', 'c.auth'],
+        storage: window.sessionStorage
+      }),
+      createPersistedState({
+        key: 'OrbitPortal',
+        paths: ['c.tmp'],
+        storage: window.localStorage
+      })]
   });
 }

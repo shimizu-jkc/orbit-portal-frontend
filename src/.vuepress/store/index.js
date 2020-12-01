@@ -9,16 +9,19 @@ import CatalogStore from './modules/CatalogStore'
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  modules: {
-    p: ProjectStore,
-    a: AccountStore,
-    t: TicketStore,
-    c: CacheStore,
-    x: CatalogStore
-  },
-  strict: process.env.NODE_ENV !== 'production',
-  plugins: [createPersistedState({
-    paths: ['p', 'a', 't', 'c']
-  })]
-});
+export default (isServer) => {
+  return new Vuex.Store({
+    modules: {
+      p: ProjectStore,
+      a: AccountStore,
+      t: TicketStore,
+      c: CacheStore,
+      x: CatalogStore
+    },
+    strict: process.env.NODE_ENV !== 'production',
+    // only client side
+    plugins: isServer ? [] : [createPersistedState({
+      paths: ['p', 'a', 't', 'c']
+    })]
+  });
+}

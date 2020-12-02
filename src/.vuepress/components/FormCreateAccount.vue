@@ -118,6 +118,7 @@ export default {
           this.loading = true;
           try{
             await this.$store.dispatch("reqCreateAccount", {projectId: this.projectId});
+            this.$store.commit("clearAccountCreateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,

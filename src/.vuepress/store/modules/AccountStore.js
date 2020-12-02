@@ -1,24 +1,27 @@
 import AccountApi from '../../api/AccountApi'
 
+// parameter schema
+const schema = {
+  Env: "",
+  BillingOWDepartmentCode: "0000000", //for test
+  BillingOWUsageCode: "11111-2222", //for test
+  BillingProjectCode: "",
+  BillingProjectSubCode: "",
+  StartOperationDate: "",
+  ExpireOperationDate: "",
+  MemberRoles: [
+    {
+      Email: "",
+      Name: "",
+      Role: "",
+      added: false
+    }
+  ]
+};
+
 // Initial state
 const state = () => ({
-  createParams: {
-    Env: "",
-    BillingOWDepartmentCode: "0000000", //for test
-    BillingOWUsageCode: "11111-2222", //for test
-    BillingProjectCode: "",
-    BillingProjectSubCode: "",
-    StartOperationDate: "",
-    ExpireOperationDate: "",
-    MemberRoles: [
-      {
-        Email: "",
-        Name: "",
-        Role: "",
-        added: false
-      }
-    ]
-  },
+  createParams: { ...schema },
   updateParams: {},
   results: [],
   result: {}
@@ -109,6 +112,9 @@ const mutations = {
       state.results.splice(index, 1);
     }
     state.result = {};
+  },
+  clearAccountCreateParams(state){
+    state.createParams = { ...schema };
   }
 }
 

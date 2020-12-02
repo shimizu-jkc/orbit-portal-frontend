@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     async onClickEdit() {
+      this.$store.commit("loadDefaultUpdateParams", this.id);
       this.$router.push({
         path: "update-project.html",
         query: { id: this.id }

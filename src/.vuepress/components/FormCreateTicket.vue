@@ -111,6 +111,7 @@ export default {
           this.loading.show = true;
           try{
             await this.$store.dispatch("reqCreateTicket", {projectId: this.projectId, accountId: this.accountId});
+            this.$store.commit("clearTicketCreateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,

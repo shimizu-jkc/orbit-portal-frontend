@@ -109,9 +109,6 @@ export default {
         default: break;
       }
     }
-  },
-  created: function(){
-    this.$store.commit("loadDefaultTicketUpdateParams", this.id);
   }
 }
 </script>

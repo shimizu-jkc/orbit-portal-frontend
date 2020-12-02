@@ -10,11 +10,12 @@ export default ({
     Vue,
     options,
     router,
-    siteData
+    siteData,
+    isServer
 }) => {
     //Vuex
     Vue.use(Vuex);
-    Vue.mixin({ store: store });
+    Vue.mixin({ store: store(isServer) });
     //ElementUI
     Vue.use(ElementUI, {locale});
 }

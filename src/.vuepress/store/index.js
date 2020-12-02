@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate';
+import PersistedState from 'vuex-persistedstate';
 import ProjectStore from './modules/ProjectStore'
 import AccountStore from './modules/AccountStore'
 import TicketStore from './modules/TicketStore'
@@ -21,12 +21,12 @@ export default (isServer) => {
     strict: process.env.NODE_ENV !== 'production',
     // only client side
     plugins: isServer ? [] : [
-      createPersistedState({
+      PersistedState({
         key: 'OrbitPortal',
         paths: ['p', 'a', 't', 'c.auth'],
         storage: window.sessionStorage
       }),
-      createPersistedState({
+      PersistedState({
         key: 'OrbitPortal',
         paths: ['c.tmp'],
         storage: window.localStorage

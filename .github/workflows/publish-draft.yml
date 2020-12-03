@@ -26,7 +26,7 @@ jobs:
         with:
           file-name: "src/.vuepress/env.json"
           BASE_URL: "https://api.orbit.jvckenwood-dev.com/organization/v1"
-          API_KEY: "Ov5R17LWDN1anc2It1LUge42YbAhFNp5rsxog045"
+          API_KEY: "u3m6ML5ypf3lYgjNFP6C93wxy5gqUX9Z5wZPyJWc"
       - name: Build
         run: npm install && npm run build
       - name: Deploy

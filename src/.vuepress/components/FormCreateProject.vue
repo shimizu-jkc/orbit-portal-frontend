@@ -81,12 +81,17 @@ export default {
         showAlertDialog("「登録する前の確認」がチェックされていません。");
         return;
       }
-      if(!this.$store.state.p.createParams.Members.length){
+      const members = this.$store.state.p.createParams.Members;
+      if(!members.length){
         showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
         return;
       }
-      if(!this.$store.state.p.createParams.Members.some(m => m.Admin)){
+      if(!members.some(m => m.Admin)){
         showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
+        return;
+      }
+      if(members.some(m => members.filter(mm => m.Email === mm.Email).length > 1)){
+        showAlertDialog("プロジェクトメンバーのEメールアドレスが重複しています。");
         return;
       }
       showConfirmDialog("プロジェクトを登録します。よろしいですか？");

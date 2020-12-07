@@ -101,13 +101,18 @@ export default {
         showAlertDialog("「申請する前の確認」がチェックされていません。");
         return;
       }
-      const pmCount = this.$store.state.a.createParams.MemberRoles.filter(m => m.Role === "PROJECT_MNGR").length;
+      const roles = this.$store.state.a.createParams.MemberRoles;
+      const pmCount = roles.filter(m => m.Role === "PROJECT_MNGR").length;
       if(pmCount === 0){
         showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
         return;
       }
       if(pmCount > 1){
         showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
+        return;
+      }
+      if(roles.some(r => roles.filter(rr => r.Email === rr.Email && r.Role === rr.Role).length > 1)){
+        showAlertDialog("同じプロジェクトメンバーに同じ役割が割り当てられています。");
         return;
       }
       showConfirmDialog("クラウド環境の利用を申請します。よろしいですか？");

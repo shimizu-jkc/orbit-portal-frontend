@@ -81,7 +81,8 @@ export default {
         this.dialog.message = message;
         this.dialog.visible = true;
       };
-      const pmCount = this.$store.state.a.updateParams.MemberRoles.filter(m => m.Role === "PROJECT_MNGR").length;
+      const roles = this.$store.state.a.updateParams.MemberRoles;
+      const pmCount = roles.filter(m => m.Role === "PROJECT_MNGR").length;
       if(pmCount === 0){
         showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
         return;
@@ -90,6 +91,10 @@ export default {
         showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
         return;
       }
+      if(roles.some(r => roles.filter(rr => r.Email === rr.Email && r.Role === rr.Role).length > 1)){
+        showAlertDialog("同じプロジェクトメンバーに同じ役割が割り当てられています。");
+        return;
+      }      
       showConfirmDialog("本当にクラウド環境の情報を更新してもよろしいですか？");
     },
     async onEventOk(event) {

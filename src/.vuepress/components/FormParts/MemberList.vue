@@ -10,6 +10,7 @@
         </span>
       </el-row>
       <member 
+        ref="member"
         v-for="(member, index) in members"
         :key="index"
         :index="index"
@@ -90,6 +91,10 @@ export default {
     },
     async onClickAdd(){
       this.$store.commit(this.hasId ? "setProjectUpdateParams":"setProjectCreateParams", {name: "Member::ADD"});
+    },
+    isValid(){
+      // whether all members have no errors
+      return this.$refs["member"].map(m => m.isValid()).every(v => v);
     }
   }
 }

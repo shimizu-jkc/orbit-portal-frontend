@@ -1,7 +1,7 @@
 <template>
   <div id="FormCreateProject">
     <el-form>
-      <el-form-item label="登録する前の確認">
+      <el-form-item label="登録する前の確認" required>
         <el-col>
           <el-checkbox 
             label="プロジェクトとしての体制が構築されている。" 
@@ -16,7 +16,7 @@
         </el-col>
       </el-form-item>
     </el-form>
-    <info operation="create" />
+    <info ref="info" operation="create" />
     <el-row type="flex" justify="start">
       <el-button type="primary" @click="onClickCreate()">登録する</el-button>
     </el-row>
@@ -79,6 +79,13 @@ export default {
       };
       if(!this.agreements.every(a => {return a})){
         showAlertDialog("「登録する前の確認」がチェックされていません。");
+        return;
+      }
+      try{
+        // form validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
         return;
       }
       const members = this.$store.state.p.createParams.Members;

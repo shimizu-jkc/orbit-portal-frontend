@@ -8,6 +8,9 @@ export default {
     },
     DateToEpochSec(date) {
       return (date ? (Math.floor(date.getTime()/1000)) : 0);
+    },
+    getEmailPattern() {
+      return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     }
   }
 }

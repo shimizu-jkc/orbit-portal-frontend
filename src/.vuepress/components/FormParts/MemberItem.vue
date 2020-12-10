@@ -5,30 +5,52 @@
       <el-checkbox v-model="admin" disabled v-else></el-checkbox>
     </el-col>  
     <el-col :span="8">
-      <el-input
-        v-if="!isDisabled('department')"
-        type="text"
-        placeholder="所属部署名を入力してください"
-        v-model="department"
-      ></el-input>
+      <span v-if="!isDisabled('department')">
+        <el-tooltip
+          :disabled="!error.department"
+          :content="error.department">
+          <el-input        
+            type="text"
+            placeholder="所属部署名を入力してください"
+            v-model="department"
+            @blur="onBlur('department')"
+            :class="{error: error.department}"
+          ></el-input>
+        </el-tooltip>
+      </span>
       <span v-else>{{department}}</span>
     </el-col>  
     <el-col :span="5">
-      <el-input 
-        v-if="!isDisabled('name')"
-        type="text"
-        placeholder="名前を入力してください"
-        v-model="name"
-      ></el-input>
+      <span v-if="!isDisabled('name')">
+        <el-tooltip
+          :disabled="!error.name"
+          :content="error.name">
+          <el-input 
+            type="text"
+            placeholder="名前を入力してください"
+            v-model="name"
+            @blur="onBlur('name')"
+            :class="{error: error.name}"
+          ></el-input>
+        </el-tooltip>
+      </span>
       <span v-else>{{name}}</span>
     </el-col>  
     <el-col :span="8" class="email-col">
-      <el-input
-        v-if="!isDisabled('email')"
-        type="text"
-        placeholder="Eメールアドレスを入力してください"
-        v-model="email"
-      ></el-input>
+      <span v-if="!isDisabled('email')">
+        <el-tooltip
+          :disabled="!error.email"
+          :content="error.email">
+          <el-input
+            type="text"
+            placeholder="Eメールアドレスを入力してください"
+            v-model="email"
+            maxlength=254
+            @blur="onBlur('email')"
+            :class="{error: error.email}"
+          ></el-input>
+        </el-tooltip>
+      </span>
       <span v-else>{{email}}</span>
     </el-col>  
     <el-col :span="1">
@@ -43,8 +65,11 @@
 </template>
 
 <script>
+import Util from "../../mixins/util";
+
 export default {
   name : "MemberItem",
+  mixins: [Util],
   props: {
     index: {
       type: Number,
@@ -63,6 +88,15 @@ export default {
           email: false,
           admin: false
         };
+      }
+    }
+  },
+  data() {
+    return {
+      error: {
+        department: "",
+        name: "",
+        email: ""
       }
     }
   },
@@ -92,7 +126,37 @@ export default {
     },
     async onClickDelete(){
       this.$store.commit(this.hasId ? "setProjectUpdateParams":"setProjectCreateParams", {name: "Member::DELETE", index: this.index});
-    } 
+    },
+    async onBlur(attr){
+      this.error[attr] = this.validateMessage(attr);
+    },
+    validateMessage(attr){
+      let message = "";
+      switch(attr) {
+        case "department":
+          if(!this.department){
+            message = "必須項目です";
+          }
+          break;
+        case "name":
+          if(!this.name){
+            message = "必須項目です";
+          }
+          break;
+        case "email":
+          if(!this.email){
+            message = "必須項目です";
+          }else if(!this.getEmailPattern().test(this.email)){
+            message = "不正な形式です";
+          }
+          break;
+      }
+      return message;
+    },
+    isValid(){
+      // whether member has no error
+      return Object.keys(this.error).map(k => this.error[k] = this.validateMessage(k)).every(e => !e);
+    }
   }
 }
 </script>
@@ -104,5 +168,11 @@ export default {
 }
 .email-col {
   text-align: center;
+}
+</style>
+
+<style>
+.error .el-input__inner {
+  border-color: #F56C6C;
 }
 </style>

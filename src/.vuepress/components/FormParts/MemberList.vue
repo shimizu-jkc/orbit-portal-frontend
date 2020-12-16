@@ -95,6 +95,19 @@ export default {
     validate(){
       // whether all members have no errors
       return this.$refs["member"].map(m => m.validate()).every(v => v);
+    },
+    checkRules(){
+      let messages = [];
+      if(!this.members.length){
+        messages.push("少なくとも1人以上のプロジェクトメンバーを登録してください。");
+      }
+      if(!this.members.some(m => m.Admin)){
+        messages.push("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
+      }
+      if(this.members.some(m => this.members.filter(mm => m.Email === mm.Email).length > 1)){
+        messages.push("プロジェクトメンバーのEメールアドレスが重複しています。");
+      }
+      return messages;
     }
   }
 }

@@ -255,6 +255,7 @@ export default {
             return messages.map(m => "・" + m).join("\n");
           };
           let messages = [];
+          // check form
           Object.keys(detail).forEach(d => {
             if(this.isEditableAttr(d)){
               messages.push(detail[d][0].message);
@@ -264,6 +265,8 @@ export default {
           if(!this.$refs["members"].validate()){
             messages.push("プロジェクトメンバーの入力内容を確認してください。");
           }
+          // check members rules
+          messages = messages.concat(this.$refs["members"].checkRules());
           if(!messages.length){
             resolve();
           }else{

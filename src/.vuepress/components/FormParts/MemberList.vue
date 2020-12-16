@@ -92,9 +92,9 @@ export default {
     async onClickAdd(){
       this.$store.commit(this.hasId ? "setProjectUpdateParams":"setProjectCreateParams", {name: "Member::ADD"});
     },
-    isValid(){
+    validate(){
       // whether all members have no errors
-      return this.$refs["member"].map(m => m.isValid()).every(v => v);
+      return this.$refs["member"].map(m => m.validate()).every(v => v);
     }
   }
 }

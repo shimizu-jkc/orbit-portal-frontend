@@ -8,7 +8,7 @@
       :label-position="isEditableAttr('page')?'top':'left'"
       :model="projectModel"
       :rules="rules"
-      :hide-required-asterisk="(operation!='create' && operation!='update')"
+      :hide-required-asterisk="!isEditable"
     >
       <el-form-item label="プロジェクト名" prop="ProjectId">
         <el-input 
@@ -123,7 +123,7 @@ export default {
         ProjectId: [
           { required: true, message: "プロジェクト名は必須です。", trigger : "blur" },
           { pattern: /^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/, 
-            message: "プロジェクト名に使用できない文字が含まれています。" }
+            message: "プロジェクト名に使用できない文字が含まれています。英数字とハイフンのみが使用可能です。" }
         ],
         ProjectEmail: [
           { required: true, message: "代表者Eメールアドレスは必須です。", trigger: "blur" },
@@ -251,20 +251,23 @@ export default {
       return new Promise((resolve, reject) => {
         // el-form validator
         this.$refs["form"].validate((error, detail) => {
-          let message = [];
+          const format = (messages) => {
+            return messages.map(m => "・" + m).join("\n");
+          };
+          let messages = [];
           Object.keys(detail).forEach(d => {
             if(this.isEditableAttr(d)){
-              message.push("・" + detail[d][0].message);
+              messages.push(detail[d][0].message);
             }
           });
           // check members
-          if(!this.$refs["members"].isValid()){
-            message.push("・プロジェクトメンバーの入力内容を確認してください。");
+          if(!this.$refs["members"].validate()){
+            messages.push("プロジェクトメンバーの入力内容を確認してください。");
           }
-          if(!message.length){
+          if(!messages.length){
             resolve();
           }else{
-            reject(new Error(message.join("\n")));
+            reject(new Error(format(messages)));
           }
         });
       });

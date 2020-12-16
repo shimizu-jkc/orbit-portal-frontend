@@ -153,8 +153,8 @@ export default {
       }
       return message;
     },
-    isValid(){
-      // whether member has no error
+    validate(){
+      // whether member has no errors
       return Object.keys(this.error).map(k => this.error[k] = this.validateMessage(k)).every(e => !e);
     }
   }

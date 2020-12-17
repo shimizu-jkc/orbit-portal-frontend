@@ -71,7 +71,7 @@
           <members :readOnly="!isEditableAttr('Members')" :id="id"/>
         </div>
       </el-form-item>
-      <el-form-item label="所有アカウント" v-show="isExist">
+      <el-form-item label="所有クラウド環境" v-show="isExist">
         <div class="form-item" v-for="account in accountIds">
           <el-button type="text" @click="onClickAccountLink(account)" v-if="isReadOnly">{{account}}</el-button>
           <span v-else>{{account}}</span>

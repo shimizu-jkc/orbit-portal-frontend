@@ -96,6 +96,7 @@ export default {
       let messages = [];
       if(this.$refs["member"].map(m => m.validate()).some(v => v.length > 0)){
         messages.push("プロジェクトメンバーの入力内容を確認してください。");
+        return messages;
       }
       if(!this.members.length){
         messages.push("少なくとも1人以上のプロジェクトメンバーを登録してください。");

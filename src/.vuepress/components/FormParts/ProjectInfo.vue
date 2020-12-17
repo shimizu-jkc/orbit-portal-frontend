@@ -262,11 +262,7 @@ export default {
             }
           });
           // check members
-          if(!this.$refs["members"].validate()){
-            messages.push("プロジェクトメンバーの入力内容を確認してください。");
-          }
-          // check members rules
-          messages = messages.concat(this.$refs["members"].checkRules());
+          messages = messages.concat(this.$refs["members"].validate());
           if(!messages.length){
             resolve();
           }else{

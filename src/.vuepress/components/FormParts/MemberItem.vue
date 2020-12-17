@@ -155,7 +155,7 @@ export default {
     },
     validate(){
       // whether member has no errors
-      return Object.keys(this.error).map(k => this.error[k] = this.validateMessage(k)).every(e => !e);
+      return Object.keys(this.error).map(k => this.error[k] = this.validateMessage(k)).filter(e => e);
     }
   }
 }

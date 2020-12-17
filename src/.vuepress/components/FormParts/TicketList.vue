@@ -10,8 +10,8 @@
       <el-table-column sortable prop="TicketId" label="作業ID"></el-table-column>
       <el-table-column sortable prop="TicketEmail" label="連絡先Eメールアドレス"></el-table-column>
       <el-table-column sortable prop="Type" label="作業種別" :formatter="typeFormatter"></el-table-column>
-      <el-table-column sortable prop="Status" label="作業状況" :formatter="statusFormatter"></el-table-column>
-      <el-table-column sortable prop="CreatedAt" label="作業依頼日" :formatter="epochFormatter" width="160"></el-table-column>
+      <el-table-column sortable prop="Status" label="ステータス" :formatter="statusFormatter"></el-table-column>
+      <el-table-column sortable prop="CreatedAt" label="登録日" :formatter="epochFormatter" width="160"></el-table-column>
       <el-table-column sortable prop="UpdatedAt" label="最終更新日" :formatter="epochFormatter" width="160"></el-table-column>
       <el-table-column width="80">
         <template v-slot="scope">

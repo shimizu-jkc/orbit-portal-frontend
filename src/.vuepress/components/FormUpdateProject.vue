@@ -4,7 +4,7 @@
       <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
       <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
     </el-row>
-    <info operation="update" :id="id"/>
+    <info ref="info" operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm
@@ -81,17 +81,11 @@ export default {
         this.dialog.message = message;
         this.dialog.visible = true;
       };
-      const members = this.$store.state.p.updateParams.Members;
-      if(!members.length){
-        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
-        return;
-      }
-      if(!members.some(m => m.Admin)){
-        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
-        return;
-      }
-      if(members.some(m => members.filter(mm => m.Email === mm.Email).length > 1)){
-        showAlertDialog("プロジェクトメンバーのEメールアドレスが重複しています。");
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
         return;
       }
       showConfirmDialog("本当にプロジェクトの情報を更新してもよろしいですか？");

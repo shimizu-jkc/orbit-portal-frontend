@@ -1,7 +1,7 @@
 <template>
   <div id="FormCreateProject">
     <el-form>
-      <el-form-item label="登録する前の確認">
+      <el-form-item label="登録する前の確認" required>
         <el-col>
           <el-checkbox 
             label="プロジェクトとしての体制が構築されている。" 
@@ -16,7 +16,7 @@
         </el-col>
       </el-form-item>
     </el-form>
-    <info operation="create" />
+    <info ref="info" operation="create" />
     <el-row type="flex" justify="start">
       <el-button type="primary" @click="onClickCreate()">登録する</el-button>
     </el-row>
@@ -81,17 +81,11 @@ export default {
         showAlertDialog("「登録する前の確認」がチェックされていません。");
         return;
       }
-      const members = this.$store.state.p.createParams.Members;
-      if(!members.length){
-        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを登録してください。");
-        return;
-      }
-      if(!members.some(m => m.Admin)){
-        showAlertDialog("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
-        return;
-      }
-      if(members.some(m => members.filter(mm => m.Email === mm.Email).length > 1)){
-        showAlertDialog("プロジェクトメンバーのEメールアドレスが重複しています。");
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
         return;
       }
       showConfirmDialog("プロジェクトを登録します。よろしいですか？");

@@ -53,3 +53,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.el-dialog__wrapper {
+  white-space: pre-wrap;
+  line-height: 200%;
+}
+</style>

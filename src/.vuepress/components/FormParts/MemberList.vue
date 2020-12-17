@@ -10,6 +10,7 @@
         </span>
       </el-row>
       <member 
+        ref="member"
         v-for="(member, index) in members"
         :key="index"
         :index="index"
@@ -90,6 +91,23 @@ export default {
     },
     async onClickAdd(){
       this.$store.commit(this.hasId ? "setProjectUpdateParams":"setProjectCreateParams", {name: "Member::ADD"});
+    },
+    validate(){
+      let messages = [];
+      if(this.$refs["member"].map(m => m.validate()).some(v => v.length > 0)){
+        messages.push("プロジェクトメンバーの入力内容を確認してください。");
+        return messages;
+      }
+      if(!this.members.length){
+        messages.push("少なくとも1人以上のプロジェクトメンバーを登録してください。");
+      }
+      if(!this.members.some(m => m.Admin)){
+        messages.push("少なくとも1人以上のプロジェクトメンバーを管理者にしてください。");
+      }
+      if(this.members.some(m => this.members.filter(mm => m.Email === mm.Email).length > 1)){
+        messages.push("プロジェクトメンバーのEメールアドレスが重複しています。");
+      }
+      return messages;
     }
   }
 }

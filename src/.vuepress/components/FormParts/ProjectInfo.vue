@@ -1,12 +1,16 @@
 <template>
   <div id="ProjectInfo">
     <el-form 
+      ref="form"
       inline-message
       status-icon
       label-width="20%"
       :label-position="isEditableAttr('page')?'top':'left'"
+      :model="projectModel"
+      :rules="rules"
+      :hide-required-asterisk="!isEditable"
     >
-      <el-form-item label="プロジェクト名">
+      <el-form-item label="プロジェクト名" prop="ProjectId">
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
@@ -21,18 +25,19 @@
           <span class="attention" v-show="isUpdate">※プロジェクト名は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="代表者Eメールアドレス">
+      <el-form-item label="代表者Eメールアドレス" prop="ProjectEmail">
         <el-input 
           type="text"
           v-if="isEditableAttr('ProjectEmail')"
           placeholder="プロジェクト代表者のEメールアドレスを入力してください"
           v-model="projectEmail"
+          maxlength=254
         ></el-input>
         <span class="form-item" v-else>
           {{projectEmail}}
         </span>
       </el-form-item>
-      <el-form-item label="事業部">
+      <el-form-item label="事業部" prop="DivisionName">
         <el-select
           v-model="divisionName" 
           v-if="isEditableAttr('DivisionName')"
@@ -50,7 +55,7 @@
           <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="クラウド利用の予算(月額)">
+      <el-form-item label="クラウド利用の予算(月額)" required>
         <div id="EditableBudget" v-if="isEditableAttr('Budget')">
           <el-input-number 
             class="input-number"
@@ -66,9 +71,9 @@
           {{budget}} USドル
         </span>
       </el-form-item>
-      <el-form-item label="プロジェクトメンバー">
+      <el-form-item label="プロジェクトメンバー" required>
         <div class="form-item">
-          <members :readOnly="!isEditableAttr('Members')" :id="id"/>
+          <members ref="members" :readOnly="!isEditableAttr('Members')" :id="id"/>
         </div>
       </el-form-item>
       <el-form-item label="所有アカウント" v-show="isExist">
@@ -113,7 +118,23 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      rules: {
+        ProjectId: [
+          { required: true, message: "プロジェクト名は必須です。", trigger : "blur" },
+          { pattern: /^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/, 
+            message: "プロジェクト名に使用できない文字が含まれています。英数字とハイフンのみが使用可能です。" }
+        ],
+        ProjectEmail: [
+          { required: true, message: "代表者Eメールアドレスは必須です。", trigger: "blur" },
+          { pattern: this.getEmailPattern(), 
+            message: "代表者Eメールアドレスはメールアドレス形式で入力してください。", trigger: "blur" }
+        ],
+        DivisionName: [
+          { required: true, message: "事業部は必須です。" }
+        ]
+      }
+    }
   },
   computed: {
     //for display
@@ -128,6 +149,15 @@ export default {
         }
       }else{
         return this.$store.getters.getDummyProject();
+      }
+    },
+    projectModel() {
+      if(this.isCreate){
+        return this.$store.state.p.createParams;
+      }else if(this.isUpdate){
+        return this.$store.state.p.updateParams;
+      }else{
+        return this.project;
       }
     },
     //Store processing
@@ -216,6 +246,30 @@ export default {
       this.$store.commit('setTmpProjectId', this.$store.state.c.auth.ProjectId);
       this.$store.commit('setTmpAccountId', accountId);
       this.$router.push({ path: "get-account.html" });
+    },
+    async validate() {
+      return new Promise((resolve, reject) => {
+        // el-form validator
+        this.$refs["form"].validate((error, detail) => {
+          const format = (messages) => {
+            return messages.map(m => "・" + m).join("\n");
+          };
+          let messages = [];
+          // check form
+          Object.keys(detail).forEach(d => {
+            if(this.isEditableAttr(d)){
+              messages.push(detail[d][0].message);
+            }
+          });
+          // check members
+          messages = messages.concat(this.$refs["members"].validate());
+          if(!messages.length){
+            resolve();
+          }else{
+            reject(new Error(format(messages)));
+          }
+        });
+      });
     }
   }
 }

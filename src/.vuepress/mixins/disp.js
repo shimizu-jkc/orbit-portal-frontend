@@ -28,7 +28,7 @@ const DispNameTable = {
     { value: "DELETE_COMPLETED" , label: "削除済み" }
   ],
   MemberRole: [
-    { value: "PROJECT_MNGR"   , label: "プロジェクト責任者" },
+    { value: "PROJECT_MNGR"   , label: "クラウド環境責任者" },
     { value: "COST_MNGR"      , label: "請求管理者" },
     { value: "SECURITY_MNGR"  , label: "セキュリティ担当者" },
     { value: "PRIV_OPERATOR"  , label: "特権運用者" },

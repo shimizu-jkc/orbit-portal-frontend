@@ -1,10 +1,14 @@
 <template>
   <div id="AccountInfo">
-    <el-form 
+    <el-form
+      ref="form"
       inline-message
       status-icon
       label-width="25%"
       :label-position="isEditableAttr('page')?'top':'left'"
+      :model="accountModel"
+      :rules="rules"
+      :hide-required-asterisk="!isEditable"
     >
       <el-form-item label="クラウド環境ID" v-show="isExist">
         <span class="form-item">{{accountId}}</span>
@@ -21,7 +25,7 @@
       <el-form-item label="ステータス" v-show="isExist">
         <span class="form-item">{{getDispName("AccountStatus", status)}}</span>
       </el-form-item>
-      <el-form-item label="利用目的">
+      <el-form-item label="利用目的" prop="Env">
         <el-select 
           class="select-env"
           v-model="env"
@@ -57,51 +61,55 @@
           <el-button type="text" @click="onClickFileLink(file)" >{{file}}</el-button>
         </div>
       </el-form-item>
-      <el-form-item label="OW部門コード">
+      <el-form-item label="OW部門コード" prop="BillingOWDepartmentCode">
         <el-input 
           type="text"
           placeholder="利用料金の配賦先となるOneWorldの部門コードを入力してください"
           v-model="billingOWDepartmentCode"
           v-if="isEditableAttr('BillingOWDepartmentCode')"
+          maxlength=7
         ></el-input>
         <span class="form-item" v-else>
           {{billingOWDepartmentCode}}
         </span>
       </el-form-item>
-      <el-form-item label="OW科目コード">
+      <el-form-item label="OW科目コード" prop="BillingOWUsageCode">
         <el-input 
           type="text"
           placeholder="利用料金の配賦先となるOneWorldの科目コードを入力してください"
           v-model="billingOWUsageCode"
           v-if="isEditableAttr('BillingOWUsageCode')"
+          maxlength=10
         ></el-input>
         <span class="form-item" v-else>
           {{billingOWUsageCode}}
         </span>
       </el-form-item>
-      <el-form-item label="プロジェクトコード">
+      <el-form-item label="プロジェクトコード" prop="BillingProjectCode">
         <el-input 
           type="text"
           placeholder="利用料金の配賦先となるプロジェクトコードを入力してください"
           v-model="billingProjectCode"
           v-if="isEditableAttr('BillingProjectCode')"
+          maxlength=254
         ></el-input>
         <span class="form-item" v-else>
           {{billingProjectCode}}
         </span>
       </el-form-item>
-      <el-form-item label="プロジェクトサブコード">
+      <el-form-item label="プロジェクトサブコード" prop="BillingProjectSubCode">
         <el-input 
           type="text"
           placeholder="利用料金の配賦先となるプロジェクトサブコードを入力してください"
           v-model="billingProjectSubCode"
           v-if="isEditableAttr('BillingProjectSubCode')"
+          maxlength=254
         ></el-input>
         <span class="form-item" v-else>
           {{billingProjectSubCode}}
         </span>
       </el-form-item>
-      <el-form-item label="実運用予定日">
+      <el-form-item label="実運用予定日" prop="StartOperationDate">
         <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
           <el-date-picker
             v-model="operationDate"
@@ -120,9 +128,9 @@
           <span class="form-item">{{epochSecToJST(expireOperationDate)}}</span>
         </div>
       </el-form-item>
-      <el-form-item label="プロジェクトメンバーの役割">
+      <el-form-item label="プロジェクトメンバーの役割" required>
         <div class="form-item">
-          <roles :readOnly="!isEditableAttr('MemberRoles')" :id="id"/>
+          <roles ref="roles" :readOnly="!isEditableAttr('MemberRoles')" :id="id"/>
         </div>
       </el-form-item>
       <el-form-item label="登録日" v-if="isReadOnly">
@@ -174,7 +182,34 @@ export default {
         }
       },
       dateSet: "",
-      fileList: []
+      fileList: [],
+      rules: {
+        Env: [
+          { required: true, message: "利用目的は必須です。" }
+        ],
+        BillingOWDepartmentCode: [
+          { required: true, message: "OW部門コードは必須です。", trigger: "blur" },
+          { pattern: /^[0-9]{7}$/, 
+            message: "OW部門コードは7桁の数字を入力してください。", trigger: "blur" }
+        ],
+        BillingOWUsageCode: [
+          { required: true, message: "OW科目コードは必須です。", trigger: "blur" },
+          { pattern: /^[0-9]{5}(?:-[0-9]{4})?$/, 
+            message: "OW科目コードは5桁または5桁-4桁の数字を入力してください。", trigger: "blur" }
+        ],
+        BillingProjectCode: [
+          // no specific rules
+        ],
+        BillingProjectSubCode: [
+          // no specific rules
+        ],
+        StartOperationDate: [
+          { required: true, type:"number", min: 1, message: "実運用予定日は必須です。" }
+        ],
+        ExpireOperationDate: [
+          // check only startDate (el-form restriction)
+        ]
+      }
     }
   },
   computed: {
@@ -191,7 +226,16 @@ export default {
       }else{
         return this.$store.getters.getDummyAccount();
       }
-    },   
+    },
+    accountModel() {
+      if(this.isCreate){
+        return this.$store.state.a.createParams;
+      }else if(this.isUpdate){
+        return this.$store.state.a.updateParams;
+      }else{
+        return this.account;
+      }
+    },
     //Store processing
     getter() {
       return (attr, readOnly=false) => {
@@ -285,6 +329,8 @@ export default {
               case "BillingProjectCode":
               case "BillingProjectSubCode":
               case "OperationDate":
+              case "StartOperationDate":
+              case "ExpireOperationDate":
               case "MemberRoles": return true;
               default: return false;
             }
@@ -297,6 +343,8 @@ export default {
               case "BillingProjectCode":
               case "BillingProjectSubCode":
               case "OperationDate":
+              case "StartOperationDate":
+              case "ExpireOperationDate":
               case "MemberRoles": return true;
               default: return false;
             }
@@ -315,6 +363,30 @@ export default {
     },
     handleFileExceed(files, fileList){
       this.$message.warning("申請できるファイルは3つまでです。");
+    },
+    async validate() {
+      return new Promise((resolve, reject) => {
+        // el-form validator
+        this.$refs["form"].validate((error, detail) => {
+          const format = (messages) => {
+            return messages.map(m => "・" + m).join("\n");
+          };
+          let messages = [];
+          // check form
+          Object.keys(detail).forEach(d => {
+            if(this.isEditableAttr(d)){
+              messages.push(detail[d][0].message);
+            }
+          });
+          // check roles
+          messages = messages.concat(this.$refs["roles"].validate());
+          if(!messages.length){
+            resolve();
+          }else{
+            reject(new Error(format(messages)));
+          }
+        });
+      });
     }
   }
 }

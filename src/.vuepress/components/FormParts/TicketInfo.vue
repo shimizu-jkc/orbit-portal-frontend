@@ -219,7 +219,7 @@ export default {
     async validate() {
       return new Promise((resolve, reject) => {
         // el-form validator
-        this.$refs["form"].validate(async (error, detail) => {
+        this.$refs["form"].validate(async (valid, detail) => {
           const format = (messages) => {
             return messages.map(m => "・" + m).join("\n");
           };

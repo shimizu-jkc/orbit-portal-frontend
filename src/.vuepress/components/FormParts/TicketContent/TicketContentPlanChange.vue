@@ -117,7 +117,7 @@ export default {
     async validate() {
       return new Promise((resolve, reject) => {
         // el-form validator
-        this.$refs["form"].validate((error, detail) => {
+        this.$refs["form"].validate((valid, detail) => {
           if(this.readOnly){
             resolve([]);
           }else{

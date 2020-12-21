@@ -1,10 +1,14 @@
 <template>
   <div id="TicketInfo">
-    <el-form 
+    <el-form
+      ref="form"
       inline-message
       status-icon
       label-width="25%"
       :label-position="isEditableAttr('page')?'top':'left'"
+      :model="ticketModel"
+      :rules="rules"
+      :hide-required-asterisk="!isEditable"
     >
       <el-form-item label="作業ID" v-show="isExist">
         <span class="form-item">{{ticketId}}</span>
@@ -15,19 +19,20 @@
       <el-form-item label="クラウド環境ID">
         <span class="form-item">{{accountId}}</span>
       </el-form-item>
-      <el-form-item label="連絡先Eメールアドレス">
+      <el-form-item label="連絡先Eメールアドレス" prop="TicketEmail">
         <el-input 
           type="text"
           v-if="isEditableAttr('TicketEmail')"
           placeholder="作業の連絡先となるEメールアドレスを入力してください"
           v-model="email"
+          maxlength=254
         ></el-input>
         <span class="form-item" v-else>{{email}}</span>
       </el-form-item>
       <el-form-item label="ステータス" v-if="isExist">
         <span class="form-item">{{getDispName("TicketStatus", status)}}</span>
       </el-form-item>
-      <el-form-item label="作業種別">
+      <el-form-item label="作業種別" prop="Type">
         <el-select 
           v-model="type" 
           v-if="isEditableAttr('Type')"
@@ -48,8 +53,8 @@
       <div id="TicketContent">
         <simple v-if="isShowContent('REQ_CF_KEYPAIR')" type="REQ_CF_KEYPAIR" :readOnly="isReadOnly" :id="id"/>
         <simple v-if="isShowContent('REQ_OTHER')" type="REQ_OTHER" :readOnly="isReadOnly" :id="id"/>
-        <audit v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
-        <plan v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
+        <audit ref="content" v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
+        <plan ref="content" v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
       </div>
       <el-form-item label="登録日" v-if="isExist">
         <span class="form-item">{{epochSecToJST(createdAt)}}</span>
@@ -91,7 +96,18 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      rules: {
+        TicketEmail: [
+          { required: true, message: "連絡先Eメールアドレスは必須です。", trigger: "blur" },
+          { pattern: this.getEmailPattern(), 
+            message: "連絡先Eメールアドレスはメールアドレス形式で入力してください。", trigger: "blur" }
+        ],
+        Type: [
+          { required: true, message: "作業種別は必須です。" }
+        ]
+      }
+    }
   },
   computed: {
     //for display
@@ -107,7 +123,16 @@ export default {
       }else{
         return this.$store.getters.getDummyTicket();
       }
-    },    
+    },
+    ticketModel() {
+      if(this.isCreate){
+        return this.$store.state.t.createParams;
+      }else if(this.isUpdate){
+        return this.$store.state.t.updateParams;
+      }else{
+        return this.ticket;
+      }
+    },
     //Store processing
     getter() {
       return (attr, readOnly=false) => {
@@ -189,8 +214,35 @@ export default {
         return (this.type === type);
       }
     }
-   },
-   methods: {}
+  },
+  methods: {
+    async validate() {
+      return new Promise((resolve, reject) => {
+        // el-form validator
+        this.$refs["form"].validate(async (error, detail) => {
+          const format = (messages) => {
+            return messages.map(m => "・" + m).join("\n");
+          };
+          let messages = [];
+          // check form
+          Object.keys(detail).forEach(d => {
+            if(this.isEditableAttr(d)){
+              messages.push(detail[d][0].message);
+            }
+          });
+          // Check content form
+          if(this.$refs["content"]){
+            messages = messages.concat(await this.$refs["content"].validate());
+          }
+          if(!messages.length){
+            resolve();
+          }else{
+            reject(new Error(format(messages)));
+          }
+        });
+      });
+    }
+  }
 }
 </script>
 

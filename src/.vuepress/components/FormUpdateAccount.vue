@@ -4,7 +4,7 @@
       <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
       <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
     </el-row>
-    <info operation="update" :id="id"/>
+    <info ref="info" operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm
@@ -81,20 +81,13 @@ export default {
         this.dialog.message = message;
         this.dialog.visible = true;
       };
-      const roles = this.$store.state.a.updateParams.MemberRoles;
-      const pmCount = roles.filter(m => m.Role === "PROJECT_MNGR").length;
-      if(pmCount === 0){
-        showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
         return;
-      }
-      if(pmCount > 1){
-        showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
-        return;
-      }
-      if(roles.some(r => roles.filter(rr => r.Email === rr.Email && r.Role === rr.Role).length > 1)){
-        showAlertDialog("同じプロジェクトメンバーに同じ役割が割り当てられています。");
-        return;
-      }      
+      }    
       showConfirmDialog("本当にクラウド環境の情報を更新してもよろしいですか？");
     },
     async onEventOk(event) {

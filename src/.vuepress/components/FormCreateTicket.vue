@@ -5,7 +5,7 @@
     </div>
     <div id="postAuth" v-else>
       <el-form>
-        <el-form-item label="依頼する前の確認">
+        <el-form-item label="依頼する前の確認" required>
           <el-col>
             <el-checkbox 
               label="作業の実施には、最大5営業日程度掛かることがあります。" 
@@ -14,7 +14,7 @@
           </el-col>
         </el-form-item>
       </el-form>
-      <info operation="create" id=""/>
+      <info ref="info" operation="create" id=""/>
       <el-row type="flex" justify="start">
         <el-button type="primary" @click="onClickCreate()">依頼する</el-button>
       </el-row>
@@ -90,19 +90,32 @@ export default {
       }
     },
     async onClickCreate() {
-      if(!this.agreements.every(a => {return a})){
+      const showAlertDialog = (message) => {
         this.dialog.id = "ALERT";
         this.dialog.cancelable = false;
         this.dialog.title = "依頼の警告";
-        this.dialog.message = "「依頼する前の確認」がチェックされていません。";
+        this.dialog.message = message;
         this.dialog.visible = true;
-      }else{
+      };
+      const showConfirmDialog = (message) => {
         this.dialog.id = "CONFIRM_CREATE";
         this.dialog.cancelable = true;
         this.dialog.title = "依頼の確認";
-        this.dialog.message = "管理者へ作業を依頼します。よろしいですか？";
+        this.dialog.message = message;
         this.dialog.visible = true;
+      };
+      if(!this.agreements.every(a => {return a})){
+        showAlertDialog("「依頼する前の確認」がチェックされていません。");
+        return;
       }
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
+        return;
+      }
+      showConfirmDialog("管理者へ作業を依頼します。よろしいですか？");
     },
     async onEventOk(event) {
         switch(event.id){

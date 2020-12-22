@@ -4,7 +4,7 @@
       <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
       <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
     </el-row>
-    <info operation="update" :id="id"/>
+    <info ref="info" operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm
@@ -67,11 +67,28 @@ export default {
       }
     },
     async onClickUpdate() {
-      this.dialog.id = "CONFIRM_UPDATE";
-      this.dialog.cancelable = true;
-      this.dialog.title = "更新の確認";
-      this.dialog.message = "本当に作業内容を更新してもよろしいですか？";
-      this.dialog.visible = true;
+      const showAlertDialog = (message) => {
+        this.dialog.id = "ALERT";
+        this.dialog.cancelable = false;
+        this.dialog.title = "更新の警告";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      const showConfirmDialog = (message) => {
+        this.dialog.id = "CONFIRM_UPDATE";
+        this.dialog.cancelable = true;
+        this.dialog.title = "更新の確認";
+        this.dialog.message = message;
+        this.dialog.visible = true;
+      };
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
+        return;
+      }
+      showConfirmDialog("本当に作業内容を更新してもよろしいですか？");
     },
     async onEventOk(event) {
       switch(event.id){

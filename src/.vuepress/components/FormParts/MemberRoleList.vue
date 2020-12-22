@@ -8,7 +8,8 @@
           <el-col :span="8">役割</el-col>
         </span>
       </el-row>
-      <role 
+      <role
+        ref="role"
         v-for="(role, index) in roles"
         :key="index"
         :index="index"
@@ -89,6 +90,24 @@ export default {
     },
     roleFormatter(row, column, value) {
       return this.getDispName("MemberRole", value)
+    },
+    validate(){
+      let messages = [];
+      if(this.$refs["role"].map(r => r.validate()).some(v => v.length > 0)){
+        messages.push("プロジェクトメンバーの役割の入力内容を確認してください。");
+        return messages;
+      }
+      const pmCount = this.roles.filter(r => r.Role === "PROJECT_MNGR").length;
+      if(pmCount === 0){
+        messages.push("「クラウド環境責任者」の役割を1人に割り当ててください。");
+      }
+      if(pmCount > 1){
+        messages.push("「クラウド環境責任者」の役割は1人だけ割り当ててください。");
+      }
+      if(this.roles.some(r => this.roles.filter(rr => r.Email === rr.Email && r.Role === rr.Role).length > 1)){
+        messages.push("同じプロジェクトメンバーに同じ役割が割り当てられています。");
+      }
+      return messages;
     }
   }
 }

@@ -5,7 +5,7 @@
     </div>
     <div id="postAuth" v-else>
       <el-form>
-        <el-form-item label="申請する前の確認">
+        <el-form-item label="申請する前の確認" required>
           <el-col>
             <el-checkbox 
               label="申請者には「プロジェクト管理者」の権限が付与されている必要があります。" 
@@ -26,7 +26,7 @@
           </el-col>
         </el-form-item>
       </el-form>
-      <info operation="create" id=""/>
+      <info ref="info" operation="create" id=""/>
       <el-row type="flex" justify="start">
         <el-button type="primary" @click="onClickCreate()">申請する</el-button>
       </el-row>
@@ -101,18 +101,11 @@ export default {
         showAlertDialog("「申請する前の確認」がチェックされていません。");
         return;
       }
-      const roles = this.$store.state.a.createParams.MemberRoles;
-      const pmCount = roles.filter(m => m.Role === "PROJECT_MNGR").length;
-      if(pmCount === 0){
-        showAlertDialog("「プロジェクト責任者」の役割を1人に割り当ててください。");
-        return;
-      }
-      if(pmCount > 1){
-        showAlertDialog("「プロジェクト責任者」の役割は1人だけ割り当ててください。");
-        return;
-      }
-      if(roles.some(r => roles.filter(rr => r.Email === rr.Email && r.Role === rr.Role).length > 1)){
-        showAlertDialog("同じプロジェクトメンバーに同じ役割が割り当てられています。");
+      try{
+        // validation check
+        await this.$refs["info"].validate();
+      }catch(err){
+        showAlertDialog(err.message);
         return;
       }
       showConfirmDialog("クラウド環境の利用を申請します。よろしいですか？");

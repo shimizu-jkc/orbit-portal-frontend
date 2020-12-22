@@ -78,7 +78,7 @@ export default {
             await this.$refs.notification.notify({
               status: "info",
               title: "申請における注意事項",
-              message: "クラウド環境の削除について、プロジェクト代表者へ確認します。\n削除までしばらくお待ちください。"
+              message: "クラウド環境の削除について、クラウド環境責任者へ確認します。\n削除までしばらくお待ちください。"
             });
             this.$router.push({ path: "get-account.html" });
           }catch(e){

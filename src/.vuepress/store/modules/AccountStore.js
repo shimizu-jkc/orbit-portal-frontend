@@ -9,6 +9,7 @@ const schema = {
   BillingProjectSubCode: "",
   StartOperationDate: "",
   ExpireOperationDate: "",
+  Files: [],
   MemberRoles: [
     {
       Email: "",
@@ -23,6 +24,7 @@ const schema = {
 const state = () => ({
   createParams: { ...schema },
   updateParams: {},
+  uploadList: [],
   results: [],
   result: {}
 });
@@ -43,7 +45,8 @@ const getters = {
     return state.result;
   },
   isAccountEdited: (state, getters) => (id) => {
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getAccountById(id))) || false;
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getAccountById(id)))
+      || (state.uploadList.length !== 0);
   }
 };
 
@@ -52,6 +55,7 @@ const actions = {
   async reqCreateAccount({commit, state}, {projectId}) {
     const result = await (new AccountApi(projectId)).createAccount(state.createParams);
     commit("setAccountResult", result);
+    return result.AccountId;
   },
   async reqGetAccount({commit, getters}, {id, projectId}) {
     const result = await (new AccountApi(projectId)).getAccount(id);
@@ -67,6 +71,30 @@ const actions = {
     await (new AccountApi(account.OwnerProjectId)).deleteAccount(id);
     commit("clearAccountResult", id);
     commit("clearAccountCache");
+  },
+  async reqUpdateAccountFiles({commit, state, getters}, {id}) {
+    const account = getters.getAccountById(id);
+    const result = await (new AccountApi(account.OwnerProjectId)).updateAccountFiles(id, {
+      Files: state.createParams.Files
+    });
+    commit("setAccountFilesResult", {id, files: result.Files || []});
+  },
+  async reqUploadAccountFiles({commit, state, getters}, {id, isCreate}) {
+    const account = getters.getAccountById(id);
+    if(state.uploadList.length) {
+      const api = new AccountApi(account.OwnerProjectId);
+      const names = state.uploadList.map(f => f.name);
+      const blobs = state.uploadList.map(f => f.raw);
+      const urls = await api.getAccountUrls(id, names, "WRITE");
+      await Promise.all(names.map(async(n, i) => {
+        await api.upload(urls[i], blobs[i]);
+      }));
+      // apply merge
+      commit("mergeAccountFiles", {isCreate});
+      commit("setAccountUploadList", []);
+      return true;
+    }
+    return false;
   }
 };
 
@@ -115,6 +143,25 @@ const mutations = {
   },
   clearAccountCreateParams(state){
     state.createParams = { ...schema };
+  },
+  setAccountFilesResult(state, {id, files}){
+    const index = state.results.findIndex(r => r.AccountId === id);
+    if(index != -1){
+      state.results[index].Files = files;
+    }
+    state.result.Files = files;
+  },
+  setAccountUploadList(state, val){
+    state.uploadList = val;
+  },
+  mergeAccountFiles(state, {isCreate}){
+    const names = state.uploadList.map(f => f.name);
+    if(isCreate){
+      state.createParams.Files = names;
+    }else{
+      // unique merge
+      state.updateParams.Files = [...new Set(state.updateParams.Files.concat(names))];
+    }
   }
 }
 

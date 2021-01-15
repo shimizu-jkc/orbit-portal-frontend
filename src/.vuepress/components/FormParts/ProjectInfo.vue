@@ -71,6 +71,22 @@
           {{budget}} USドル
         </span>
       </el-form-item>
+      <el-form-item label="申請ファイル">
+        <files
+          v-if="isExist"
+          v-model="files"
+          clickable
+          :deletable="!isReadOnly"
+          @click="onClickFile"
+        ></files>
+        <upload
+          v-if="isEditableAttr('Files')"
+          v-model="uploadList"
+          :limit="3"
+          :max-size="100*1000*1000"
+          :before-add="beforeAddFile"
+        ></upload>
+      </el-form-item>
       <el-form-item label="プロジェクトメンバー" required>
         <div class="form-item">
           <members ref="members" :readOnly="!isEditableAttr('Members')" :id="id"/>
@@ -95,13 +111,19 @@
 
 <script>
 import MemberList from './MemberList';
+import FileUpload from './FileUpload';
+import FileList from './FileList';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
+import ProjectApi from "../../api/ProjectApi"
+import FileSaver from "file-saver";
 
 export default {
   name: "ProjectInfo",
   components : {
-    members: MemberList
+    members: MemberList,
+    upload: FileUpload,
+    files: FileList
   },
   mixins: [Util, Disp],
   props: {
@@ -210,6 +232,14 @@ export default {
       get() { return this.getter("Budget"); },
       set(value){ this.setter({ name: "Budget", val: value }); }
     },
+    files: {
+      get() { return this.getter("Files"); },
+      set(value){ this.setter({ name: "Files", val: value }); }      
+    },
+    uploadList: {
+      get() { return this.$store.state.p.uploadList; },
+      set(value){ this.$store.commit("setProjectUploadList", value); }   
+    },
     isEditableAttr(){
       return (target) => {
         switch(this.operation){
@@ -220,6 +250,7 @@ export default {
               case "DivisionName":
               case "ProjectEmail":
               case "Budget":
+              case "Files":
               case "Members": return true;
               default: return false;
             }
@@ -229,6 +260,7 @@ export default {
               //case "page":
               case "ProjectEmail":
               case "Budget":
+              case "Files":
               case "Members": return true;
               default: return false;
             }
@@ -240,8 +272,8 @@ export default {
         }
       }
     }
-   },
-   methods:{
+  },
+  methods:{
     async onClickAccountLink(accountId){
       this.$store.commit('setTmpProjectId', this.$store.state.c.auth.ProjectId);
       this.$store.commit('setTmpAccountId', accountId);
@@ -270,7 +302,36 @@ export default {
           }
         });
       });
+    },
+    beforeAddFile(filename) {
+      if(this.files.some(f => f === filename)) {
+        this.$message.warning("同名のファイルは上書きされます。");
+        return true;
+      }
+      if([...new Set(this.files.concat(this.uploadList.map(f => f.name)))].length >= 3){
+        this.$message.error("申請できるファイルは合計3つまでです。");
+        return false;
+      }
+      return true;
+    },
+    async onClickFile(filename) {
+      // download
+      const api = new ProjectApi();
+      this.$message.info("ファイルのダウンロードを開始しました。");
+      try {
+        const [url] = await api.getProjectUrls(this.projectId, [filename], "READ");
+        const blob = await api.download(url);
+        FileSaver(blob, filename);
+        this.$message.success("ファイルのダウンロードが完了しました。");
+      } catch(e) {
+        console.error(e);
+        this.$message.error(e.message);
+      }
     }
+  },
+  created(){
+    // always clear upload list
+    this.$store.commit("setProjectUploadList", []);
   }
 }
 </script>

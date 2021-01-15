@@ -6,6 +6,7 @@ const schema = {
   ProjectEmail: "",
   DivisionName: "",
   Budget: 0,
+  Files: [],
   Members: [
     {
       Department: "",
@@ -21,6 +22,7 @@ const schema = {
 const state = () => ({
   createParams: { ...schema },
   updateParams: {},
+  uploadList: [],
   results: [],
   result: {}
 });
@@ -40,7 +42,8 @@ const getters = {
     return state.result;
   },
   isProjectEdited: (state, getters) => (id) => {
-    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id))) || false;
+    return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id)))
+      || (state.uploadList.length !== 0);
   }
 };
 
@@ -49,6 +52,7 @@ const actions = {
   async reqCreateProject({commit, state}) {
     const result = await (new ProjectApi()).createProject(state.createParams);
     commit("setProjectResult", result);
+    return result.ProjectId;
   },
   async reqGetProject({commit, getters}, {id}) {
     const result = await (new ProjectApi()).getProject(id);
@@ -62,6 +66,28 @@ const actions = {
     await (new ProjectApi()).deleteProject(id);
     commit("clearProjectResult", id);
     commit("clearProjectCache");
+  },
+  async reqUpdateProjectFiles({commit, state, getters}, {id}) {
+    const result = await (new ProjectApi()).updateProjectFiles(id, {
+      Files: state.createParams.Files
+    });
+    commit("setProjectFilesResult", {id, files: result.Files || []});
+  },
+  async reqUploadProjectFiles({commit, state, getters}, {id, isCreate}) {
+    if(state.uploadList.length) {
+      const api = new ProjectApi();
+      const names = state.uploadList.map(f => f.name);
+      const blobs = state.uploadList.map(f => f.raw);
+      const urls = await api.getProjectUrls(id, names, "WRITE");
+      await Promise.all(names.map(async(n, i) => {
+        await api.upload(urls[i], blobs[i]);
+      }));
+      // apply merge
+      commit("mergeProjectFiles", {isCreate});
+      commit("setProjectUploadList", []);
+      return true;
+    }
+    return false;
   }
 };
 
@@ -112,6 +138,25 @@ const mutations = {
   },
   clearProjectCreateParams(state){
     state.createParams = { ...schema };
+  },
+  setProjectFilesResult(state, {id, files}){
+    const index = state.results.findIndex(r => r.ProjectId === id);
+    if(index != -1){
+      state.results[index].Files = files;
+    }
+    state.result.Files = files;
+  },
+  setProjectUploadList(state, val){
+    state.uploadList = val;
+  },
+  mergeProjectFiles(state, {isCreate}){
+    const names = state.uploadList.map(f => f.name);
+    if(isCreate){
+      state.createParams.Files = names;
+    }else{
+      // unique merge
+      state.updateParams.Files = [...new Set(state.updateParams.Files.concat(names))];
+    }
   }
 }
 

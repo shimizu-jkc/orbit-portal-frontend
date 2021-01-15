@@ -102,6 +102,7 @@ export default {
         case "CONFIRM_UPDATE": {
           this.loading = true;
           try{
+            await this.$store.dispatch("reqUploadAccountFiles", {id: this.id, isCreate: false});
             await this.$store.dispatch("reqUpdateAccount", {id: this.id});
             await this.$refs.notification.notify({
               status: "success",
@@ -121,6 +122,7 @@ export default {
           }finally{
             this.loading = false;
           }
+          break;
         }
         case "ALERT":
         default: break;

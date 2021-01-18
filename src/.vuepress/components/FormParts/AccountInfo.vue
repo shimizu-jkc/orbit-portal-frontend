@@ -44,7 +44,7 @@
           <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item :error="fileError" label="申請ファイル">
+      <el-form-item v-if="isPrd" :error="fileError" label="申請ファイル">
         <files
           class="form-item"
           v-if="isExist"
@@ -111,7 +111,7 @@
           {{billingProjectSubCode}}
         </span>
       </el-form-item>
-      <el-form-item label="実運用予定日" prop="StartOperationDate">
+      <el-form-item v-if="isPrd" label="実運用予定日" prop="StartOperationDate">
         <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
           <el-date-picker
             v-model="operationDate"
@@ -122,7 +122,7 @@
             format="yyyy年M月d日"
             :picker-options="pickerOptions">
           </el-date-picker>
-           <span class="attention">※5営業日以降から選択できます。</span>
+          <span class="attention">※5営業日以降から選択できます。</span>
         </div>
         <div id="ReadOnlyOpsDate" v-else>
           <span class="form-item">{{epochSecToJST(startOperationDate)}}</span>
@@ -332,6 +332,16 @@ export default {
     uploadList: {
       get() { return this.$store.state.a.uploadList; },
       set(value){ this.$store.commit("setAccountUploadList", value); }   
+    },
+    isPrd(){
+      const prd = this.env === "PRD";
+      if(!prd && this.isEditable){
+        // clear related data
+        this.files = [];
+        this.uploadList = [];
+        this.operationDate = null;
+      }
+      return prd;
     },
     isEditableAttr(){
       return (target) => {

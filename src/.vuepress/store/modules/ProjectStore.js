@@ -69,7 +69,7 @@ const actions = {
   },
   async reqUpdateProjectFiles({commit, state, getters}, {id}) {
     const result = await (new ProjectApi()).updateProjectFiles(id, {
-      Files: state.createParams.Files
+      Files: state.uploadList.map(f => f.name)
     });
     commit("setProjectFilesResult", {id, files: result.Files || []});
   },
@@ -82,9 +82,11 @@ const actions = {
       await Promise.all(names.map(async(n, i) => {
         await api.upload(urls[i], blobs[i]);
       }));
-      // apply merge
-      commit("mergeProjectFiles", {isCreate});
-      commit("setProjectUploadList", []);
+      if(!isCreate){
+        // apply merge
+        commit("mergeProjectFiles");
+        commit("setProjectUploadList", []);
+      }
       return true;
     }
     return false;
@@ -149,14 +151,10 @@ const mutations = {
   setProjectUploadList(state, val){
     state.uploadList = val;
   },
-  mergeProjectFiles(state, {isCreate}){
+  mergeProjectFiles(state){
     const names = state.uploadList.map(f => f.name);
-    if(isCreate){
-      state.createParams.Files = names;
-    }else{
-      // unique merge
-      state.updateParams.Files = [...new Set(state.updateParams.Files.concat(names))];
-    }
+    // unique merge
+    state.updateParams.Files = [...new Set(state.updateParams.Files.concat(names))];
   }
 }
 

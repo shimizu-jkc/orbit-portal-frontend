@@ -1,6 +1,6 @@
 <template>
   <div id="FileList">
-    <div v-for="filename in value">
+    <el-row v-for="filename in value">
       <span v-show="deletable">
         <el-button
           v-if="upload"
@@ -29,7 +29,7 @@
         >{{filename}}</el-button>
         <span v-else >{{filename}}</span>
       </span>
-    </div>
+    </el-row>
   </div>
 </template>
 

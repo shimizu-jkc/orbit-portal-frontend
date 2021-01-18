@@ -39,7 +39,8 @@ export default {
       type: Number,
       default: 100 * 1000 * 1000
     },
-    beforeAdd: Function
+    beforeAdd: Function,
+    onError: Function,
   },
   computed: {
     uploadList: {
@@ -56,12 +57,12 @@ export default {
       // Add
       const reject = fileList.slice(0, -1);
       if (this.value.some(f => f.name === file.name)) {
-        this.$message.error("同名のファイルは指定できません。");
+        this.onError && this.onError("同名のファイルは指定できません。");
         this.$emit("input", reject);
         return;
       }
       if (file.size > this.maxSize) {
-        this.$message.error("ファイルサイズが大きすぎます。");
+        this.onError && this.onError("ファイルサイズが大きすぎます。");
         this.$emit("input", reject);
         return;
       }
@@ -76,7 +77,7 @@ export default {
       this.$emit("input", fileList);
     },
     handleFileExceed(file, fileList) {
-      this.$message.error(`申請できるファイルは${this.limit}つまでです。`);
+      this.onError && this.onError(`申請できるファイルは${this.limit}つまでです。`);
     }
   }
 };

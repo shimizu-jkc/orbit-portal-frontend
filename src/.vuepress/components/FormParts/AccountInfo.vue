@@ -44,8 +44,9 @@
           <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="申請ファイル">
+      <el-form-item :error="fileError" label="申請ファイル">
         <files
+          class="form-item"
           v-if="isExist"
           v-model="files"
           clickable
@@ -53,11 +54,13 @@
           @click="onClickFile"
         ></files>
         <upload
+          class="form-item"
           v-if="isEditableAttr('Files')"
           v-model="uploadList"
           :limit="3"
           :max-size="100*1000*1000"
           :before-add="beforeAddFile"
+          :on-error="onFileError"
         ></upload>
       </el-form-item>
       <el-form-item label="OW部門コード" prop="BillingOWDepartmentCode">
@@ -187,6 +190,7 @@ export default {
         }
       },
       dateSet: "",
+      fileError: "",
       rules: {
         Env: [
           { required: true, message: "利用目的は必須です。" }
@@ -398,14 +402,18 @@ export default {
     },
     beforeAddFile(filename) {
       if(this.files.some(f => f === filename)) {
-        this.$message.warning("同名のファイルは上書きされます。");
-        return true;
+        this.fileError = "同名のファイルは上書きされます。";
+        return true;  // allow
       }
       if([...new Set(this.files.concat(this.uploadList.map(f => f.name)))].length >= 3){
-        this.$message.error("申請できるファイルは合計3つまでです。");
+        this.fileError = "申請できるファイルは合計3つまでです。";
         return false;
       }
+      this.fileError = "";
       return true;
+    },
+    onFileError(message) {
+      this.fileError = message;
     },
     async onClickFile(filename) {
       // download
@@ -413,8 +421,8 @@ export default {
       this.$message.info("ファイルのダウンロードを開始しました。");
       try {
         const [url] = await api.getAccountUrls(this.accountId, [filename], "READ");
-        const blob = await api.download(url);
-        FileSaver(blob, filename);
+        //const blob = await api.download(url);
+        FileSaver(url, filename);
         this.$message.success("ファイルのダウンロードが完了しました。");
       } catch(e) {
         console.error(e);

@@ -7,9 +7,9 @@ const schema = {
   BillingOWUsageCode: "11111-2222", //for test
   BillingProjectCode: "",
   BillingProjectSubCode: "",
-  StartOperationDate: "",
-  ExpireOperationDate: "",
   Files: [],
+  StartOperationDate: 0,
+  ExpireOperationDate: 0,
   MemberRoles: [
     {
       Email: "",

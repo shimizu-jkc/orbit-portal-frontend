@@ -2,7 +2,11 @@
   <div id="FormUpdateAccount">
     <el-row type="flex" justify="end">
       <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
-      <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
+      <el-button
+        type="primary"
+        :disabled="!isEdited"
+        @click="onClickUpdate()"
+      >{{isReapply ? "再申請する" : "適用する"}}</el-button>
     </el-row>
     <info ref="info" operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
@@ -49,6 +53,10 @@ export default {
   computed: {
     isEdited() {
       return this.$store.getters.isAccountEdited(this.id);
+    },
+    isReapply() {
+      const account = this.$store.getters.getAccountById(this.id);
+      return account && (account.Status === "REJECT");
     }
   },
   methods: {

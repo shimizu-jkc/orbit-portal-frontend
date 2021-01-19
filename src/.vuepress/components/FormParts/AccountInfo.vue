@@ -190,7 +190,6 @@ export default {
           return time.getTime() < date.getTime();
         }
       },
-      dateSet: "",
       fileError: "",
       rules: {
         Env: [
@@ -323,9 +322,12 @@ export default {
       set(value){ this.setter({ name: "BillingProjectSubCode", val: value }); }
     },
     operationDate: {
-      get(){ return this.isUpdate ? [this.$store.state.a.updateParams.StartOperationDate * 1000, this.$store.state.a.updateParams.ExpireOperationDate * 1000] : this.dateSet; },
+      get(){
+        const start = this.getter("StartOperationDate");
+        const expire = this.getter("ExpireOperationDate");
+        return (start && expire) ? [start * 1000, expire * 1000] : null;
+      },
       set(value){
-        this.dateSet = value;
         this.setter({ name: "StartOperationDate", val: this.DateToEpochSec(value ? value[0] : 0) });
         this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(value ? value[1] : 0) });
       }

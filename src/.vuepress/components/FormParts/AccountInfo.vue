@@ -30,6 +30,7 @@
           class="select-env"
           v-model="env"
           v-if="isEditableAttr('Env')"
+          @change="onEnvChanged"
           placeholder="利用目的を選択してください。"
         >
          <el-option
@@ -44,22 +45,24 @@
           <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="申請ファイル">
-        <el-upload
-          v-if="isEditable"
-          class="file-upload"
-          multiple
-          action=""
-          :auto-upload="false"
+      <el-form-item v-if="isPrd" :error="fileError" label="申請ファイル">
+        <files
+          class="form-item"
+          v-if="isExist"
+          v-model="files"
+          clickable
+          :deletable="!isReadOnly"
+          @click="onClickFile"
+        ></files>
+        <upload
+          class="form-item"
+          v-if="isEditableAttr('Files')"
+          v-model="uploadList"
           :limit="3"
-          :on-exceed="handleFileExceed"
-          :file-list="fileList"
-        >
-          <el-button size="mini" type="primary">ファイルを選択</el-button>
-        </el-upload>
-        <div v-for="file in fileList" class="form-item">
-          <el-button type="text" @click="onClickFileLink(file)" >{{file}}</el-button>
-        </div>
+          :max-size="100*1000*1000"
+          :before-add="beforeAddFile"
+          :on-error="onFileError"
+        ></upload>
       </el-form-item>
       <el-form-item label="OW部門コード" prop="BillingOWDepartmentCode">
         <el-input 
@@ -109,7 +112,7 @@
           {{billingProjectSubCode}}
         </span>
       </el-form-item>
-      <el-form-item label="実運用予定日" prop="StartOperationDate">
+      <el-form-item v-if="isPrd" label="実運用予定日" prop="StartOperationDate">
         <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
           <el-date-picker
             v-model="operationDate"
@@ -120,7 +123,7 @@
             format="yyyy年M月d日"
             :picker-options="pickerOptions">
           </el-date-picker>
-           <span class="attention">※5営業日以降から選択できます。</span>
+          <span class="attention">※5営業日以降から選択できます。</span>
         </div>
         <div id="ReadOnlyOpsDate" v-else>
           <span class="form-item">{{epochSecToJST(startOperationDate)}}</span>
@@ -146,13 +149,19 @@
 
 <script>
 import MemberRoleList from './MemberRoleList';
+import FileUpload from './FileUpload';
+import FileList from './FileList';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
+import AccountApi from "../../api/AccountApi"
+import FileSaver from "file-saver";
 
 export default {
   name: "AccountInfo",
   components : {
-    roles: MemberRoleList
+    roles: MemberRoleList,
+    upload: FileUpload,
+    files: FileList
   },
   mixins: [Util, Disp],
   props: {
@@ -181,7 +190,7 @@ export default {
           return time.getTime() < date.getTime();
         }
       },
-      fileList: [],
+      fileError: "",
       rules: {
         Env: [
           { required: true, message: "利用目的は必須です。" }
@@ -292,6 +301,10 @@ export default {
       get() { return this.getter("Env"); },
       set(value){ this.setter({ name: "Env", val: value }); }
     },
+    files: {
+      get() { return this.getter("Files"); },
+      set(value){ this.setter({ name: "Files", val: value }); }      
+    },
     billingOWDepartmentCode: {
       get() { return this.getter("BillingOWDepartmentCode"); },
       set(value){ this.setter({ name: "BillingOWDepartmentCode", val: value }); }
@@ -319,6 +332,13 @@ export default {
         this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(value ? value[1] : 0) });
       }
     },
+    uploadList: {
+      get() { return this.$store.state.a.uploadList; },
+      set(value){ this.$store.commit("setAccountUploadList", value); }   
+    },
+    isPrd(){
+      return this.env === "PRD";
+    },
     isEditableAttr(){
       return (target) => {
         switch(this.operation){
@@ -326,6 +346,7 @@ export default {
             switch(target){
               case "page":
               case "Env":
+              case "Files":
               case "BillingOWDepartmentCode":
               case "BillingOWUsageCode":
               case "BillingProjectCode":
@@ -340,6 +361,7 @@ export default {
           case "update": {
             switch(target){
               //case "page":
+              case "Files":
               case "BillingOWDepartmentCode":
               case "BillingOWUsageCode":
               case "BillingProjectCode":
@@ -358,14 +380,8 @@ export default {
         }
       }
     }
-   },
-   methods:{
-    getFileUrl(val){
-      return "";
-    },
-    handleFileExceed(files, fileList){
-      this.$message.warning("申請できるファイルは3つまでです。");
-    },
+  },
+  methods:{
     async validate() {
       return new Promise((resolve, reject) => {
         // el-form validator
@@ -389,7 +405,48 @@ export default {
           }
         });
       });
+    },
+    onEnvChanged(val) {
+      if(val !== "PRD") {
+        // clear related data
+        this.files = [];
+        this.uploadList = [];
+        this.operationDate = null;
+      }
+    },
+    beforeAddFile(filename) {
+      if(this.files.some(f => f === filename)) {
+        this.fileError = "同名のファイルは上書きされます。";
+        return true;  // allow
+      }
+      if([...new Set(this.files.concat(this.uploadList.map(f => f.name)))].length >= 3){
+        this.fileError = "申請できるファイルは合計3つまでです。";
+        return false;
+      }
+      this.fileError = "";
+      return true;
+    },
+    onFileError(message) {
+      this.fileError = message;
+    },
+    async onClickFile(filename) {
+      // download
+      const api = new AccountApi(this.projectId);
+      this.$message.info("ファイルのダウンロードを開始しました。");
+      try {
+        const [url] = await api.getAccountUrls(this.accountId, [filename], "READ");
+        //const blob = await api.download(url);
+        FileSaver(url, filename);
+        this.$message.success("ファイルのダウンロードが完了しました。");
+      } catch(e) {
+        console.error(e);
+        this.$message.error(e.message);
+      }
     }
+  },
+  created(){
+    // always clear upload list
+    this.$store.commit("setAccountUploadList", []);
   }
 }
 </script>
@@ -417,12 +474,4 @@ export default {
   color: #8492a6;
   font-size: 0.8rem;
 }
-.file-upload {
-  width: 25%;
-}
-.file-upload .el-upload-list__item {
-  border-bottom: solid 1px;
-  border-block-color: #eaecef;
-}
-
 </style>

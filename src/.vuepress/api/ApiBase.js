@@ -51,6 +51,50 @@ export default class ApiBase {
     }
   }
 
+  async getUrls(path, names, action="READ"){
+    const result = await this.post(path, {
+      Files: names.map(n => ({ Name: n, Action: action }))
+    });
+    return names.map(n => {
+      const r = result.Urls.find(u => u.FileName === n);
+      return r && r.Url;
+    });
+  }
+
+  async upload(url, file, onProgress){
+    try{
+      const http = axios.create({
+        headers: {
+          "Content-Type": ""  // specify empty
+        },
+        onUploadProgress(event) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          onProgress && onProgress(percent);
+        }
+      });
+      const result = await http.put(url, file);
+      return result.data;
+    }catch(e){
+      throw this._createErrorMessage(e);
+    }
+  }
+
+  async download(url, onProgress){
+    try{
+      const http = axios.create({
+        responseType: "blob",
+        onDownloadProgress(event) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          onProgress && onProgress(percent);
+        }
+      });
+      const result = await http.get(url);
+      return result.data;
+    }catch(e){
+      throw this._createErrorMessage(e);
+    }
+  }
+
   //Private method
   _getToken(){
     try{

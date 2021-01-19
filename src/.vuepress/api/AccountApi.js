@@ -19,13 +19,21 @@ export default class AccountApi extends ApiBase {
     return await super.put(`/projects/${this.pid}/accounts/${id}`, this._formatParam(param));
   }
 
+  async updateAccountFiles(id, param){
+    return await super.put(`/projects/${this.pid}/accounts/${id}/files`, this._formatParam(param));
+  }
+
   async deleteAccount(id){
     return await super.delete(`/projects/${this.pid}/accounts/${id}`);
   }
 
+  async getAccountUrls(id, names, action){
+    return await super.getUrls(`/projects/${this.pid}/accounts/${id}/files/url`, names, action);
+  }
+ 
   _formatParam(param, isCreate=false){
     const createOnly = isCreate ? ["Env"] : [];
-    const editable =  ["BillingOWDepartmentCode", "BillingOWUsageCode", "BillingProjectCode", "BillingProjectSubCode",
+    const editable =  ["Files", "BillingOWDepartmentCode", "BillingOWUsageCode", "BillingProjectCode", "BillingProjectSubCode",
                        "StartOperationDate", "ExpireOperationDate", "MemberRoles"];
     let body = {};
 

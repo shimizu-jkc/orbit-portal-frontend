@@ -31,7 +31,7 @@
         <el-button type="primary" @click="onClickCreate()">申請する</el-button>
       </el-row>
     </div>
-    <loading :show="loading" message="申請中です"/>
+    <loading :show="loading.show" :message="loading.message"/>
     <notification ref="notification"/>
     <confirm
       :id="dialog.id"
@@ -63,7 +63,10 @@ export default {
   },
   data(){
     return {
-      loading: false,
+      loading: {
+        show: false,
+        message: "申請中です"
+      },
       dialog: {
         id: "",
         visible: false,
@@ -111,11 +114,13 @@ export default {
       showConfirmDialog("クラウド環境の利用を申請します。よろしいですか？");
     },
     async onEventOk(event) {
-        switch(event.id){
+      switch(event.id){
         case "CONFIRM_CREATE": {
-          this.loading = true;
+          let accountId;
+          this.loading.message = "申請中です";
+          this.loading.show = true;
           try{
-            await this.$store.dispatch("reqCreateAccount", {projectId: this.projectId});
+            accountId = await this.$store.dispatch("reqCreateAccount", {projectId: this.projectId});
             this.$store.commit("clearAccountCreateParams");
             await this.$refs.notification.notify({
               status: "success",
@@ -127,19 +132,38 @@ export default {
               title: "申請における注意事項",
               message: "クラウド環境が利用できるまで、最大5営業日程度掛かる場合があります。\n利用可能になった際にはプロジェクトの代表者へ連絡しますので、しばらくの間お待ちください。"
             });
-            this.$router.push({
-              path: "show-account.html",
-              query: { id: this.$store.getters.getAccountResult().AccountId, operation: "create" }
-            });
           }catch(e){
             await this.$refs.notification.notify({
               status: "error",
               title: this.$page.title,
               message: e.message
             });
+            return;
           }finally{
-            this.loading = false;
+            this.loading.show = false;
           }
+          // file upload proccess
+          this.loading.message = "ファイルのアップロード中です";
+          this.loading.show = true;
+          try{
+            if(await this.$store.dispatch("reqUploadAccountFiles", {id: accountId, isCreate: true})){
+              // upload success
+              await this.$store.dispatch("reqUpdateAccountFiles", {id: accountId});
+            }
+          }catch(e){
+            await this.$refs.notification.notify({
+              status: "warning",
+              title: this.$page.title,
+              message: "ファイルのアップロードに失敗しました。クラウド環境の編集画面から再アップロードしてください。"
+            });
+          }finally{
+            this.loading.show = false;
+            this.$router.push({
+              path: "show-account.html",
+              query: { id: accountId, operation: "create" }
+            });
+          }
+          break;
         }
         case "ALERT":
         default: break;

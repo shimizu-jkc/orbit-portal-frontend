@@ -30,6 +30,7 @@
           class="select-env"
           v-model="env"
           v-if="isEditableAttr('Env')"
+          @change="onEnvChanged"
           placeholder="利用目的を選択してください。"
         >
          <el-option
@@ -334,14 +335,7 @@ export default {
       set(value){ this.$store.commit("setAccountUploadList", value); }   
     },
     isPrd(){
-      const prd = this.env === "PRD";
-      if(!prd && this.isEditable){
-        // clear related data
-        this.files = [];
-        this.uploadList = [];
-        this.operationDate = null;
-      }
-      return prd;
+      return this.env === "PRD";
     },
     isEditableAttr(){
       return (target) => {
@@ -409,6 +403,14 @@ export default {
           }
         });
       });
+    },
+    onEnvChanged(val) {
+      if(val !== "PRD") {
+        // clear related data
+        this.files = [];
+        this.uploadList = [];
+        this.operationDate = null;
+      }
     },
     beforeAddFile(filename) {
       if(this.files.some(f => f === filename)) {

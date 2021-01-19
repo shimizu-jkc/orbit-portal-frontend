@@ -77,7 +77,6 @@ export default {
   data() {
     return {
       type: "REQ_AUDIT_LOG",
-      dateSet: "",
       rules: {
         Service: [
           { required: true, message: "対象サービスは必須です。" }
@@ -125,15 +124,27 @@ export default {
         }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.Service;
         }else{
-          return this.$store.state.t.createParams.Content[this.type].Service 
+          return this.$store.state.t.createParams.Content[this.type].Service;
         }
       },
       set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Service", val: value}) }
     },
     date: {
-      get(){ return this.hasId ? [this.$store.state.t.updateParams.Content.StartDate * 1000, this.$store.state.t.updateParams.Content.EndDate * 1000] : this.dateSet; },
+      get(){
+        let start, end;
+        if(this.hasId && this.readOnly){
+          start = this.content.StartDate;
+          end = this.content.EndDate;
+        }else if(this.hasId && !this.readOnly){
+          start = this.$store.state.t.updateParams.Content.StartDate;
+          end = this.$store.state.t.updateParams.Content.EndDate;
+        }else{
+          start = this.$store.state.t.createParams.Content[this.type].StartDate;
+          end = this.$store.state.t.createParams.Content[this.type].EndDate;
+        }
+        return (start && end) ? [start * 1000, end * 1000] : null;
+      },
       set(value){
-        this.dateSet = value;
         this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::StartDate", val: this.DateToEpochSec(value ? value[0] : 0)});
         this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::EndDate", val: this.DateToEpochSec(value ? value[1] : 0)});
       }
@@ -145,10 +156,10 @@ export default {
         }else if(this.hasId && !this.readOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
-          return this.$store.state.t.createParams.Content[this.type].Note 
+          return this.$store.state.t.createParams.Content[this.type].Note;
         }
       },
-      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}) }
+      set(value){ this.$store.commit(this.hasId ? "setTicketUpdateParams":"setTicketCreateParams", {type: this.type, name: "Content::Note", val: value}); }
     },
     hasId(){ return this.id.length > 0 }
   },

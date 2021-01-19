@@ -41,6 +41,10 @@ export default class AccountApi extends ApiBase {
         }
       }
     });
+    if(!isCreate && param.Status === "REJECT"){
+      // overwrite status if "REJECT"
+      body.Status = "WAITING_CONFIRM";
+    }
     if(Object.keys(body).length === 0){
       console.error(id, body);
       throw new Error("パラメータが存在しません。")

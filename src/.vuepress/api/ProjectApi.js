@@ -18,13 +18,21 @@ export default class ProjectApi extends ApiBase {
     return await super.put(`/projects/${id}`, this._formatParam(param));
   }
 
+  async updateProjectFiles(id, param){
+    return await super.put(`/projects/${id}/files`, this._formatParam(param));
+  }
+
   async deleteProject(id){
     return await super.delete(`/projects/${id}`);
   }
 
+  async getProjectUrls(id, names, action){
+    return await super.getUrls(`/projects/${id}/files/url`, names, action);
+  }
+
   _formatParam(param, isCreate=false){
     const createOnly = isCreate ? ["ProjectId", "DivisionName"] : [];
-    const editable =  ["ProjectEmail", "Budget", "Members"];
+    const editable =  ["ProjectEmail", "Budget", "Files", "Members"];
     let body = {};
 
     editable.concat(createOnly).forEach(a => {

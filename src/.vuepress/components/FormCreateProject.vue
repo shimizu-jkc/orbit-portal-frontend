@@ -20,7 +20,7 @@
     <el-row type="flex" justify="start">
       <el-button type="primary" @click="onClickCreate()">登録する</el-button>
     </el-row>
-    <loading :show="loading" message="登録中です"/>
+    <loading :show="loading.show" :message="loading.message"/>
     <notification ref="notification"/>
     <confirm
       :id="dialog.id"
@@ -50,7 +50,10 @@ export default {
   },
   data(){
     return {
-      loading: false,
+      loading: {
+        show: false,
+        message: "登録中です"
+      },
       dialog: {
         id: "",
         visible: false,
@@ -93,18 +96,16 @@ export default {
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CREATE": {
-          this.loading = true;
+          let projectId;
+          this.loading.message = "登録中です";
+          this.loading.show = true;
           try{
-            await this.$store.dispatch("reqCreateProject");
+            projectId = await this.$store.dispatch("reqCreateProject");
+            this.$store.commit("clearProjectCreateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
               message: "プロジェクトを登録しました。"
-            });
-            this.$store.commit("clearProjectCreateParams");
-            this.$router.push({
-              path: "show-project.html",
-              query: { id: this.$store.getters.getProjectResult().ProjectId, operation: "create" }
             });
           }catch(e){
             await this.$refs.notification.notify({
@@ -112,9 +113,33 @@ export default {
               title: this.$page.title,
               message: e.message
             });
+            return;
           }finally{
-            this.loading = false;
+            this.loading.show = false;
           }
+          // file upload proccess
+          this.loading.message = "ファイルのアップロード中です";
+          this.loading.show = true;
+          try{
+            if(await this.$store.dispatch("reqUploadProjectFiles", {id: projectId, isCreate: true})){
+              // upload success
+              await this.$store.dispatch("reqUpdateProjectFiles", {id: projectId});
+            }
+          }catch(e){
+            console.error(e);
+            await this.$refs.notification.notify({
+              status: "warning",
+              title: this.$page.title,
+              message: "ファイルのアップロードに失敗しました。プロジェクトの編集画面から再アップロードしてください。"
+            });
+          }finally{
+            this.loading.show = false;
+            this.$router.push({
+              path: "show-project.html",
+              query: { id: projectId, operation: "create" }
+            });
+          }
+          break;
         }
         case "ALERT":
         default: break;

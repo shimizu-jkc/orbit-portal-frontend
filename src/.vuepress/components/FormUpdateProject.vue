@@ -102,6 +102,7 @@ export default {
         case "CONFIRM_UPDATE": {
           this.loading = true;
           try{
+            await this.$store.dispatch("reqUploadProjectFiles", {id: this.id, isCreate: false});
             await this.$store.dispatch("reqUpdateProject", {id: this.id});
             await this.$refs.notification.notify({
               status: "success",

@@ -39,7 +39,7 @@ const DispNameTable = {
     { value: "GUEST"          , label: "ゲスト" }
   ],
   TicketType: [
-    { value: "REQ_CF_KEYPAIR"          , label: "CloudFrontキーペアの作成" }, 
+//  { value: "REQ_CF_KEYPAIR"          , label: "CloudFrontキーペアの作成" },
     { value: "REQ_AUDIT_LOG"           , label: "監査ログの確認" }, 
     { value: "REQ_SUPPORT_PLAN_CHANGE" , label: "サポートプランの変更" }, 
     { value: "REQ_OTHER"               , label: "その他の作業" }

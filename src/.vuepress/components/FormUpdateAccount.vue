@@ -101,6 +101,7 @@ export default {
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CANCEL": {
+          this.$store.commit("clearAccountUpdateParams");
           this.$router.push({
             path: "show-account.html",
             query: { id: this.id }
@@ -112,6 +113,7 @@ export default {
           try{
             await this.$store.dispatch("reqUploadAccountFiles", {id: this.id, isCreate: false});
             await this.$store.dispatch("reqUpdateAccount", {id: this.id});
+            this.$store.commit("clearAccountUpdateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,

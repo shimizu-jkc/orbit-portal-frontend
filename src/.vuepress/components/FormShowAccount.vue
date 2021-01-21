@@ -51,7 +51,11 @@ export default {
   },
   methods: {
     async onClickEdit() {
-      this.$store.commit("loadDefaultAccountUpdateParams", this.id);
+      if(this.$store.getters.isExistAccountUpdateCache(this.id)) {
+        this.$message.info("編集中のクラウド環境情報を復元しました。");
+      } else {
+        this.$store.commit("loadDefaultAccountUpdateParams", this.id);
+      }
       this.$router.push({
         path: "update-account.html",
         query: { id: this.id }

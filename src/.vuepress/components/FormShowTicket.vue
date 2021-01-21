@@ -26,7 +26,11 @@ export default {
   },
   methods: {
     async onClickEdit() {
-      this.$store.commit("loadDefaultTicketUpdateParams", this.id);
+      if(this.$store.getters.isExistTicketUpdateCache(this.id)) {
+        this.$message.info("編集中の作業情報を復元しました。");
+      } else {
+        this.$store.commit("loadDefaultTicketUpdateParams", this.id);
+      }
       this.$router.push({
         path: "update-ticket.html",
         query: { id: this.id }

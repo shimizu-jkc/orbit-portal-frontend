@@ -23,7 +23,9 @@ export default (isServer) => {
     plugins: isServer ? [] : [
       PersistedState({
         key: 'OrbitPortal',
-        paths: ['p', 'a', 't', 'c.auth'],
+        paths: ['p.createParams', 'p.updateParams',
+                'a.createParams', 'a.updateParams',
+                't.createParams', 't.updateParams'],
         storage: window.sessionStorage
       }),
       PersistedState({

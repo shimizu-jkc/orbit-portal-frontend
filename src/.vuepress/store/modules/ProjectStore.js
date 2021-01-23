@@ -44,6 +44,9 @@ const getters = {
   isProjectEdited: (state, getters) => (id) => {
     return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getProjectById(id)))
       || (state.uploadList.length !== 0);
+  },
+  isExistProjectUpdateCache: (state, getters) => (id) => {
+    return (id === state.updateParams.ProjectId) && getters.isProjectEdited(id);
   }
 };
 
@@ -140,6 +143,9 @@ const mutations = {
   },
   clearProjectCreateParams(state){
     state.createParams = { ...schema };
+  },
+  clearProjectUpdateParams(state){
+    state.updateParams = { ...schema };
   },
   setProjectFilesResult(state, {id, files}){
     const index = state.results.findIndex(r => r.ProjectId === id);

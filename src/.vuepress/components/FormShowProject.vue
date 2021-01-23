@@ -51,7 +51,11 @@ export default {
   },
   methods: {
     async onClickEdit() {
-      this.$store.commit("loadDefaultUpdateParams", this.id);
+      if(this.$store.getters.isExistProjectUpdateCache(this.id)) {
+        this.$message.info("編集中のプロジェクト情報を復元しました。");
+      } else {
+        this.$store.commit("loadDefaultUpdateParams", this.id);
+      }
       this.$router.push({
         path: "update-project.html",
         query: { id: this.id }

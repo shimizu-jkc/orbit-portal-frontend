@@ -47,6 +47,9 @@ const getters = {
   isAccountEdited: (state, getters) => (id) => {
     return (JSON.stringify(state.updateParams) !== JSON.stringify(getters.getAccountById(id)))
       || (state.uploadList.length !== 0);
+  },
+  isExistAccountUpdateCache: (state, getters) => (id) => {
+    return (id === state.updateParams.AccountId) && getters.isAccountEdited(id);
   }
 };
 
@@ -145,6 +148,9 @@ const mutations = {
   },
   clearAccountCreateParams(state){
     state.createParams = { ...schema };
+  },
+  clearAccountUpdateParams(state){
+    state.updateParams = { ...schema };
   },
   setAccountFilesResult(state, {id, files}){
     const index = state.results.findIndex(r => r.AccountId === id);

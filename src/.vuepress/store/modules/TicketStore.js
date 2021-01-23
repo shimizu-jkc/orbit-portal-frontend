@@ -54,6 +54,9 @@ const getters = {
   isTicketLoaded: (state, getters) => (id) => {
     return getters.getTicketById(id).Content ? true : false;
   },
+  isExistTicketUpdateCache: (state, getters) => (id) => {
+    return (id === state.updateParams.TicketId) && getters.isTicketEdited(id);
+  }
 };
 
 // Actions
@@ -122,6 +125,9 @@ const mutations = {
   },
   clearTicketCreateParams(state){
     state.createParams = { ...schema };
+  },
+  clearTicketUpdateParams(state){
+    state.updateParams = { ...schema };
   }
 }
 

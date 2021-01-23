@@ -93,6 +93,7 @@ export default {
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CANCEL": {
+          this.$store.commit("clearProjectUpdateParams");
           this.$router.push({
             path: "show-project.html",
             query: { id: this.id }
@@ -104,6 +105,7 @@ export default {
           try{
             await this.$store.dispatch("reqUploadProjectFiles", {id: this.id, isCreate: false});
             await this.$store.dispatch("reqUpdateProject", {id: this.id});
+            this.$store.commit("clearProjectUpdateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
@@ -122,6 +124,7 @@ export default {
           }finally{
             this.loading = false;
           }
+          break;
         }
         case "ALERT":
         default: break;

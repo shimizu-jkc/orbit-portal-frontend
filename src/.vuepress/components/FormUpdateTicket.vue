@@ -93,6 +93,7 @@ export default {
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CANCEL": {
+          this.$store.commit("clearTicketUpdateParams");
           this.$router.push({
             path: "show-ticket.html",
             query: { id: this.id }
@@ -103,6 +104,7 @@ export default {
           this.loading = true;
           try{
             await this.$store.dispatch("reqUpdateTicket", {id: this.id});
+            this.$store.commit("clearTicketUpdateParams");
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
@@ -121,6 +123,7 @@ export default {
           }finally{
             this.loading = false;
           }
+          break;
         }
         case "ALERT":
         default: break;

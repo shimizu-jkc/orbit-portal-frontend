@@ -52,6 +52,7 @@
           v-model="files"
           clickable
           :deletable="!isReadOnly"
+          :download-status="downloadStatus"
           @click="onClickFile"
         ></files>
         <upload
@@ -191,6 +192,7 @@ export default {
         }
       },
       fileError: "",
+      downloadStatus: {},
       rules: {
         Env: [
           { required: true, message: "利用目的は必須です。" }
@@ -432,15 +434,26 @@ export default {
     async onClickFile(filename) {
       // download
       const api = new AccountApi(this.projectId);
-      this.$message.info("ファイルのダウンロードを開始しました。");
+      const updateDownloadStatus = (message, progress, status="success") => {
+        this.downloadStatus = Object.assign({}, this.downloadStatus, {
+          [filename]: {
+            message: message,
+            progress: progress,
+            status: status
+          }
+        });
+      };
+      updateDownloadStatus("ダウンロードの準備中です...", 0);
       try {
         const [url] = await api.getAccountUrls(this.accountId, [filename], "READ");
-        //const blob = await api.download(url);
-        FileSaver(url, filename);
-        this.$message.success("ファイルのダウンロードが完了しました。");
+        const blob = await api.download(url, (progress) => {
+          updateDownloadStatus("ダウンロードしています...", progress);
+        });
+        FileSaver(blob, filename);
+        updateDownloadStatus("ダウンロードが完了しました。", 100);
       } catch(e) {
         console.error(e);
-        this.$message.error(e.message);
+        updateDownloadStatus(e.message, 0, "exception");
       }
     }
   },

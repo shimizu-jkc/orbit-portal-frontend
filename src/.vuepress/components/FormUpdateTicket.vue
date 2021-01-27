@@ -1,10 +1,10 @@
 <template>
   <div id="FormUpdateTicket">
-    <el-row type="flex" justify="end">
-      <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
-      <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
-    </el-row>
     <info ref="info" operation="update" :id="id"/>
+    <el-row type="flex" justify="start">
+      <el-button type="primary" :disabled="!isEdited" @click="onClickUpdate()">適用する</el-button>
+      <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
+    </el-row>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm

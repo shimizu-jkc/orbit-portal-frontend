@@ -342,7 +342,8 @@ export default {
         const blob = await api.download(url, (progress) => {
           updateDownloadStatus("ダウンロードしています...", progress);
         });
-        FileSaver(blob, filename);
+        // [#53] force erase blob type for FireFox
+        FileSaver(blob.slice(0, blob.size, ""), filename);
         updateDownloadStatus("ダウンロードが完了しました。", 100);
       } catch(e) {
         console.error(e);

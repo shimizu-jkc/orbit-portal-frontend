@@ -311,12 +311,12 @@ export default {
         });
       });
     },
-    beforeAddFile(filename) {
+    beforeAddFile(filename, uploadList) {
       if(this.files.some(f => f === filename)) {
         this.fileError = "同名のファイルは上書きされます。";
         return true;  // allow
       }
-      if([...new Set(this.files.concat(this.uploadList.map(f => f.name)))].length >= 3){
+      if([...new Set(this.files.concat(uploadList.map(f => f.name)))].length >= 3){
         this.fileError = "申請できるファイルは合計3つまでです。";
         return false;
       }

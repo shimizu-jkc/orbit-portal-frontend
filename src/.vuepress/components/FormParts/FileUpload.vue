@@ -7,11 +7,9 @@
       action
       :auto-upload="false"
       :show-file-list="false"
-      :limit="limit"
       :on-change="handleFileChange"
       :on-remove="handleFileRemove"
-      :on-exceed="handleFileExceed"
-      :file-list="value"
+      :file-list="fileList"
     >
       <el-button type="primary" icon="el-icon-upload">ファイルを追加</el-button>
     </el-upload>
@@ -42,44 +40,56 @@ export default {
     beforeAdd: Function,
     onError: Function,
   },
+  data() {
+    return {
+      fileList: this.value
+    };
+  },
   computed: {
     uploadList: {
       get() {
         return this.value.map(v => v.name);
       },
       set(val) {
-        this.$emit("input", this.value.filter(v => val.includes(v.name)));
+        this.fileList = this.value.filter(v => val.includes(v.name));
       }
     }
   },
   methods: {
-    handleFileChange(file, fileList) {
-      // Add
-      const reject = fileList.slice(0, -1);
-      if (this.value.some(f => f.name === file.name)) {
+    handleFileChange(file) {
+      if (this.fileList.some(f => f.name === file.name)) {
         this.onError && this.onError("同名のファイルは指定できません。");
-        this.$emit("input", reject);
+        this.fileList = [...this.fileList];
         return;
       }
       if (file.size > this.maxSize) {
         this.onError && this.onError("ファイルサイズが大きすぎます。");
-        this.$emit("input", reject);
+        this.fileList = [...this.fileList];
         return;
       }
-      if (this.beforeAdd && !this.beforeAdd(file.name)) {
-        this.$emit("input", reject);
+      if (this.fileList.length >= this.limit){
+        this.onError && this.onError(`申請できるファイルは${this.limit}つまでです。`);
+        this.fileList = [...this.fileList];
         return;
       }
-      this.$emit("input", fileList);
+      if (this.beforeAdd && !this.beforeAdd(file.name, this.fileList)) {
+        this.fileList = [...this.fileList];
+        return;
+      }
+      // Add
+      this.fileList = [...this.fileList, file];
     },
     handleFileRemove(file, fileList) {
       // Remove
-      this.$emit("input", fileList);
-    },
-    handleFileExceed(file, fileList) {
-      this.onError && this.onError(`申請できるファイルは${this.limit}つまでです。`);
+      this.fileList = fileList;
     }
-  }
+  },
+  watch: {
+    fileList(val) {
+      // update parent
+      this.$emit("input", val);
+    },
+  },
 };
 </script>
 

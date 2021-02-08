@@ -150,8 +150,10 @@ export default {
       rules: {
         ProjectId: [
           { required: true, message: "プロジェクト名は必須です。", trigger : "blur" },
-          { pattern: /^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/, 
-            message: "プロジェクト名に使用できない文字が含まれています。英数字とハイフンのみが使用可能です。" }
+          { pattern: /^[a-zA-Z0-9\-]{1,20}$/, 
+            message: "プロジェクト名に使用できない文字が含まれています。半角英数字とハイフンのみが使用可能です。" },
+          { pattern: /^[^\-]/, 
+            message: "プロジェクト名はハイフンから始めることはできません。" },
         ],
         ProjectEmail: [
           { required: true, message: "代表者Eメールアドレスは必須です。", trigger: "blur" },

@@ -1,8 +1,8 @@
 <template>
   <div id="FormShowAccount">
     <el-row type="flex" justify="end">
-      <el-button type="danger" @click="onClickDelete()" v-show="isDelete">削除する</el-button>
-      <el-button type="primary" @click="onClickEdit()" v-show="isShow">編集する</el-button>
+      <el-button type="danger" :disabled="isDeleted" @click="onClickDelete()" v-show="isDelete">削除する</el-button>
+      <el-button type="primary" :disabled="isDeleted" @click="onClickEdit()" v-show="isShow">編集する</el-button>
     </el-row>
     <info operation="show" :id="id"/>
     <loading :show="loading" message="削除の申請中です"/>
@@ -48,6 +48,11 @@ export default {
       id: this.$route.query.id,
       operation: this.$route.query.operation || "show"
     };
+  },
+  computed: {
+    isDeleted() {
+      return this.$store.getters.isAccountDeleted(this.id);
+    }
   },
   methods: {
     async onClickEdit() {

@@ -14,7 +14,7 @@
         <el-select 
           v-model="service" 
           v-if="!readOnly"
-          placeholder="確認したいサービスを選択してください。"
+          placeholder="確認したいサービスを選択してください"
         >
           <el-option
             v-for="(item, index) in getDispNameSets('ServiceForAudit')"
@@ -49,7 +49,7 @@
           v-if="!readOnly"
           type="textarea"
           :rows="2"
-          placeholder="連絡事項がある場合は、こちらにご記入ください。">
+          placeholder="連絡事項がある場合は、こちらにご記入ください">
         </el-input>
         <span class="form-item" v-else>{{note}}</span>
       </el-form-item>

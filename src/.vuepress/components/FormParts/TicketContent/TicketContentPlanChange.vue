@@ -14,7 +14,7 @@
         <el-select
           v-model="plan" 
           v-if="!this.readOnly"
-          placeholder="変更先のサポートプランを選択してください。"
+          placeholder="変更先のサポートプランを選択してください"
         >
           <el-option
             v-for="(item, index) in getDispNameSets('SupportPlan')"
@@ -33,7 +33,7 @@
           v-if="!this.readOnly"
           type="textarea"
           :rows="2"
-          placeholder="連絡事項がある場合は、こちらにご記入ください。">
+          placeholder="連絡事項がある場合は、こちらにご記入ください">
         </el-input>
         <span class="form-item" v-else>{{note}}</span>
       </el-form-item>
@@ -62,7 +62,7 @@ export default {
       type: "REQ_SUPPORT_PLAN_CHANGE",
       rules: {
         ExpectedPlan: [
-          { required: true, message: "サポートプランは必須です。" }
+          { required: true, message: "サポートプランは必須です" }
         ],
         Note: [
           // no specific rules

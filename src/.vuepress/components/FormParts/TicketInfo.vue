@@ -36,7 +36,7 @@
         <el-select 
           v-model="type" 
           v-if="isEditableAttr('Type')"
-          placeholder="依頼する作業の種別を選択してください。"
+          placeholder="依頼する作業の種別を選択してください"
         >
           <el-option
             v-for="(item, index) in getDispNameSets('TicketType')"

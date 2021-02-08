@@ -31,7 +31,7 @@
           v-model="env"
           v-if="isEditableAttr('Env')"
           @change="onEnvChanged"
-          placeholder="利用目的を選択してください。"
+          placeholder="利用目的を選択してください"
         >
          <el-option
             v-for="(item, index) in getDispNameSets('Env')"

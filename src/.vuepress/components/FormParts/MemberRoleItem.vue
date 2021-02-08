@@ -6,7 +6,7 @@
         :content="error.name">
         <el-select 
           v-model="email"
-          placeholder="ユーザーを選択してください。"
+          placeholder="ユーザーを選択してください"
           @change="onChange('name')"
           :class="{error: error.name}"
         >
@@ -29,7 +29,7 @@
         :content="error.role">
         <el-select 
           v-model="role" 
-          placeholder="役割を選択してください。"
+          placeholder="役割を選択してください"
           @change="onChange('role')"
           :class="{error: error.role}"
         >

@@ -41,7 +41,7 @@
         <el-select
           v-model="divisionName" 
           v-if="isEditableAttr('DivisionName')"
-          placeholder="所属する事業部を選択してください。"
+          placeholder="所属する事業部を選択してください"
         >
          <el-option
             v-for="(item, index) in getDispNameSets('Division')"
@@ -60,7 +60,7 @@
           <el-input-number 
             class="input-number"
             v-model="budget"
-            placeholder="予定している月毎のクラウド利用料金を入力してください。"
+            placeholder="予定している月毎のクラウド利用料金を入力してください"
             :step="10"
             :min="0" 
             :max="10000"

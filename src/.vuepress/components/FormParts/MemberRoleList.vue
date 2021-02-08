@@ -31,7 +31,7 @@
       >
         <el-table-column prop="Name" label="名前"></el-table-column>
         <el-table-column prop="Email" label="Eメールアドレス"></el-table-column>
-        <el-table-column prop="Role" label="役割" :formatter="roleFormatter"></el-table-column>
+        <el-table-column prop="Role" label="役割" :formatter="roleFormatter" sortable></el-table-column>
       </el-table>
       <el-row v-else>
         <span class="form-item">役割が割り当てられていません。</span>

@@ -56,11 +56,17 @@
         <audit ref="content" v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
         <plan ref="content" v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
       </div>
-      <el-form-item label="登録日" v-if="isExist">
+      <el-form-item label="登録日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(createdAt)}}</span>
       </el-form-item>
-      <el-form-item label="最終更新日" v-if="isExist">
+      <el-form-item label="登録者" v-if="isReadOnly">
+        <span class="form-item">{{createdBy}}</span>
+      </el-form-item>
+      <el-form-item label="最終更新日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
+      </el-form-item>
+      <el-form-item label="最終更新者" v-if="isReadOnly">
+        <span class="form-item">{{updatedBy}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -175,7 +181,13 @@ export default {
     },
     updatedAt: {
       get() { return this.getter("UpdatedAt", true); },
-    },   
+    },
+    createdBy: {
+      get() { return this.getter("CreatedBy", true); },
+    },
+    updatedBy: {
+      get() { return this.getter("UpdatedBy", true); },
+    },
     //Editable value
     email: {
       get() { return this.getter("TicketEmail"); },

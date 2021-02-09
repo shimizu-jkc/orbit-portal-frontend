@@ -41,7 +41,7 @@
         <el-select
           v-model="divisionName" 
           v-if="isEditableAttr('DivisionName')"
-          placeholder="所属する事業部を選択してください。"
+          placeholder="所属する事業部を選択してください"
         >
          <el-option
             v-for="(item, index) in getDispNameSets('Division')"
@@ -60,7 +60,7 @@
           <el-input-number 
             class="input-number"
             v-model="budget"
-            placeholder="予定している月毎のクラウド利用料金を入力してください。"
+            placeholder="予定している月毎のクラウド利用料金を入力してください"
             :step="10"
             :min="0" 
             :max="10000"
@@ -96,17 +96,23 @@
           <members ref="members" :readOnly="!isEditableAttr('Members')" :id="id"/>
         </div>
       </el-form-item>
-      <el-form-item label="所有クラウド環境" v-show="isExist">
+      <el-form-item label="所有クラウド環境" v-show="isReadOnly">
         <div class="form-item" v-for="account in accountIds">
           <el-button type="text" @click="onClickAccountLink(account)" v-if="isReadOnly">{{account}}</el-button>
           <span v-else>{{account}}</span>
         </div>
       </el-form-item>
-      <el-form-item label="登録日" v-if="isExist">
+      <el-form-item label="登録日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(createdAt)}}</span>
       </el-form-item>
-      <el-form-item label="最終更新日" v-if="isExist">
+      <el-form-item label="最終更新日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
+      </el-form-item>
+      <el-form-item label="登録者" v-if="isReadOnly">
+        <span class="form-item">{{createdBy}}</span>
+      </el-form-item>
+      <el-form-item label="最終更新者" v-if="isReadOnly">
+        <span class="form-item">{{updatedBy}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -222,6 +228,12 @@ export default {
     },
     updatedAt: {
       get() { return this.getter("UpdatedAt", true); },
+    },
+    createdBy: {
+      get() { return this.getter("CreatedBy", true); },
+    },
+    updatedBy: {
+      get() { return this.getter("UpdatedBy", true); },
     },
     //Editable value
     projectId: {

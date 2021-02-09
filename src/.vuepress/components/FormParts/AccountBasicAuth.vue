@@ -80,7 +80,7 @@ export default {
           this.$store.commit("setAuthProjectId", this.projectId);
         }
         const needAccountAuth = this.$store.getters.needAccountAuth(); 
-        if(needAccountAuth){
+        if(needProjectAuth || needAccountAuth){
           await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectId});
           this.$store.commit('setAuthAccountId', this.accountId);
         }

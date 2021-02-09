@@ -6,7 +6,7 @@
         v-if="!this.readOnly"
         type="textarea"
         :rows="2"
-        placeholder="連絡事項がある場合は、こちらにご記入ください。">
+        placeholder="連絡事項がある場合は、こちらにご記入ください">
       </el-input>
       <span class="form-item" v-else>{{note}}</span>
     </el-form-item>

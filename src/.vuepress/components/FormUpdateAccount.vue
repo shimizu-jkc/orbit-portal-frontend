@@ -1,14 +1,14 @@
 <template>
   <div id="FormUpdateAccount">
-    <el-row type="flex" justify="end">
-      <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
+    <info ref="info" operation="update" :id="id"/>
+    <el-row type="flex" justify="start">
       <el-button
         type="primary"
         :disabled="!isEdited"
         @click="onClickUpdate()"
       >{{isReapply ? "再申請する" : "適用する"}}</el-button>
+      <el-button type="primary" plain @click="onClickCancel()">キャンセル</el-button>
     </el-row>
-    <info ref="info" operation="update" :id="id"/>
     <loading :show="loading" message="更新中です"/>
     <notification ref="notification"/>
     <confirm

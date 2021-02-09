@@ -31,7 +31,7 @@
           v-model="env"
           v-if="isEditableAttr('Env')"
           @change="onEnvChanged"
-          placeholder="利用目的を選択してください。"
+          placeholder="利用目的を選択してください"
         >
          <el-option
             v-for="(item, index) in getDispNameSets('Env')"
@@ -142,6 +142,12 @@
       </el-form-item>
       <el-form-item label="最終更新日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
+      </el-form-item>
+      <el-form-item label="登録者" v-if="isReadOnly">
+        <span class="form-item">{{createdBy}}</span>
+      </el-form-item>
+      <el-form-item label="最終更新者" v-if="isReadOnly">
+        <span class="form-item">{{updatedBy}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -297,6 +303,12 @@ export default {
     },
     updatedAt: {
       get() { return this.getter("UpdatedAt", true); },
+    },
+    createdBy: {
+      get() { return this.getter("CreatedBy", true); },
+    },
+    updatedBy: {
+      get() { return this.getter("UpdatedBy", true); },
     },
     //Editable value
     env: {

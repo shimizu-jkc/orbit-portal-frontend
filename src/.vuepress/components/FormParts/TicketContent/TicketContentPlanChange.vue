@@ -62,7 +62,7 @@ export default {
       type: "REQ_SUPPORT_PLAN_CHANGE",
       rules: {
         ExpectedPlan: [
-          { required: true, message: "サポートプランは必須です" }
+          { required: true, message: "サポートプランは必須です。" }
         ],
         Note: [
           // no specific rules

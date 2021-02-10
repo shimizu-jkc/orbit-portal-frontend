@@ -121,7 +121,7 @@ export default {
       if(this.id.length > 0){
         const ticket = this.$store.getters.getTicketById(this.id);
         if(!ticket){
-          this.$router.push({ path: "get-tickets.html" });
+          //this.$router.push({ path: "get-tickets.html" });
           return this.$store.getters.getDummyTicket();
         }else{
           return ticket;
@@ -254,6 +254,13 @@ export default {
         });
       });
     }
+  },
+  created(){
+    // Return to the auth page when reloading
+    if(this.id && !this.$store.getters.getTicketById(this.id)){
+      this.$router.push({ path: "get-tickets.html" });
+      return;
+    };
   }
 }
 </script>

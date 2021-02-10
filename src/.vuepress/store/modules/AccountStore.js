@@ -50,7 +50,7 @@ const getters = {
   },
   isAccountDeleted: (state, getters) => (id) => {
     const account = getters.getAccountById(id);
-    return (account.Status === "WAITING_DELETE" || account.Status === "DELETE_START" || account.Status === "DELETE_COMPLETED");
+    return account && (account.Status === "WAITING_DELETE" || account.Status === "DELETE_START" || account.Status === "DELETE_COMPLETED");
   },
   isExistAccountUpdateCache: (state, getters) => (id) => {
     return (id === state.updateParams.AccountId) && getters.isAccountEdited(id);

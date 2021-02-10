@@ -9,7 +9,7 @@ export default class ApiBase {
       headers: {
         "Content-Type": "application/json",
         "x-api-key": env.API_KEY,
-        "Authorization": "Bearer " + this._getToken()
+        "Authorization": "Bearer " + (env.TOKEN || this._getToken())
       },
       responseType: "json"
     });

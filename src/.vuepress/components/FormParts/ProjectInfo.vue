@@ -178,7 +178,7 @@ export default {
       if(this.id.length > 0){
         const project = this.$store.getters.getProjectById(this.id);
         if(!project){
-          this.$router.push({ path: "get-project.html" });
+          //this.$router.push({ path: "get-project.html" });
           return this.$store.getters.getDummyProject();
         }else{
           return project;
@@ -366,6 +366,11 @@ export default {
     }
   },
   created(){
+    // Return to the auth page when reloading
+    if(this.id && !this.$store.getters.getProjectById(this.id)){
+      this.$router.push({ path: "get-project.html" });
+      return;
+    };
     // always clear upload list
     this.$store.commit("setProjectUploadList", []);
   }

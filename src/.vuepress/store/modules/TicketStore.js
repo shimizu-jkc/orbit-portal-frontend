@@ -56,7 +56,7 @@ const getters = {
   },
   isTicketDeleted: (state, getters) => (id) => {
     const ticket = getters.getTicketById(id);
-    return (ticket.Status === "CLOSED");
+    return ticket && (ticket.Status === "CLOSED");
   },
   isExistTicketUpdateCache: (state, getters) => (id) => {
     return (id === state.updateParams.TicketId) && getters.isTicketEdited(id);

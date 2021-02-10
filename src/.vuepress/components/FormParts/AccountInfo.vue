@@ -234,7 +234,7 @@ export default {
       if(this.id.length > 0){
         const account = this.$store.getters.getAccountById(this.id);
         if(!account){
-          this.$router.push({ path: "get-account.html" });
+          //this.$router.push({ path: "get-account.html" });
           return this.$store.getters.getDummyAccount();
         }else{
           return account;
@@ -471,6 +471,11 @@ export default {
     }
   },
   created(){
+    // Return to the auth page when reloading
+    if(this.id && !this.$store.getters.getAccountById(this.id)){
+      this.$router.push({ path: "get-account.html" });
+      return;
+    };
     // always clear upload list
     this.$store.commit("setAccountUploadList", []);
   }

@@ -1,7 +1,7 @@
 <template>
   <div id="AccountBasicAuth">
-    <el-form label-position="top" @submit.native.prevent>
-      <el-form-item label="プロジェクト名">
+    <el-form status-icon label-position="top" @submit.native.prevent>
+      <el-form-item :error="projectError" label="プロジェクト名" required>
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
@@ -12,7 +12,7 @@
           @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
-      <el-form-item label="クラウド環境ID">
+      <el-form-item :error="accountError" label="クラウド環境ID" required>
         <el-input 
           type="text"
           placeholder="クラウド環境のIDを入力してください"
@@ -66,8 +66,26 @@ export default {
     message(){
       return this.action + "中です";
     },
+    projectError(){
+      if(this.projectId === ""){
+        return "プロジェクト名を入力してください。";
+      }
+      if(!/^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/.test(this.projectId)){
+        return "不正な形式です。正しいプロジェクト名を入力してください。";
+      }
+      return "";
+    },
+    accountError(){
+      if(this.accountId === ""){
+        return "クラウド環境IDを入力してください。";
+      }
+      if(!/^[a-zA-Z0-9]{12}$/.test(this.accountId)){
+        return "不正な形式です。正しいクラウド環境IDを入力してください。";
+      }
+      return "";
+    },
     isValid(){
-      return (this.projectId !== "") && (this.accountId !== "");
+      return (this.projectError === "") && (this.accountError === "");
     }
   },
   methods: {

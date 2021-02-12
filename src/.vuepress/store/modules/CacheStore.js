@@ -7,6 +7,10 @@ const state = () => ({
   auth: {
     ProjectId: "",
     AccountId: ""
+  },
+  lastAuth: {
+    ProjectId: "",
+    AccountId: ""
   }
 });
 
@@ -17,6 +21,12 @@ const getters = {
   },
   needAccountAuth: (state) => () => {
     return (state.auth.AccountId.length === 0) || (state.tmp.AccountId !== state.auth.AccountId);
+  },
+  lastAuthProjectId: (state) => () => {
+    return state.lastAuth.ProjectId;
+  },
+  lastAuthAccountId: (state) => () => {
+    return state.lastAuth.AccountId;
   }
 };
 
@@ -33,17 +43,21 @@ const mutations = {
   },
   setAuthProjectId(state, val){
     state.auth.ProjectId = val ? val : "";
+    state.lastAuth.ProjectId = val ? val : "";
   },
   setAuthAccountId(state, val){
     state.auth.AccountId = val ? val : "";
+    state.lastAuth.AccountId = val ? val : "";
   },
   clearProjectCache(state){
     state.tmp.ProjectId = "";
     state.auth.ProjectId = "";
+    state.lastAuth.ProjectId = "";
   },
   clearAccountCache(state){
     state.tmp.AccountId = "";
     state.auth.AccountId = "";
+    state.lastAuth.AccountId = "";
   }
 };
 

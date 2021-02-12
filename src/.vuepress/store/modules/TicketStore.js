@@ -26,7 +26,7 @@ const schema = {
 
 // Initial state
 const state = () => ({
-  createParams: { ...schema },
+  createParams: JSON.parse(JSON.stringify(schema)),
   updateParams: {},
   results: [],
   result: {}
@@ -128,10 +128,10 @@ const mutations = {
     state.result = {};
   },
   clearTicketCreateParams(state){
-    state.createParams = { ...schema };
+    state.createParams = JSON.parse(JSON.stringify(schema));
   },
   clearTicketUpdateParams(state){
-    state.updateParams = { ...schema };
+    state.updateParams = JSON.parse(JSON.stringify(schema));
   }
 }
 

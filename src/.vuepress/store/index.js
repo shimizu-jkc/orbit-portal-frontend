@@ -25,7 +25,8 @@ export default (isServer) => {
         key: 'OrbitPortal',
         paths: ['p.createParams', 'p.updateParams',
                 'a.createParams', 'a.updateParams',
-                't.createParams', 't.updateParams'],
+                't.createParams', 't.updateParams',
+                'c.lastAuth'],
         storage: window.sessionStorage
       }),
       PersistedState({

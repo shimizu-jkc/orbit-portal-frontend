@@ -59,10 +59,15 @@ export default {
     async onClickGet() {
       this.loading = true;
       try{
+        const lastAuthProjectId = this.$store.getters.lastAuthProjectId();
         const needAuth = this.$store.getters.needProjectAuth(); 
         if(needAuth){
           await this.$store.dispatch("reqGetProject", {id: this.projectId});
           this.$store.commit("setAuthProjectId", this.projectId);
+        }
+        if(this.projectId !== lastAuthProjectId){
+          // disable account create cache
+          this.$store.commit("clearAccountCreateParams");
         }
         this.$emit("success", { projectId: this.projectId, changed: needAuth });
       }catch(e){

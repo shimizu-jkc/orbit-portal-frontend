@@ -74,6 +74,7 @@ export default {
     async onClickGet() {
       this.loading = true;
       try{
+        const lastAuthAccountId = this.$store.getters.lastAuthAccountId();
         const needProjectAuth = this.$store.getters.needProjectAuth(); 
         if(needProjectAuth){
           await this.$store.dispatch("reqGetProject", {id: this.projectId});
@@ -83,6 +84,10 @@ export default {
         if(needProjectAuth || needAccountAuth){
           await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectId});
           this.$store.commit('setAuthAccountId', this.accountId);
+        }
+        if(this.accountId !== lastAuthAccountId){
+          // disable ticket create cache
+          this.$store.commit("clearTicketCreateParams");
         }
         this.$emit("success", { 
           projectId: this.projectId, 

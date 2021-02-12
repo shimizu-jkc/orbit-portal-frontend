@@ -20,7 +20,7 @@ const schema = {
 
 // Initial state
 const state = () => ({
-  createParams: { ...schema },
+  createParams: JSON.parse(JSON.stringify(schema)),
   updateParams: {},
   uploadList: [],
   results: [],
@@ -142,10 +142,10 @@ const mutations = {
     state.result = {};
   },
   clearProjectCreateParams(state){
-    state.createParams = { ...schema };
+    state.createParams = JSON.parse(JSON.stringify(schema));
   },
   clearProjectUpdateParams(state){
-    state.updateParams = { ...schema };
+    state.updateParams = JSON.parse(JSON.stringify(schema));
   },
   setProjectFilesResult(state, {id, files}){
     const index = state.results.findIndex(r => r.ProjectId === id);

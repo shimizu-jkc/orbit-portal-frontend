@@ -22,7 +22,7 @@ const schema = {
 
 // Initial state
 const state = () => ({
-  createParams: { ...schema },
+  createParams: JSON.parse(JSON.stringify(schema)),
   updateParams: {},
   uploadList: [],
   results: [],
@@ -151,10 +151,10 @@ const mutations = {
     state.result = {};
   },
   clearAccountCreateParams(state){
-    state.createParams = { ...schema };
+    state.createParams = JSON.parse(JSON.stringify(schema));
   },
   clearAccountUpdateParams(state){
-    state.updateParams = { ...schema };
+    state.updateParams = JSON.parse(JSON.stringify(schema));
   },
   setAccountFilesResult(state, {id, files}){
     const index = state.results.findIndex(r => r.AccountId === id);

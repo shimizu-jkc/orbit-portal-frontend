@@ -26,7 +26,7 @@ export default (isServer) => {
         paths: ['p.createParams', 'p.updateParams',
                 'a.createParams', 'a.updateParams',
                 't.createParams', 't.updateParams',
-                'c.lastAuth'],
+                'c.authPersistent'],
         storage: window.sessionStorage
       }),
       PersistedState({

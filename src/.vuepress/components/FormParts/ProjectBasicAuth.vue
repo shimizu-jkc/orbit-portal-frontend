@@ -1,7 +1,7 @@
 <template>
   <div id="ProjectBasicAuth">
-    <el-form label-position="top" @submit.native.prevent>
-      <el-form-item label="プロジェクト名">
+    <el-form status-icon label-position="top" @submit.native.prevent>
+      <el-form-item :error="projectError" label="プロジェクト名">
         <el-input 
           type="text"
           placeholder="プロジェクトの名称を入力してください"
@@ -51,8 +51,17 @@ export default {
     message(){
       return this.action + "中です";
     },
+    projectError(){
+      if(this.projectId === ""){
+        return "プロジェクト名は必須です。";
+      }
+      if(!/^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/.test(this.projectId)){
+        return "不正な形式です。プロジェクト名は半角英数字とハイフンで構成されます。";
+      }
+      return "";
+    },
     isValid(){
-      return this.projectId !== "";
+      return this.projectError === "";
     }
   },
   methods: {

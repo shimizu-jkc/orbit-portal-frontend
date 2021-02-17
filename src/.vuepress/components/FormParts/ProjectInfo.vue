@@ -55,12 +55,12 @@
           <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item label="クラウド利用の予算(月額)" required>
+      <el-form-item label="クラウド利用の予算(月額)">
         <div id="EditableBudget" v-if="isEditableAttr('Budget')">
           <el-input-number 
             class="input-number"
             v-model="budget"
-            placeholder="予定している月毎のクラウド利用料金を入力してください"
+            placeholder="0"
             :step="10"
             :min="0" 
             :max="10000"
@@ -250,7 +250,7 @@ export default {
     },
     budget: {
       get() { return this.getter("Budget"); },
-      set(value){ this.setter({ name: "Budget", val: value }); }
+      set(value){ this.setter({ name: "Budget", val: value || 0 }); } // set 0 for empty
     },
     files: {
       get() { return this.getter("Files"); },
@@ -380,9 +380,6 @@ export default {
 <style>
 .el-select {
   width: 30%
-}
-.el-input-number {
-  width: 15%
 }
 .attention {
   margin-left: 1.5em;

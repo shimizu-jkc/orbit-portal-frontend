@@ -4,20 +4,27 @@
       <auth action="認証" @success="onEventSuccess($event)"/>
     </div>
     <div id="postAuth" v-else>
-      <el-form>
-        <el-form-item label="依頼する前の確認" required>
-          <el-col>
-            <el-checkbox 
-              label="作業の実施には、最大5営業日程度掛かることがあります。" 
-              v-model="agreements[0]"
-            ></el-checkbox>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <info ref="info" operation="create" id=""/>
-      <el-row type="flex" justify="start">
-        <el-button type="primary" @click="onClickCreate()">依頼する</el-button>
-      </el-row>
+      <div id="CreateTicketEnable" v-if="isCreateEnabled">
+        <el-form>
+          <el-form-item label="依頼する前の確認" required>
+            <el-col>
+              <el-checkbox
+                label="作業の実施には、最大5営業日程度掛かることがあります。"
+                v-model="agreements[0]"
+              ></el-checkbox>
+            </el-col>
+          </el-form-item>
+        </el-form>
+        <info ref="info" operation="create" id=""/>
+        <el-row type="flex" justify="start">
+          <el-button type="primary" @click="onClickCreate()">依頼する</el-button>
+        </el-row>
+      </div>
+      <div id="CreateTicketDisable" v-else>
+        <span>
+          現在、クラウド環境「{{accountId}}」は有効な状態でないため、作業の依頼を受け付けておりません。
+        </span>
+      </div>
     </div>
     <loading :show="loading.show" :message="loading.message"/>
     <notification ref="notification"/>
@@ -68,7 +75,11 @@ export default {
   },
   computed: {
     projectId(){ return this.$store.state.c.auth.ProjectId; }, 
-    accountId(){ return this.$store.state.c.auth.AccountId; } 
+    accountId(){ return this.$store.state.c.auth.AccountId; },
+    isCreateEnabled() {
+      const account = this.$store.getters.getAccountById(this.accountId);
+      return account && (account.Status === "AVAILABLE");
+    }
   },
   methods: {
     async onEventSuccess(event) {

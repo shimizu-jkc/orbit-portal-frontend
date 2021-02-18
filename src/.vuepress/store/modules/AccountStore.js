@@ -54,6 +54,9 @@ const getters = {
   },
   isExistAccountUpdateCache: (state, getters) => (id) => {
     return (id === state.updateParams.AccountId) && getters.isAccountEdited(id);
+  },
+  isExistUploadAccountFiles: (state) => () => {
+    return state.uploadList.length > 0;
   }
 };
 

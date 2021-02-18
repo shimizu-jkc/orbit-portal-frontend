@@ -10,7 +10,7 @@
       :rules="rules"
       :hide-required-asterisk="!isEditable"
     >
-      <el-form-item label="クラウド環境ID" v-show="isExist && !isTemporaryIdStatus">
+      <el-form-item label="クラウド環境ID" v-show="isExist">
         <span class="form-item">{{accountId}}</span>
       </el-form-item>
       <el-form-item label="プロジェクト名">
@@ -352,21 +352,6 @@ export default {
     },
     isPrd(){
       return this.env === "PRD";
-    },
-    isTemporaryIdStatus(){
-      switch(this.status){
-        case "WAITING_CONFIRM":
-        case "CONFIRM":
-        case "REJECT":
-        case "PREPARING":
-        case "CREATE_START":
-        case "CREATING":
-        case "CREATE_FAILED":
-        case "CREATE_COMPLETED":
-          return true;
-        default:
-          return false;
-      }
     },
     isEditableAttr(){
       return (target) => {

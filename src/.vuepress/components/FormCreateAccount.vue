@@ -158,11 +158,6 @@ export default {
             });
           }finally{
             this.loading.show = false;
-            await this.$refs.notification.notify({
-              status: "warning",
-              title: "申請内容の確認",
-              message: "こちらの内容で申請を受け付けました。控えが必要な場合、画面のスクリーンショットを保存してください。"
-            });
             this.$router.push({
               path: "show-account.html",
               query: { id: accountId, operation: "create" }

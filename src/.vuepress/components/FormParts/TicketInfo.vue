@@ -260,7 +260,12 @@ export default {
     if(this.id && !this.$store.getters.getTicketById(this.id)){
       this.$router.push({ path: "get-tickets.html" });
       return;
-    };
+    }
+    // Return to the auth page when query is empty
+    if(this.isExist && !this.id){
+      this.$router.push({ path: "get-tickets.html" });
+      return;
+    }
   }
 }
 </script>

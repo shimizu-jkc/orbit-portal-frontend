@@ -475,7 +475,12 @@ export default {
     if(this.id && !this.$store.getters.getAccountById(this.id)){
       this.$router.push({ path: "get-account.html" });
       return;
-    };
+    }
+    // Return to the auth page when query is empty
+    if(this.isExist && !this.id){
+      this.$router.push({ path: "get-account.html" });
+      return;
+    }
     // always clear upload list
     this.$store.commit("setAccountUploadList", []);
   }

@@ -370,7 +370,12 @@ export default {
     if(this.id && !this.$store.getters.getProjectById(this.id)){
       this.$router.push({ path: "get-project.html" });
       return;
-    };
+    }
+    // Return to the auth page when query is empty
+    if(this.isExist && !this.id){
+      this.$router.push({ path: "get-project.html" });
+      return;
+    }
     // always clear upload list
     this.$store.commit("setProjectUploadList", []);
   }

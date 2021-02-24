@@ -1,0 +1,39 @@
+name: PublishForGitHubPages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build & Publish OrbitUserManual
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+      - name: Build
+        run: |
+          npm install
+          npm run build
+      - name: Publish
+        uses: maxheld83/ghpages@v0.2.1
+        env:
+          BUILD_DIR: release
+          GH_PAT: ${{ secrets.GH_PAT }}
+      - name: Slack Notification Success
+        if: success()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "Orbit UserManual"
+          SLACK_TITLE: "Publish Success"
+          SLACK_MESSAGE: "https://orbit.jvckenwood-dev.com"
+          SLACK_WEBHOOK: ${{ secrets.ORBIT_DOC_SLACK_WEBHOOK }}
+      - name: Slack Notification Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "Orbit UserManual"
+          SLACK_TITLE: "Publish Failed"
+          SLACK_WEBHOOK: ${{ secrets.ORBIT_DOC_SLACK_WEBHOOK }}
+          SLACK_COLOR: "#FF0000"

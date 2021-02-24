@@ -1,8 +1,8 @@
-name: PublishToPrd
+name: PublishToStg
 on:
   push:
     branches:
-      - master
+      - stg
     paths-ignore:
       - "README.md"
       - "doc/*"
@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENV_PATH: "src/.vuepress/env.json"
-      BASE_URL: "https://api.orbit.jvckenwood.com/organization/v1"
-      DEPLOY_BUCKET_NAME: "orbit.jvckenwood.com"
-      API_KEY: ${{ secrets.API_KEY_PRD }}
+      BASE_URL: "https://api.stg.orbit.jvckenwood-dev.com/organization/v1"
+      DEPLOY_BUCKET_NAME: "stg.orbit.jvckenwood-dev.com"
+      API_KEY: ${{ secrets.API_KEY_STG }}
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_FOR_ORBIT_SS_PRD }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FOR_ORBIT_SS_PRD }}
-      SLACK_WEBHOOK_URL: ${{ secrets.ORBIT_CICD_SLACK_WEBHOOK }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_FOR_ORBIT_SS_STG }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FOR_ORBIT_SS_STG }}
+      SLACK_WEBHOOK_URL: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
       SLACK_ICON_URL: "https://avatars0.githubusercontent.com/u/44036562?s=100"
     steps:
       - uses: actions/checkout@v2

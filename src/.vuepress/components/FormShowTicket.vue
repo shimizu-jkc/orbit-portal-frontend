@@ -2,7 +2,7 @@
   <div id="FormShowTicket">
     <el-row type="flex" justify="end">
       <el-button type="primary" plain @click="onClickBack()">一覧に戻る</el-button>
-      <el-button type="primary" :disabled="isDeleted" @click="onClickEdit()" v-show="isShow">編集する</el-button>
+      <el-button type="primary" @click="onClickEdit()" v-show="isShow && isEditEnabled">編集する</el-button>
     </el-row>
     <info operation="show" :id="id"/>
   </div>
@@ -25,8 +25,9 @@ export default {
     };
   },
   computed: {
-    isDeleted() {
-      return this.$store.getters.isTicketDeleted(this.id);
+    isEditEnabled() {
+      const ticket = this.$store.getters.getTicketById(this.id);
+      return ticket && (ticket.Status !== "CLOSED");
     }
   },
   methods: {

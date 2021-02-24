@@ -76,6 +76,7 @@ export default {
       },
       agreements: [false, false, false],
       completeAuth: false,
+      targetAccountId: ""
     }
   },
   computed: {
@@ -116,22 +117,28 @@ export default {
     async onEventOk(event) {
       switch(event.id){
         case "CONFIRM_CREATE": {
-          let accountId;
+          const showInfoDialog = (accountId) => {
+            this.dialog.id = "INFO";
+            this.dialog.cancelable = false;
+            this.dialog.title = "クラウド環境の利用申請を受け付けました。";
+            this.dialog.message = "ただいま申請いただいた情報を確認しておりますので、しばらくお待ちください。\n\n" +  
+                                  "クラウド環境が利用できるまで、最大で5営業日程度掛かる場合がございます。\n" +
+                                  "利用が可能になりましたら、プロジェクトの代表者へ連絡いたします。\n\n" +
+                                  "その間、お問い合わせには以下の問い合わせ番号が必要になりますので、\nお控えいただくようお願いします。\n\n" +
+                                  `問い合わせ番号   ${accountId}`;
+            this.dialog.visible = true;
+          };
           this.loading.message = "申請中です";
           this.loading.show = true;
           try{
-            accountId = await this.$store.dispatch("reqCreateAccount", {projectId: this.projectId});
-            this.$store.commit("clearAccountCreateParams");
+            this.targetAccountId = await this.$store.dispatch("reqCreateAccount", {projectId: this.projectId});
+            /*
             await this.$refs.notification.notify({
               status: "success",
               title: this.$page.title,
               message: "クラウド環境の利用を申請しました。"
             });
-            await this.$refs.notification.notify({
-              status: "info",
-              title: "申請における注意事項",
-              message: "クラウド環境が利用できるまで、最大5営業日程度掛かる場合があります。\n利用可能になった際にはプロジェクトの代表者へ連絡しますので、しばらくの間お待ちください。"
-            });
+            */
           }catch(e){
             await this.$refs.notification.notify({
               status: "error",
@@ -143,26 +150,38 @@ export default {
             this.loading.show = false;
           }
           // file upload proccess
-          this.loading.message = "ファイルのアップロード中です";
-          this.loading.show = true;
-          try{
-            if(await this.$store.dispatch("reqUploadAccountFiles", {id: accountId, isCreate: true})){
-              // upload success
-              await this.$store.dispatch("reqUpdateAccountFiles", {id: accountId});
+          if(this.$store.getters.isExistUploadAccountFiles()){
+            this.loading.message = "ファイルのアップロード中です";
+            this.loading.show = true;
+            try{
+              await this.$store.dispatch("reqUploadAccountFiles", {id: this.targetAccountId, isCreate: true});
+              await this.$store.dispatch("reqUpdateAccountFiles", {id: this.targetAccountId});
+              showInfoDialog(this.targetAccountId);
+            }catch(e){
+              await this.$refs.notification.notify({
+                status: "warning",
+                title: this.$page.title,
+                message: "ファイルのアップロードに失敗しました。クラウド環境の編集画面から再アップロードしてください。"
+              });
+              this.$store.commit("clearAccountCreateParams");
+              this.$router.push({
+                path: "show-account.html",
+                query: { id: this.targetAccountId, operation: "create" }
+              });
+            }finally{
+              this.loading.show = false;
             }
-          }catch(e){
-            await this.$refs.notification.notify({
-              status: "warning",
-              title: this.$page.title,
-              message: "ファイルのアップロードに失敗しました。クラウド環境の編集画面から再アップロードしてください。"
-            });
-          }finally{
-            this.loading.show = false;
-            this.$router.push({
-              path: "show-account.html",
-              query: { id: accountId, operation: "create" }
-            });
+          }else{
+            showInfoDialog(this.targetAccountId);
           }
+          break;
+        }
+        case "INFO": {
+          this.$store.commit("clearAccountCreateParams");
+          this.$router.push({
+            path: "show-account.html",
+            query: { id: this.targetAccountId, operation: "create" }
+          });
           break;
         }
         case "ALERT":

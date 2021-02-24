@@ -1,0 +1,39 @@
+{
+  "name": "orbit-portal",
+  "version": "0.0.1",
+  "description": "User manual of orbit cloud platform.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src",
+    "ghpages": "echo orbit.jvckenwood-dev.com > release/CNAME && gh-pages -d release -m 'Auto publish book'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkc-cloud/orbit-doc-UserManual.git"
+  },
+  "keywords": [],
+  "author": "shimizu.yusuke53@jvckenwood.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jkc-cloud/orbit-doc-UserManual/issues"
+  },
+  "homepage": "https://jkc-cloud.github.io/orbit-doc-UserManual/",
+  "devDependencies": {
+    "gh-pages": "^2.2.0",
+    "vuepress": "^1.5.2"
+  },
+  "dependencies": {
+    "@vuepress/plugin-back-to-top": "^1.5.2",
+    "@vuepress/plugin-medium-zoom": "^1.5.2",
+    "axios": "^0.19.2",
+    "element-ui": "^2.13.2",
+    "file-saver": "^2.0.5",
+    "markdown-it-mark": "^3.0.0",
+    "vue-tabs-component": "^1.5.0",
+    "vuepress": "^1.5.2",
+    "vuepress-plugin-tabs": "^0.3.0",
+    "vuex": "^3.5.1",
+    "vuex-persistedstate": "^3.1.0"
+  }
+}

@@ -1,8 +1,8 @@
 <template>
   <div id="FormShowAccount">
     <el-row type="flex" justify="end">
-      <el-button type="danger" :disabled="isDeleted" @click="onClickDelete()" v-show="isDelete">削除する</el-button>
-      <el-button type="primary" :disabled="isDeleted" @click="onClickEdit()" v-show="isShow">編集する</el-button>
+      <el-button type="danger" :disabled="!isDeleteEnabled" @click="onClickDelete()" v-show="isDelete">削除する</el-button>
+      <el-button type="primary" @click="onClickEdit()" v-show="isShow && isEditEnabled">編集する</el-button>
     </el-row>
     <info operation="show" :id="id"/>
     <loading :show="loading" message="削除の申請中です"/>
@@ -50,8 +50,13 @@ export default {
     };
   },
   computed: {
-    isDeleted() {
-      return this.$store.getters.isAccountDeleted(this.id);
+    isEditEnabled() {
+      const account = this.$store.getters.getAccountById(this.id);
+      return account && (account.Status === "WAITING_CONFIRM" || account.Status === "REJECT" || account.Status === "AVAILABLE");
+    },
+    isDeleteEnabled() {
+      const account = this.$store.getters.getAccountById(this.id);
+      return account && !(account.Status === "WAITING_DELETE" || account.Status === "DELETE_START" || account.Status === "DELETE_COMPLETED");
     }
   },
   methods: {

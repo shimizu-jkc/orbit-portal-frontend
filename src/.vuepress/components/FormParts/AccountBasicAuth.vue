@@ -80,7 +80,7 @@ export default {
         return "クラウド環境IDは必須です。";
       }
       if(!/^[a-zA-Z0-9]{12}$/.test(this.accountId)){
-        return "不正な形式です。クラウド環境IDは半角数字12桁で構成されます。";
+        return "AWSアカウントのID(半角数字12桁)、もしくは問い合わせ番号(半角英数字12桁) が利用できます。";
       }
       return "";
     },

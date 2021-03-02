@@ -92,12 +92,17 @@ export default {
     async onClickGet() {
       this.loading = true;
       try{
-        const authPersistentAccountId = this.$store.getters.authPersistentAccountId();
+        const authPersistentProjectId = this.$store.getters.authPersistentProjectId();
         const needProjectAuth = this.$store.getters.needProjectAuth(); 
         if(needProjectAuth){
           await this.$store.dispatch("reqGetProject", {id: this.projectId});
           this.$store.commit("setAuthProjectId", this.projectId);
         }
+        if(this.projectId !== authPersistentProjectId){
+          // disable account create cache
+          this.$store.commit("clearAccountCreateParams");
+        }
+        const authPersistentAccountId = this.$store.getters.authPersistentAccountId();
         const needAccountAuth = this.$store.getters.needAccountAuth(); 
         if(needProjectAuth || needAccountAuth){
           await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectId});

@@ -9,6 +9,7 @@
           minlength=1
           maxlength=20
           show-word-limit
+          @input="onInputProjectId"
           @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
@@ -25,6 +26,7 @@
 <script>
 import Loading from '../common/Loading.vue'
 import Notification from '../common/Notification.vue'
+import Validate from '../../mixins/validate'
 
 export default {
   name: "ProjectBasicAuth",
@@ -32,6 +34,7 @@ export default {
     loading: Loading,
     notification: Notification
   },
+  mixins: [Validate],
   props: {
     action: {
       type: String,
@@ -40,7 +43,8 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      projectError: ""
     };
   },
   computed: {
@@ -51,17 +55,8 @@ export default {
     message(){
       return this.action + "中です";
     },
-    projectError(){
-      if(this.projectId === ""){
-        return "プロジェクト名は必須です。";
-      }
-      if(!/^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/.test(this.projectId)){
-        return "不正な形式です。プロジェクト名は半角英数字とハイフンで構成されます。";
-      }
-      return "";
-    },
     isValid(){
-      return this.projectError === "";
+      return this.validateAuthProjectId(this.projectId) === "";
     }
   },
   methods: {
@@ -90,6 +85,9 @@ export default {
       }finally{
         this.loading = false;
       }
+    },
+    async onInputProjectId(val) {
+      this.projectError = this.validateAuthProjectId(val);
     }
   }
 }

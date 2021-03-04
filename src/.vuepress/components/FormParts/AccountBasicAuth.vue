@@ -9,6 +9,7 @@
           minlength=1
           maxlength=20
           show-word-limit
+          @input="onInputProjectId"
           @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
@@ -20,6 +21,7 @@
           minlength=12
           maxlength=12
           show-word-limit
+          @input="onInputAccountId"
           @keypress.enter.native="isValid && onClickGet()"
         ></el-input>
       </el-form-item>
@@ -36,6 +38,7 @@
 <script>
 import Loading from '../common/Loading.vue'
 import Notification from '../common/Notification.vue'
+import Validate from '../../mixins/validate'
 
 export default {
   name: "AccountBasicAuth",
@@ -43,6 +46,7 @@ export default {
     loading: Loading,
     notification: Notification
   },
+  mixins: [Validate],
   props: {
     action: {
       type: String,
@@ -51,7 +55,9 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      projectError: "",
+      accountError: ""
     };
   },
   computed: {
@@ -66,38 +72,25 @@ export default {
     message(){
       return this.action + "中です";
     },
-    projectError(){
-      if(this.projectId === ""){
-        return "プロジェクト名は必須です。";
-      }
-      if(!/^[a-zA-Z0-9][a-zA-Z0-9\-]{0,19}$/.test(this.projectId)){
-        return "不正な形式です。プロジェクト名は半角英数字とハイフンで構成されます。";
-      }
-      return "";
-    },
-    accountError(){
-      if(this.accountId === ""){
-        return "クラウド環境IDは必須です。";
-      }
-      if(!/^[a-zA-Z0-9]{12}$/.test(this.accountId)){
-        return "不正な形式です。クラウド環境IDは半角数字12桁で構成されます。";
-      }
-      return "";
-    },
     isValid(){
-      return (this.projectError === "") && (this.accountError === "");
+      return (this.validateAuthProjectId(this.projectId) === "") && (this.validateAuthAccountId(this.accountId) === "");
     }
   },
   methods: {
     async onClickGet() {
       this.loading = true;
       try{
-        const authPersistentAccountId = this.$store.getters.authPersistentAccountId();
+        const authPersistentProjectId = this.$store.getters.authPersistentProjectId();
         const needProjectAuth = this.$store.getters.needProjectAuth(); 
         if(needProjectAuth){
           await this.$store.dispatch("reqGetProject", {id: this.projectId});
           this.$store.commit("setAuthProjectId", this.projectId);
         }
+        if(this.projectId !== authPersistentProjectId){
+          // disable account create cache
+          this.$store.commit("clearAccountCreateParams");
+        }
+        const authPersistentAccountId = this.$store.getters.authPersistentAccountId();
         const needAccountAuth = this.$store.getters.needAccountAuth(); 
         if(needProjectAuth || needAccountAuth){
           await this.$store.dispatch("reqGetAccount", {id: this.accountId, projectId: this.projectId});
@@ -124,6 +117,12 @@ export default {
       }finally{
         this.loading = false;
       }
+    },
+    async onInputProjectId(val) {
+      this.projectError = this.validateAuthProjectId(val);
+    },
+    async onInputAccountId(val) {
+      this.accountError = this.validateAuthAccountId(val);
     }
   }
 }

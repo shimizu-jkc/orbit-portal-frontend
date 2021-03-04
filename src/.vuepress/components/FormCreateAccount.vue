@@ -120,11 +120,11 @@ export default {
           const showInfoDialog = (accountId) => {
             this.dialog.id = "INFO";
             this.dialog.cancelable = false;
-            this.dialog.title = "クラウド環境の利用申請を受け付けました。";
+            this.dialog.title = "クラウド環境の利用申請を受け付けました";
             this.dialog.message = "ただいま申請いただいた情報を確認しておりますので、しばらくお待ちください。\n\n" +  
-                                  "クラウド環境が利用できるまで、最大で5営業日程度掛かる場合がございます。\n" +
+                                  "クラウド環境が利用できるまで、最大で5営業日程度掛かる場合があります。\n" +
                                   "利用が可能になりましたら、プロジェクトの代表者へ連絡いたします。\n\n" +
-                                  "その間、お問い合わせには以下の問い合わせ番号が必要になりますので、\nお控えいただくようお願いします。\n\n" +
+                                  "その間、お問い合わせには以下の問い合わせ番号が必要になりますので、お控えいただくようお願いします。\n\n" +
                                   `問い合わせ番号   ${accountId}`;
             this.dialog.visible = true;
           };

@@ -45,7 +45,7 @@
           <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
         </span>
       </el-form-item>
-      <el-form-item v-if="isPrd" :error="fileError" label="申請ファイル">
+      <el-form-item v-show="isPrd" :error="fileError" label="申請ファイル">
         <files
           class="form-item"
           v-if="isExist"
@@ -113,7 +113,7 @@
           {{billingProjectSubCode}}
         </span>
       </el-form-item>
-      <el-form-item v-if="isPrd" label="実運用予定日" prop="StartOperationDate">
+      <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
         <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
           <el-date-picker
             v-model="operationDate"
@@ -360,30 +360,30 @@ export default {
             switch(target){
               case "page":
               case "Env":
-              case "Files":
               case "BillingOWDepartmentCode":
               case "BillingOWUsageCode":
               case "BillingProjectCode":
               case "BillingProjectSubCode":
+              case "MemberRoles": return true;
+              case "Files":
               case "OperationDate":
               case "StartOperationDate":
-              case "ExpireOperationDate":
-              case "MemberRoles": return true;
+              case "ExpireOperationDate": return this.isPrd;
               default: return false;
             }
           }
           case "update": {
             switch(target){
               //case "page":
-              case "Files":
               case "BillingOWDepartmentCode":
               case "BillingOWUsageCode":
               case "BillingProjectCode":
               case "BillingProjectSubCode":
+              case "MemberRoles": return true;
+              case "Files":
               case "OperationDate":
               case "StartOperationDate":
-              case "ExpireOperationDate":
-              case "MemberRoles": return true;
+              case "ExpireOperationDate": return this.isPrd;
               default: return false;
             }
           }

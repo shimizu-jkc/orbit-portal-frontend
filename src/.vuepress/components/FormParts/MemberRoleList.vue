@@ -5,7 +5,13 @@
         <span class="role-header">
           <el-col :span="6">名前</el-col>
           <el-col :span="9">Eメールアドレス</el-col>
-          <el-col :span="8">役割</el-col>
+          <el-col :span="8">役割
+            <hint>
+              役割の詳細は
+              <el-link type="primary" href="/guide/aws/service/id-management.html#役割の一覧" target="_blank">こちら</el-link>
+              を参照してください。
+            </hint>
+          </el-col>
         </span>
       </el-row>
       <role
@@ -42,12 +48,14 @@
 
 <script>
 import MemberRoleItem from './MemberRoleItem';
+import ItemHint from './ItemHint';
 import Disp from "../../mixins/disp";
 
 export default {
   name : "MemberRoleList",
   components: {
-    role: MemberRoleItem
+    role: MemberRoleItem,
+    hint: ItemHint
   },
   mixins: [Disp],
   props: {

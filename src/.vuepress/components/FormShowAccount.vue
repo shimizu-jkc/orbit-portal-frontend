@@ -75,7 +75,9 @@ export default {
       this.dialog.id = "CONFIRM_DELETE";
       this.dialog.cancelable = true;
       this.dialog.title = "削除申請の確認";
-      this.dialog.message ="本当にクラウド環境の削除を申請してもよろしいですか？";
+      this.dialog.message = "本当にクラウド環境の削除を申請してもよろしいですか？\n\n" +
+                            "申請をしたとしても、すぐにクラウド環境が削除される訳ではありません。\n" +
+                            "削除の実行については、あらためて責任者の方へ確認させていただきます。";
       this.dialog.visible = true;
     },
     async onEventOk(event) {
@@ -84,17 +86,14 @@ export default {
           this.loading = true;
           try{
             await this.$store.dispatch("reqDeleteAccount", { id: this.id });
-            await this.$refs.notification.notify({
-              status: "success",
-              title: this.$page.title,
-              message: "クラウド環境の削除を申請しました。"
-            });
-            await this.$refs.notification.notify({
-              status: "info",
-              title: "申請における注意事項",
-              message: "クラウド環境の削除について、クラウド環境責任者へ確認します。\n削除までしばらくお待ちください。"
-            });
-            this.$router.push({ path: "get-account.html" });
+            this.dialog.id = "INFO";
+            this.dialog.cancelable = false;
+            this.dialog.title = "クラウド環境の削除申請を受け付けました";
+            this.dialog.message = "ただいま申請いただいた情報を確認しております。\n\n" +
+                                  "クラウド環境の削除にはいくつかの注意事項があります。\n" +
+                                  "また、削除の実行には責任者の同意が必要となります。\n\n" + 
+                                  "あらためて確認の連絡をさせていただきますので、しばらくお待ちください。";
+            this.dialog.visible = true;
           }catch(e){
             await this.$refs.notification.notify({
               status: "error",
@@ -104,6 +103,11 @@ export default {
           }finally{
             this.loading = false;
           }
+          break;
+        }
+        case "INFO": {
+          this.$router.push({ path: "delete-account.html" });
+          break;
         }
         default: break;
       }

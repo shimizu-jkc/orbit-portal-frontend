@@ -48,7 +48,7 @@
 
 <script>
 import MemberRoleItem from './MemberRoleItem';
-import ItemHint from './ItemHint';
+import ItemHint from '../common/ItemHint';
 import Disp from "../../mixins/disp";
 
 export default {

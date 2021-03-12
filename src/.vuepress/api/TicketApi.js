@@ -31,7 +31,7 @@ export default class TicketApi extends ApiBase {
 
   _formatParam(param, isCreate=false){
     const createOnly = isCreate ? [] : [];
-    const editable =  ["TicketEmail", "Type", "Content"];
+    const editable =  ["TicketEmail", "Status", "Type", "Content"];
     let body = {};
 
     editable.concat(createOnly).forEach(a => {

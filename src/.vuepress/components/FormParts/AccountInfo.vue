@@ -343,7 +343,8 @@ export default {
       },
       set(value){
         this.setter({ name: "StartOperationDate", val: this.DateToEpochSec(value ? value[0] : 0) });
-        this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(value ? value[1] : 0) });
+        this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(
+          value ? this.getLastTimeOfDay(value[1]) : 0) });
       }
     },
     uploadList: {

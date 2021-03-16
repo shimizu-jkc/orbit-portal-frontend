@@ -77,7 +77,7 @@ export default {
       this.dialog.title = "削除申請の確認";
       this.dialog.message = "本当にクラウド環境の削除を申請してもよろしいですか？\n\n" +
                             "申請をしたとしても、すぐにクラウド環境が削除される訳ではありません。\n" +
-                            "削除の実行については、あらためて責任者の方へ確認させていただきます。";
+                            "削除の実施については、あらためて責任者の方へ確認させていただきます。";
       this.dialog.visible = true;
     },
     async onEventOk(event) {
@@ -91,8 +91,8 @@ export default {
             this.dialog.title = "クラウド環境の削除申請を受け付けました";
             this.dialog.message = "ただいま申請いただいた情報を確認しております。\n\n" +
                                   "クラウド環境の削除にはいくつかの注意事項があります。\n" +
-                                  "また、削除の実行には責任者の同意が必要となります。\n\n" + 
-                                  "あらためて確認の連絡をさせていただきますので、しばらくお待ちください。";
+                                  "また、削除の実施には責任者の同意が必要となります。\n\n" +
+                                  "あらためて連絡をさせていただきますので、しばらくお待ちください。";
             this.dialog.visible = true;
           }catch(e){
             await this.$refs.notification.notify({

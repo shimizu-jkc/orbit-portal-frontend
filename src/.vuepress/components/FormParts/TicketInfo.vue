@@ -255,7 +255,7 @@ export default {
       });
     }
   },
-  created(){
+  mounted(){
     // Return to the auth page when reloading
     if(this.id && !this.$store.getters.getTicketById(this.id)){
       this.$router.push({ path: "get-tickets.html" });

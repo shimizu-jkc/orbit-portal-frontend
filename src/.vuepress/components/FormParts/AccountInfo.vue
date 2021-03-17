@@ -471,7 +471,7 @@ export default {
       }
     }
   },
-  created(){
+  mounted(){
     // Return to the auth page when reloading
     if(this.id && !this.$store.getters.getAccountById(this.id)){
       this.$router.push({ path: "get-account.html" });

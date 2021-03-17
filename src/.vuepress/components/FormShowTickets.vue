@@ -12,7 +12,7 @@ export default {
   components: {
     list: TicketList
   },
-  created(){
+  mounted(){
     // check auth for reload
     const needProjectAuth = this.$store.getters.needProjectAuth();
     const needAccountAuth = this.$store.getters.needAccountAuth();

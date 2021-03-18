@@ -365,7 +365,7 @@ export default {
       }
     }
   },
-  created(){
+  mounted(){
     // Return to the auth page when reloading
     if(this.id && !this.$store.getters.getProjectById(this.id)){
       this.$router.push({ path: "get-project.html" });

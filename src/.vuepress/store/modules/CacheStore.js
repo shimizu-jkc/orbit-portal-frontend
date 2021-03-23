@@ -1,8 +1,8 @@
 // Initial state
 const state = () => ({
   tmp: {
-    ProjectId: "Orbit",
-    AccountId: "g10ebtcyejef"
+    ProjectId: "",
+    AccountId: ""
   },
   auth: {
     ProjectId: "",

@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - draft
+      - test-deploy
     paths-ignore:
       - "README.md"
       - "doc/*"

@@ -65,52 +65,20 @@
           :on-error="onFileError"
         ></upload>
       </el-form-item>
-      <el-form-item label="OW部門コード" prop="BillingOWDepartmentCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるOneWorldの部門コードを入力してください"
-          v-model="billingOWDepartmentCode"
-          v-if="isEditableAttr('BillingOWDepartmentCode')"
-          maxlength=7
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingOWDepartmentCode}}
+      <el-form-item prop="BillingAFFCode">
+        <span slot="label">AFFコード
+          <hint v-show="isEditable">AFF(会計フレックスフィールド)コードは10個のコードをドットでつないだ文字列です。</hint>
         </span>
-      </el-form-item>
-      <el-form-item label="OW科目コード" prop="BillingOWUsageCode">
         <el-input 
           type="text"
-          placeholder="利用料金の配賦先となるOneWorldの科目コードを入力してください"
-          v-model="billingOWUsageCode"
-          v-if="isEditableAttr('BillingOWUsageCode')"
-          maxlength=10
+          placeholder="利用料金の配賦先となる会計フレックスフィールドコードを入力してください"
+          v-model="billingAFFCode"
+          v-if="isEditableAttr('BillingAFFCode')"
+          minlength=35
+          maxlength=100
         ></el-input>
         <span class="form-item" v-else>
-          {{billingOWUsageCode}}
-        </span>
-      </el-form-item>
-      <el-form-item label="プロジェクトコード" prop="BillingProjectCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるプロジェクトコードを入力してください"
-          v-model="billingProjectCode"
-          v-if="isEditableAttr('BillingProjectCode')"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingProjectCode}}
-        </span>
-      </el-form-item>
-      <el-form-item label="プロジェクトサブコード" prop="BillingProjectSubCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるプロジェクトサブコードを入力してください"
-          v-model="billingProjectSubCode"
-          v-if="isEditableAttr('BillingProjectSubCode')"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingProjectSubCode}}
+          {{billingAFFCode}}
         </span>
       </el-form-item>
       <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
@@ -158,6 +126,7 @@
 import MemberRoleList from './MemberRoleList';
 import FileUpload from './FileUpload';
 import FileList from './FileList';
+import ItemHint from '../common/ItemHint';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
 import AccountApi from "../../api/AccountApi"
@@ -168,7 +137,8 @@ export default {
   components : {
     roles: MemberRoleList,
     upload: FileUpload,
-    files: FileList
+    files: FileList,
+    hint: ItemHint
   },
   mixins: [Util, Disp],
   props: {
@@ -203,21 +173,10 @@ export default {
         Env: [
           { required: true, message: "利用目的は必須です。" }
         ],
-        BillingOWDepartmentCode: [
-          { required: true, message: "OW部門コードは必須です。", trigger: "blur" },
-          { pattern: /^[0-9]{7}$/, 
-            message: "OW部門コードは7桁の数字を入力してください。", trigger: "blur" }
-        ],
-        BillingOWUsageCode: [
-          { required: true, message: "OW科目コードは必須です。", trigger: "blur" },
-          { pattern: /^[0-9]{5}(?:-[0-9]{4})?$/, 
-            message: "OW科目コードは5桁または5桁-4桁の数字を入力してください。", trigger: "blur" }
-        ],
-        BillingProjectCode: [
-          // no specific rules
-        ],
-        BillingProjectSubCode: [
-          // no specific rules
+        BillingAFFCode: [
+          { required: true, message: "AFFコードは必須です。", trigger: "blur" },
+          { pattern: /^\d{4}\.\d{6}\.\w{4}\.\w{5}\.\d{3}\.\d{7}\.\w{6}\..+$/, 
+            message: "AFFコードが不正な形式です。", trigger: "blur" }
         ],
         StartOperationDate: [
           { required: true, type:"number", min: 1, message: "実運用予定日は必須です。" }
@@ -319,21 +278,9 @@ export default {
       get() { return this.getter("Files"); },
       set(value){ this.setter({ name: "Files", val: value }); }      
     },
-    billingOWDepartmentCode: {
-      get() { return this.getter("BillingOWDepartmentCode"); },
-      set(value){ this.setter({ name: "BillingOWDepartmentCode", val: value }); }
-    },
-    billingOWUsageCode: {
-      get() { return this.getter("BillingOWUsageCode"); },
-      set(value){ this.setter({ name: "BillingOWUsageCode", val: value }); }
-    },
-    billingProjectCode: {
-      get() { return this.getter("BillingProjectCode"); },
-      set(value){ this.setter({ name: "BillingProjectCode", val: value }); }
-    },
-    billingProjectSubCode: {
-      get() { return this.getter("BillingProjectSubCode"); },
-      set(value){ this.setter({ name: "BillingProjectSubCode", val: value }); }
+    billingAFFCode: {
+      get() { return this.getter("BillingAFFCode"); },
+      set(value){ this.setter({ name: "BillingAFFCode", val: value }); }
     },
     operationDate: {
       get(){
@@ -361,10 +308,7 @@ export default {
             switch(target){
               case "page":
               case "Env":
-              case "BillingOWDepartmentCode":
-              case "BillingOWUsageCode":
-              case "BillingProjectCode":
-              case "BillingProjectSubCode":
+              case "BillingAFFCode":
               case "MemberRoles": return true;
               case "Files":
               case "OperationDate":
@@ -376,10 +320,7 @@ export default {
           case "update": {
             switch(target){
               //case "page":
-              case "BillingOWDepartmentCode":
-              case "BillingOWUsageCode":
-              case "BillingProjectCode":
-              case "BillingProjectSubCode":
+              case "BillingAFFCode":
               case "MemberRoles": return true;
               case "Files":
               case "OperationDate":

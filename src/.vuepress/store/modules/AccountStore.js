@@ -3,10 +3,7 @@ import AccountApi from '../../api/AccountApi'
 // parameter schema
 const schema = {
   Env: "",
-  BillingOWDepartmentCode: "0000000", //for test
-  BillingOWUsageCode: "11111-2222", //for test
-  BillingProjectCode: "",
-  BillingProjectSubCode: "",
+  BillingAFFCode: "1000.100600.0000.OT001.000.6510210.000000.0000000000.0.0", //for test
   Files: [],
   StartOperationDate: 0,
   ExpireOperationDate: 0,

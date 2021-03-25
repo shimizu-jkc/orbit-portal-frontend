@@ -13,6 +13,7 @@
       <el-form-item label="プロジェクト名" prop="ProjectId">
         <el-input 
           type="text"
+          class="width-50"
           placeholder="プロジェクトの名称を入力してください"
           v-model="projectId"
           v-if="isEditableAttr('ProjectId')"
@@ -28,6 +29,7 @@
       <el-form-item label="代表者Eメールアドレス" prop="ProjectEmail">
         <el-input 
           type="text"
+          class="width-75"
           v-if="isEditableAttr('ProjectEmail')"
           placeholder="プロジェクト代表者のEメールアドレスを入力してください"
           v-model="projectEmail"

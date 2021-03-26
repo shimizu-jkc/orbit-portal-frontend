@@ -77,6 +77,13 @@ const actions = {
     const ticket = getters.getTicketById(id);
     const result = await (new TicketApi(ticket.OwnerProjectId, ticket.OwnerAccountId)).updateTicket(id, state.updateParams);
     commit("setTicketResult", result);
+  },
+  async reqCloseTicket({commit, state, getters}, {id}) {
+    const ticket = getters.getTicketById(id);
+    const result = await (new TicketApi(ticket.OwnerProjectId, ticket.OwnerAccountId)).updateTicket(id, {
+      Status: "CLOSED"
+    });
+    commit("setTicketResult", result);
   }
 };
 

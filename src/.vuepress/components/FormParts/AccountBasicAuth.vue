@@ -4,6 +4,7 @@
       <el-form-item :error="projectError" label="プロジェクト名">
         <el-input 
           type="text"
+          class="form-item-short"
           placeholder="プロジェクトの名称を入力してください"
           v-model="projectId"
           minlength=1
@@ -16,6 +17,7 @@
       <el-form-item :error="accountError" label="クラウド環境ID">
         <el-input 
           type="text"
+          class="form-item-short"
           placeholder="クラウド環境のIDを入力してください"
           v-model="accountId"
           minlength=12

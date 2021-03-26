@@ -1,8 +1,10 @@
+import env from "../../env.json";
+
 // Initial state
 const state = () => ({
   tmp: {
-    ProjectId: "Orbit",
-    AccountId: "g10ebtcyejef"
+    ProjectId: (env.ENV === "dev") ? "Orbit" : "",
+    AccountId: (env.ENV === "dev") ? "259121556800" : ""
   },
   auth: {
     ProjectId: "",

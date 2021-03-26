@@ -27,21 +27,19 @@
       </template>
     </Sidebar>
 
-    <ClientOnly>
-      <Home v-if="$page.frontmatter.home" />
+    <Home v-if="$page.frontmatter.home" />
 
-      <Page
-        v-else
-        :sidebar-items="sidebarItems"
-      >
-        <template #top>
-          <slot name="page-top" />
-        </template>
-        <template #bottom>
-          <slot name="page-bottom" />
-        </template>
-      </Page>
-    </ClientOnly>
+    <Page
+      v-else
+      :sidebar-items="sidebarItems"
+    >
+      <template #top>
+        <slot name="page-top" />
+      </template>
+      <template #bottom>
+        <slot name="page-bottom" />
+      </template>
+    </Page>
   </div>
 </template>
 

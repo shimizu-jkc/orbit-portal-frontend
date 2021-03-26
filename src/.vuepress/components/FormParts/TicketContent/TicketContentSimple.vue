@@ -1,14 +1,16 @@
 <template>
   <div id="TicketContentSimple">
     <el-form-item label="備考">
-      <el-input
-        v-model="note"
-        v-if="!this.readOnly"
-        type="textarea"
-        :rows="2"
-        placeholder="連絡事項がある場合は、こちらにご記入ください">
-      </el-input>
-      <span class="form-item" v-else>{{note}}</span>
+      <div class="form-item">
+        <el-input
+          v-model="note"
+          v-if="!this.readOnly"
+          type="textarea"
+          :rows="2"
+          placeholder="連絡事項がある場合は、こちらにご記入ください">
+        </el-input>
+        <span v-else>{{note}}</span>
+      </div>
     </el-form-item>
   </div>
 </template>

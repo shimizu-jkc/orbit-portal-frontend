@@ -4,6 +4,7 @@
       <el-form-item :error="projectError" label="プロジェクト名">
         <el-input 
           type="text"
+          class="form-item-short"
           placeholder="プロジェクトの名称を入力してください"
           v-model="projectId"
           minlength=1

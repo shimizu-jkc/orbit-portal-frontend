@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - draft
+      - test-deploy
     paths-ignore:
       - "README.md"
       - "doc/*"
@@ -11,6 +12,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     env:
+      ENV: "dev"
       ENV_PATH: "src/.vuepress/env.json"
       BASE_URL: "https://api.orbit.jvckenwood-dev.com/organization/v1"
       DEPLOY_BUCKET_NAME: "orbit.jvckenwood-dev.com"
@@ -34,6 +36,7 @@ jobs:
         uses: schdck/create-env-json@v1
         with:
           file-name: ${{ env.ENV_PATH }}
+          ENV: ${{ env.ENV }}
           BASE_URL: ${{ env.BASE_URL }}
           API_KEY:  ${{ env.API_KEY }}
       - name: Build

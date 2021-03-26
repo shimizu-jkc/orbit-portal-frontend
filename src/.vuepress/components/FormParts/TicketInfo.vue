@@ -20,35 +20,41 @@
         <span class="form-item">{{accountId}}</span>
       </el-form-item>
       <el-form-item label="連絡先Eメールアドレス" prop="TicketEmail">
-        <el-input 
-          type="text"
-          v-if="isEditableAttr('TicketEmail')"
-          placeholder="作業の連絡先となるEメールアドレスを入力してください"
-          v-model="email"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>{{email}}</span>
+        <div class="form-item">
+          <el-input 
+            type="text"
+            class="form-item-medium"
+            v-if="isEditableAttr('TicketEmail')"
+            placeholder="作業の連絡先となるEメールアドレスを入力してください"
+            v-model="email"
+            maxlength=254
+          ></el-input>
+          <span v-else>{{email}}</span>
+        </div>
       </el-form-item>
       <el-form-item label="ステータス" v-if="isExist">
         <span class="form-item">{{getDispName("TicketStatus", status)}}</span>
       </el-form-item>
       <el-form-item label="作業種別" prop="Type">
-        <el-select 
-          v-model="type" 
-          v-if="isEditableAttr('Type')"
-          placeholder="依頼する作業の種別を選択してください"
-        >
-          <el-option
-            v-for="(item, index) in getDispNameSets('TicketType')"
-            :key="index"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <span class="form-item" v-else>
-          {{getDispName("TicketType", type)}}
-          <span class="attention" v-show="isUpdate">※作業種別は変更できません</span>
-        </span>
+        <div class="form-item">
+          <el-select
+            class="form-item-vshort"
+            v-model="type" 
+            v-if="isEditableAttr('Type')"
+            placeholder="依頼する作業の種別を選択してください"
+          >
+            <el-option
+              v-for="(item, index) in getDispNameSets('TicketType')"
+              :key="index"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span v-else>
+            {{getDispName("TicketType", type)}}
+            <span class="attention" v-show="isUpdate">※作業種別は変更できません</span>
+          </span>
+        </div>
       </el-form-item>
       <div id="TicketContent">
         <simple v-if="isShowContent('REQ_CF_KEYPAIR')" type="REQ_CF_KEYPAIR" :readOnly="isReadOnly" :id="id"/>
@@ -63,10 +69,10 @@
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <el-form-item label="登録者" v-if="isReadOnly">
-        <span class="form-item">{{createdBy}}</span>
+        <span class="form-item">{{wrapAdmin(createdBy)}}</span>
       </el-form-item>
       <el-form-item label="最終更新者" v-if="isReadOnly">
-        <span class="form-item">{{updatedBy}}</span>
+        <span class="form-item">{{wrapAdmin(updatedBy)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -255,7 +261,7 @@ export default {
       });
     }
   },
-  created(){
+  mounted(){
     // Return to the auth page when reloading
     if(this.id && !this.$store.getters.getTicketById(this.id)){
       this.$router.push({ path: "get-tickets.html" });
@@ -271,17 +277,4 @@ export default {
 </script>
 
 <style scoped>
-</style>
-<style>
-.el-select {
-  width: 35%
-}
-.attention {
-  margin-left: 1.5em;
-  font-size: 80%;
-  color: red;
-}
-.form-item {
-  padding: 0 16px;
-}
 </style>

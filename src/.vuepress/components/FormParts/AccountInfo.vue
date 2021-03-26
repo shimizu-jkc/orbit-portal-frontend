@@ -26,110 +26,84 @@
         <span class="form-item">{{getDispName("AccountStatus", status)}}</span>
       </el-form-item>
       <el-form-item label="利用目的" prop="Env">
-        <el-select 
-          class="select-env"
-          v-model="env"
-          v-if="isEditableAttr('Env')"
-          @change="onEnvChanged"
-          placeholder="利用目的を選択してください"
-        >
-         <el-option
-            v-for="(item, index) in getDispNameSets('Env')"
-            :key="index"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select> 
-        <span class="form-item" v-else>
-          {{getDispName("Env", env)}}
-          <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
-        </span>
-      </el-form-item>
+        <div class="form-item">
+          <el-select 
+            class="form-item-vshort"
+            v-model="env"
+            v-if="isEditableAttr('Env')"
+            @change="onEnvChanged"
+            placeholder="利用目的を選択してください"
+          >
+            <el-option
+                v-for="(item, index) in getDispNameSets('Env')"
+                :key="index"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select> 
+            <span v-else>
+              {{getDispName("Env", env)}}
+              <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
+            </span>
+          </div>
+        </el-form-item>
       <el-form-item v-show="isPrd" :error="fileError" label="申請ファイル">
-        <files
-          class="form-item"
-          v-if="isExist"
-          v-model="files"
-          clickable
-          :deletable="!isReadOnly"
-          :download-status="downloadStatus"
-          @click="onClickFile"
-        ></files>
-        <upload
-          class="form-item"
-          v-if="isEditableAttr('Files')"
-          v-model="uploadList"
-          :limit="3"
-          :max-size="100*1000*1000"
-          :before-add="beforeAddFile"
-          :on-error="onFileError"
-        ></upload>
+        <div class="form-item">
+          <files
+            v-if="isExist"
+            v-model="files"
+            clickable
+            :deletable="!isReadOnly"
+            :download-status="downloadStatus"
+            @click="onClickFile"
+          ></files>
+          <upload
+            v-if="isEditableAttr('Files')"
+            v-model="uploadList"
+            :limit="3"
+            :max-size="100*1000*1000"
+            :button-size="isUpdate ? 'mini' : 'medium'"
+            :before-add="beforeAddFile"
+            :on-error="onFileError"
+          ></upload>
+        </div>
       </el-form-item>
-      <el-form-item label="OW部門コード" prop="BillingOWDepartmentCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるOneWorldの部門コードを入力してください"
-          v-model="billingOWDepartmentCode"
-          v-if="isEditableAttr('BillingOWDepartmentCode')"
-          maxlength=7
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingOWDepartmentCode}}
+      <el-form-item prop="BillingAFFCode">
+        <span slot="label">AFFコード
+          <hint v-show="isEditable">AFF(会計フレックスフィールド)コードは10個のコードをドットでつないだ文字列です。</hint>
         </span>
-      </el-form-item>
-      <el-form-item label="OW科目コード" prop="BillingOWUsageCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるOneWorldの科目コードを入力してください"
-          v-model="billingOWUsageCode"
-          v-if="isEditableAttr('BillingOWUsageCode')"
-          maxlength=10
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingOWUsageCode}}
-        </span>
-      </el-form-item>
-      <el-form-item label="プロジェクトコード" prop="BillingProjectCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるプロジェクトコードを入力してください"
-          v-model="billingProjectCode"
-          v-if="isEditableAttr('BillingProjectCode')"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingProjectCode}}
-        </span>
-      </el-form-item>
-      <el-form-item label="プロジェクトサブコード" prop="BillingProjectSubCode">
-        <el-input 
-          type="text"
-          placeholder="利用料金の配賦先となるプロジェクトサブコードを入力してください"
-          v-model="billingProjectSubCode"
-          v-if="isEditableAttr('BillingProjectSubCode')"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>
-          {{billingProjectSubCode}}
-        </span>
+        <div class="form-item">
+          <el-input
+            class="form-item-medium"
+            type="text"
+            placeholder="利用料金の配賦先となる会計フレックスフィールドコードを入力してください"
+            v-model="billingAFFCode"
+            v-if="isEditableAttr('BillingAFFCode')"
+            minlength=35
+            maxlength=100
+          ></el-input>
+          <span v-else>{{billingAFFCode}}</span>
+        </div>
       </el-form-item>
       <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
-        <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
-          <el-date-picker
-            v-model="operationDate"
-            type="daterange"
-            range-separator="～"
-            start-placeholder="開始予定日"
-            end-placeholder="終了予定日"
-            format="yyyy年M月d日"
-            :picker-options="pickerOptions">
-          </el-date-picker>
-          <span class="attention">※5営業日以降から選択できます。</span>
-        </div>
-        <div id="ReadOnlyOpsDate" v-else>
-          <span class="form-item">{{epochSecToJST(startOperationDate)}}</span>
-          <span class="form-item">～</span>
-          <span class="form-item">{{epochSecToJST(expireOperationDate)}}</span>
+        <div class="form-item">
+          <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
+            <el-date-picker
+              v-model="operationDate"
+              type="daterange"
+              range-separator="～"
+              start-placeholder="開始予定日"
+              end-placeholder="終了予定日"
+              format="yyyy年M月d日"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            <span class="attention">※5営業日以降から選択できます。</span>
+          </div>
+          <div id="ReadOnlyOpsDate" v-else>
+            <span>{{epochSecToJST(startOperationDate)}}</span>
+            <span>～</span>
+            <span>{{epochSecToJST(expireOperationDate)}}</span>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="プロジェクトメンバーの役割" required>
@@ -144,10 +118,10 @@
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <el-form-item label="登録者" v-if="isReadOnly">
-        <span class="form-item">{{createdBy}}</span>
+        <span class="form-item">{{wrapAdmin(createdBy)}}</span>
       </el-form-item>
       <el-form-item label="最終更新者" v-if="isReadOnly">
-        <span class="form-item">{{updatedBy}}</span>
+        <span class="form-item">{{wrapAdmin(updatedBy)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -158,6 +132,7 @@
 import MemberRoleList from './MemberRoleList';
 import FileUpload from './FileUpload';
 import FileList from './FileList';
+import ItemHint from '../common/ItemHint';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
 import AccountApi from "../../api/AccountApi"
@@ -168,7 +143,8 @@ export default {
   components : {
     roles: MemberRoleList,
     upload: FileUpload,
-    files: FileList
+    files: FileList,
+    hint: ItemHint
   },
   mixins: [Util, Disp],
   props: {
@@ -203,21 +179,10 @@ export default {
         Env: [
           { required: true, message: "利用目的は必須です。" }
         ],
-        BillingOWDepartmentCode: [
-          { required: true, message: "OW部門コードは必須です。", trigger: "blur" },
-          { pattern: /^[0-9]{7}$/, 
-            message: "OW部門コードは7桁の数字を入力してください。", trigger: "blur" }
-        ],
-        BillingOWUsageCode: [
-          { required: true, message: "OW科目コードは必須です。", trigger: "blur" },
-          { pattern: /^[0-9]{5}(?:-[0-9]{4})?$/, 
-            message: "OW科目コードは5桁または5桁-4桁の数字を入力してください。", trigger: "blur" }
-        ],
-        BillingProjectCode: [
-          // no specific rules
-        ],
-        BillingProjectSubCode: [
-          // no specific rules
+        BillingAFFCode: [
+          { required: true, message: "AFFコードは必須です。", trigger: "blur" },
+          { pattern: /^\d{4}\.\d{6}\.\w{4}\.\w{5}\.\d{3}\.\d{7}\.\w{6}\..+$/, 
+            message: "AFFコードが不正な形式です。", trigger: "blur" }
         ],
         StartOperationDate: [
           { required: true, type:"number", min: 1, message: "実運用予定日は必須です。" }
@@ -319,21 +284,9 @@ export default {
       get() { return this.getter("Files"); },
       set(value){ this.setter({ name: "Files", val: value }); }      
     },
-    billingOWDepartmentCode: {
-      get() { return this.getter("BillingOWDepartmentCode"); },
-      set(value){ this.setter({ name: "BillingOWDepartmentCode", val: value }); }
-    },
-    billingOWUsageCode: {
-      get() { return this.getter("BillingOWUsageCode"); },
-      set(value){ this.setter({ name: "BillingOWUsageCode", val: value }); }
-    },
-    billingProjectCode: {
-      get() { return this.getter("BillingProjectCode"); },
-      set(value){ this.setter({ name: "BillingProjectCode", val: value }); }
-    },
-    billingProjectSubCode: {
-      get() { return this.getter("BillingProjectSubCode"); },
-      set(value){ this.setter({ name: "BillingProjectSubCode", val: value }); }
+    billingAFFCode: {
+      get() { return this.getter("BillingAFFCode"); },
+      set(value){ this.setter({ name: "BillingAFFCode", val: value }); }
     },
     operationDate: {
       get(){
@@ -343,7 +296,8 @@ export default {
       },
       set(value){
         this.setter({ name: "StartOperationDate", val: this.DateToEpochSec(value ? value[0] : 0) });
-        this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(value ? value[1] : 0) });
+        this.setter({ name: "ExpireOperationDate", val: this.DateToEpochSec(
+          value ? this.getLastTimeOfDay(value[1]) : 0) });
       }
     },
     uploadList: {
@@ -360,10 +314,7 @@ export default {
             switch(target){
               case "page":
               case "Env":
-              case "BillingOWDepartmentCode":
-              case "BillingOWUsageCode":
-              case "BillingProjectCode":
-              case "BillingProjectSubCode":
+              case "BillingAFFCode":
               case "MemberRoles": return true;
               case "Files":
               case "OperationDate":
@@ -375,10 +326,7 @@ export default {
           case "update": {
             switch(target){
               //case "page":
-              case "BillingOWDepartmentCode":
-              case "BillingOWUsageCode":
-              case "BillingProjectCode":
-              case "BillingProjectSubCode":
+              case "BillingAFFCode":
               case "MemberRoles": return true;
               case "Files":
               case "OperationDate":
@@ -470,7 +418,7 @@ export default {
       }
     }
   },
-  created(){
+  mounted(){
     // Return to the auth page when reloading
     if(this.id && !this.$store.getters.getAccountById(this.id)){
       this.$router.push({ path: "get-account.html" });
@@ -488,22 +436,6 @@ export default {
 </script>
 
 <style scoped>
-.el-select {
-  width: 30%
-}
-.el-input-number {
-  width: 15%
-}
-</style>
-<style>
-.attention {
-  margin-left: 1.5em;
-  font-size: 80%;
-  color: red;
-}
-.form-item {
-  padding: 0 16px;
-}
 .date-label {
   display: block;
   text-align: center;

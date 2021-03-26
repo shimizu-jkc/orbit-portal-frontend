@@ -5,10 +5,17 @@
         <span class="role-header">
           <el-col :span="6">名前</el-col>
           <el-col :span="9">Eメールアドレス</el-col>
-          <el-col :span="8">役割</el-col>
+          <el-col :span="8">役割
+            <hint>
+              役割の詳細は
+              <el-link type="primary" href="/guide/aws/service/id-management.html#役割の一覧" target="_blank">こちら</el-link>
+              を参照してください。
+            </hint>
+          </el-col>
         </span>
       </el-row>
       <role
+        class="role-row"
         ref="role"
         v-for="(role, index) in roles"
         :key="index"
@@ -42,12 +49,14 @@
 
 <script>
 import MemberRoleItem from './MemberRoleItem';
+import ItemHint from '../common/ItemHint';
 import Disp from "../../mixins/disp";
 
 export default {
   name : "MemberRoleList",
   components: {
-    role: MemberRoleItem
+    role: MemberRoleItem,
+    hint: ItemHint
   },
   mixins: [Disp],
   props: {
@@ -113,7 +122,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 table {
   margin: 0
 }
@@ -123,14 +132,16 @@ table {
 .el-table tr{
   background-color: #FFFFFF;
 }
-.role-header {
-  font-size: 80%;
-  text-align: center;
+.role-row {
+  margin: 1px;
 }
 .button-row {
   margin-top: 1.5em;
 }
-.form-item {
-  padding: 0 16px;
+</style>
+<style>
+.role-header {
+  font-size: 90%;
+  text-align: center;
 }
 </style>

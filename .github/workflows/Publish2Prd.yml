@@ -1,0 +1,61 @@
+name: PublishToPrd
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "README.md"
+      - "doc/*"
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    env:
+      ENV: "prd"
+      ENV_PATH: "src/.vuepress/env.json"
+      BASE_URL: "https://api.orbit.jvckenwood.com/organization/v1"
+      DEPLOY_BUCKET_NAME: "orbit.jvckenwood.com"
+      API_KEY: ${{ secrets.API_KEY_PRD }}
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_FOR_ORBIT_SS_PRD }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FOR_ORBIT_SS_PRD }}
+      SLACK_WEBHOOK_URL: ${{ secrets.ORBIT_CICD_SLACK_WEBHOOK }}
+      SLACK_ICON_URL: "https://avatars0.githubusercontent.com/u/44036562?s=100"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: CreateEnvJson
+        uses: schdck/create-env-json@v1
+        with:
+          file-name: ${{ env.ENV_PATH }}
+          ENV: ${{ env.ENV }}
+          BASE_URL: ${{ env.BASE_URL }}
+          API_KEY:  ${{ env.API_KEY }}
+      - name: Build
+        run: npm install && npm run build
+      - name: Deploy
+        uses: ItsKarma/aws-cli@v1.70.0
+        with:
+          args: s3 sync --delete --acl bucket-owner-read --exact-timestamps release/ s3://${{ env.DEPLOY_BUCKET_NAME }}/
+      - name: Notify success to slack
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: ${{ github.repository }}
+          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK_URL }}
+          SLACK_ICON: ${{ env.SLACK_ICON_URL }}
+      - name: Notify failure to slack
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: ${{ github.repository }}
+          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK_URL }}
+          SLACK_ICON: ${{ env.SLACK_ICON_URL }}
+          SLACK_COLOR: "#FF0000"

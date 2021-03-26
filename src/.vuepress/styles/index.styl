@@ -1,0 +1,53 @@
+.tabs-component
+  margin 2.5em 0
+
+.tabs-component-tabs
+  margin-bottom 5px
+  padding-left 0
+
+.tabs-component-tab
+  color #555
+  margin-right 0
+  padding 0 10px 0 10px
+  list-style none
+  &:hover
+    color: #409EFF
+  &.is-active
+    color #409EFF
+  &.is-disabled *
+    color #cdcdcd
+    cursor not-allowed !important
+
+.tabs-component-tab-a
+  align-items center
+  color inherit
+  display flex
+  padding .25em .5em
+  text-decoration none
+
+.tabs-component-panels
+  margin-top 1em
+  padding 1em 0
+
+@media (min-width: 700px)
+  .tabs-component-tabs
+    border 0
+    align-items stretch
+    display flex
+    justify-content flex-start
+    margin-bottom -1px
+
+  .tabs-component-tab
+    background-color #fff
+    border-radius 3px 3px 0 0
+    margin-right .25em
+    transition transform .3s ease
+  &.is-active
+    border-bottom solid 3px #409EFF
+    z-index 2
+
+  .tabs-component-panels
+    border-top-left-radius 0
+    background-color #fff
+    border solid 1px #ddd    
+    padding 1em 1em

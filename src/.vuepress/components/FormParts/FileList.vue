@@ -2,7 +2,7 @@
   <div id="FileList">
     <div v-for="filename in value">
       <el-row>
-        <span v-show="deletable">
+        <span class="delete-button" v-show="deletable">
           <el-button
             v-if="upload"
             size="mini"
@@ -89,8 +89,11 @@ export default {
 </script>
 
 <style scoped>
-.file-item {
-  padding: 0 8px;
+.el-row {
+  margin: 0;
+}
+.delete-button {
+  margin-right: 8px;
 }
 .dowonload-progress {
   line-height: 16px;

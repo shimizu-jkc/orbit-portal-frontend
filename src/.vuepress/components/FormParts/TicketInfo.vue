@@ -22,6 +22,7 @@
       <el-form-item label="連絡先Eメールアドレス" prop="TicketEmail">
         <el-input 
           type="text"
+          class="width-75"
           v-if="isEditableAttr('TicketEmail')"
           placeholder="作業の連絡先となるEメールアドレスを入力してください"
           v-model="email"

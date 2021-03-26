@@ -11,7 +11,7 @@
       :on-remove="handleFileRemove"
       :file-list="fileList"
     >
-      <el-button type="primary" icon="el-icon-upload">ファイルを追加</el-button>
+      <el-button type="primary" icon="el-icon-upload" :size="buttonSize">ファイルを追加</el-button>
     </el-upload>
   </div>
 </template>
@@ -32,6 +32,10 @@ export default {
     limit: {
       type: Number,
       default: 3
+    },
+    buttonSize: {
+      type: String,
+      default: ""
     },
     maxSize: {
       type: Number,
@@ -95,6 +99,6 @@ export default {
 
 <style scoped>
 .file-upload {
-  margin-top: 16px;
+  margin-top: 0px;
 }
 </style>

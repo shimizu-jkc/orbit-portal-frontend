@@ -7,12 +7,14 @@
       <div id="CreateTicketEnable" v-if="isCreateEnabled">
         <el-form>
           <el-form-item label="依頼する前の確認" required>
-            <el-col>
-              <el-checkbox
-                label="作業の実施には、最大5営業日程度掛かることがあります。"
-                v-model="agreements[0]"
-              ></el-checkbox>
-            </el-col>
+            <div class="form-item">
+              <el-col>
+                <el-checkbox
+                  label="作業の実施には、最大5営業日程度掛かることがあります。"
+                  v-model="agreements[0]"
+                ></el-checkbox>
+              </el-col>
+            </div>
           </el-form-item>
         </el-form>
         <info ref="info" operation="create" id=""/>

@@ -11,87 +11,94 @@
       :hide-required-asterisk="!isEditable"
     >
       <el-form-item label="プロジェクト名" prop="ProjectId">
-        <el-input 
-          type="text"
-          class="width-50"
-          placeholder="プロジェクトの名称を入力してください"
-          v-model="projectId"
-          v-if="isEditableAttr('ProjectId')"
-          minlength=1
-          maxlength=20
-          show-word-limit
-        ></el-input>
-        <span class="form-item" v-else>
-          {{projectId}}
-          <span class="attention" v-show="isUpdate">※プロジェクト名は変更できません</span>
-        </span>
+        <div class="form-item">
+          <el-input 
+            type="text"
+            class="form-item-medium"
+            placeholder="プロジェクトの名称を入力してください"
+            v-model="projectId"
+            v-if="isEditableAttr('ProjectId')"
+            minlength=1
+            maxlength=20
+            show-word-limit
+          ></el-input>
+          <span v-else>
+            {{projectId}}
+            <span class="attention" v-show="isUpdate">※プロジェクト名は変更できません</span>
+          </span>
+        </div>
       </el-form-item>
       <el-form-item label="代表者Eメールアドレス" prop="ProjectEmail">
-        <el-input 
-          type="text"
-          class="width-75"
-          v-if="isEditableAttr('ProjectEmail')"
-          placeholder="プロジェクト代表者のEメールアドレスを入力してください"
-          v-model="projectEmail"
-          maxlength=254
-        ></el-input>
-        <span class="form-item" v-else>
-          {{projectEmail}}
-        </span>
+        <div class="form-item">
+          <el-input 
+            type="text"
+            class="form-item-medium"
+            v-if="isEditableAttr('ProjectEmail')"
+            placeholder="プロジェクト代表者のEメールアドレスを入力してください"
+            v-model="projectEmail"
+            maxlength=254
+          ></el-input>
+          <span v-else>{{projectEmail}}</span>
+        </div>
       </el-form-item>
       <el-form-item label="事業部" prop="DivisionName">
-        <el-select
-          v-model="divisionName" 
-          v-if="isEditableAttr('DivisionName')"
-          placeholder="所属する事業部を選択してください"
-        >
-         <el-option
-            v-for="(item, index) in getDispNameSets('Division')"
-            :key="index"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <span class="form-item" v-else>
-          {{getDispName("Division", divisionName)}}
-          <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
-        </span>
+        <div class="form-item">
+          <el-select
+            class="form-item-vshort"
+            v-model="divisionName" 
+            v-if="isEditableAttr('DivisionName')"
+            placeholder="所属する事業部を選択してください"
+          >
+            <el-option
+              v-for="(item, index) in getDispNameSets('Division')"
+              :key="index"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span v-else>
+            {{getDispName("Division", divisionName)}}
+            <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
+          </span>
+        </div>
       </el-form-item>
       <el-form-item label="クラウド利用の予算(月額)">
-        <div id="EditableBudget" v-if="isEditableAttr('Budget')">
-          <el-input-number 
-            class="input-number"
-            v-model="budget"
-            placeholder="0"
-            :step="10"
-            :min="0" 
-            :max="10000"
-          ></el-input-number>
-          <span> USドル </span>
+        <div class="form-item">
+          <div id="EditableBudget" style="margin: 1px" v-if="isEditableAttr('Budget')">
+            <el-input-number
+              v-model="budget"
+              placeholder="0"
+              :step="10"
+              :min="0" 
+              :max="10000"
+            ></el-input-number>
+            <span> USドル </span>
+          </div>
+          <span v-else>
+            {{budget}} USドル
+          </span>
         </div>
-        <span class="form-item" v-else>
-          {{budget}} USドル
-        </span>
       </el-form-item>
       <el-form-item :error="fileError" label="申請ファイル">
-        <files
-          class="form-item"
-          v-if="isExist"
-          v-model="files"
-          clickable
-          :deletable="!isReadOnly"
-          :download-status="downloadStatus"
-          @click="onClickFile"
-        ></files>
-        <upload
-          class="form-item"
-          v-if="isEditableAttr('Files')"
-          v-model="uploadList"
-          :limit="3"
-          :max-size="100*1000*1000"
-          :before-add="beforeAddFile"
-          :on-error="onFileError"
-        ></upload>
+        <div class="form-item">
+          <files
+            v-if="isExist"
+            v-model="files"
+            clickable
+            :deletable="!isReadOnly"
+            :download-status="downloadStatus"
+            @click="onClickFile"
+          ></files>
+          <upload
+            v-if="isEditableAttr('Files')"
+            v-model="uploadList"
+            :limit="3"
+            :button-size="isUpdate ? 'mini' : 'medium'"
+            :max-size="100*1000*1000"
+            :before-add="beforeAddFile"
+            :on-error="onFileError"
+          ></upload>
+        </div>
       </el-form-item>
       <el-form-item label="プロジェクトメンバー" required>
         <div class="form-item">
@@ -99,9 +106,11 @@
         </div>
       </el-form-item>
       <el-form-item label="所有クラウド環境" v-show="isReadOnly">
-        <div class="form-item" v-for="account in accountIds">
-          <el-button type="text" @click="onClickAccountLink(account)" v-if="isReadOnly">{{account}}</el-button>
-          <span v-else>{{account}}</span>
+        <div class="form-item">
+          <div v-for="account in accountIds">
+            <el-button type="text" @click="onClickAccountLink(account)" v-if="isReadOnly">{{account}}</el-button>
+            <span v-else>{{account}}</span>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="登録日" v-if="isReadOnly">
@@ -111,10 +120,10 @@
         <span class="form-item">{{epochSecToJST(updatedAt)}}</span>
       </el-form-item>
       <el-form-item label="登録者" v-if="isReadOnly">
-        <span class="form-item">{{createdBy}}</span>
+        <span class="form-item">{{wrapAdmin(createdBy)}}</span>
       </el-form-item>
       <el-form-item label="最終更新者" v-if="isReadOnly">
-        <span class="form-item">{{updatedBy}}</span>
+        <span class="form-item">{{wrapAdmin(updatedBy)}}</span>
       </el-form-item>
       <br>
     </el-form>
@@ -384,16 +393,5 @@ export default {
 }
 </script>
 
-<style>
-.el-select {
-  width: 30%
-}
-.attention {
-  margin-left: 1.5em;
-  font-size: 80%;
-  color: red;
-}
-.form-item {
-  padding: 0 16px;
-}
+<style scoped>
 </style>

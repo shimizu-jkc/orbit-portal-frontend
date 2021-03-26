@@ -1,9 +1,9 @@
 <template>
   <div id="TicketList">
     <el-row>
-      <el-col :span="4"><span class="form-item">プロジェクト名</span></el-col>
+      <el-col :span="4"><span>プロジェクト名</span></el-col>
       <el-col :span="6"><span>{{projectId}}</span></el-col>
-      <el-col :span="4"><span class="form-item">クラウド環境ID</span></el-col>
+      <el-col :span="4"><span>クラウド環境ID</span></el-col>
       <el-col :span="6"><span>{{accountId}}</span></el-col>
     </el-row>
     <el-table :data="tickets":default-sort="defaultSort">

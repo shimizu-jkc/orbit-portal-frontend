@@ -11,31 +11,36 @@
       :hide-required-asterisk="readOnly"
     >
       <el-form-item label="サポートプラン" prop="ExpectedPlan">
-        <el-select
-          v-model="plan" 
-          v-if="!this.readOnly"
-          placeholder="変更先のサポートプランを選択してください"
-        >
-          <el-option
-            v-for="(item, index) in getDispNameSets('SupportPlan')"
-            :key="index"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <span class="form-item" v-else>
-          {{getDispName("SupportPlan", plan)}}
-        </span>
+        <div class="form-item">
+          <el-select
+            class="form-item-vshort"
+            v-model="plan" 
+            v-if="!this.readOnly"
+            placeholder="変更先のプランを選択してください"
+          >
+            <el-option
+              v-for="(item, index) in getDispNameSets('SupportPlan')"
+              :key="index"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span v-else>
+            {{getDispName("SupportPlan", plan)}}
+          </span>
+        </div>
       </el-form-item>
       <el-form-item label="備考" prop="Note">
-        <el-input
-          v-model="note"
-          v-if="!this.readOnly"
-          type="textarea"
-          :rows="2"
-          placeholder="連絡事項がある場合は、こちらにご記入ください">
-        </el-input>
-        <span class="form-item" v-else>{{note}}</span>
+        <div class="form-item">
+          <el-input
+            v-model="note"
+            v-if="!this.readOnly"
+            type="textarea"
+            :rows="2"
+            placeholder="連絡事項がある場合は、こちらにご記入ください">
+          </el-input>
+          <span v-else>{{note}}</span>
+        </div>
       </el-form-item>
     </el-form>
   </div>

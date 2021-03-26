@@ -87,6 +87,9 @@ export default {
         console.error(`${attrName} is invalid`);
         return { value: "UNKNOWN", label: "不明な表示名" };   
       }
+    },
+    wrapAdmin(email){
+      return (email === "cpd@jvckenwood.com") ? "管理者" : email;
     }
   },
   computed: {

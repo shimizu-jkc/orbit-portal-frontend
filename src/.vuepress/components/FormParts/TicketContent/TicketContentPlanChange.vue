@@ -5,17 +5,17 @@
       inline-message
       status-icon
       label-width="25%"
-      :label-position="!readOnly?'top':'left'"
+      :label-position="isCreate ? 'top':'left'"
       :model="contentModel"
       :rules="rules"
-      :hide-required-asterisk="readOnly"
+      :hide-required-asterisk="isReadOnly"
     >
       <el-form-item label="サポートプラン" prop="ExpectedPlan">
         <div class="form-item">
           <el-select
             class="form-item-vshort"
             v-model="plan" 
-            v-if="!this.readOnly"
+            v-if="!isReadOnly"
             placeholder="変更先のプランを選択してください"
           >
             <el-option
@@ -34,7 +34,7 @@
         <div class="form-item">
           <el-input
             v-model="note"
-            v-if="!this.readOnly"
+            v-if="!isReadOnly"
             type="textarea"
             :rows="2"
             placeholder="連絡事項がある場合は、こちらにご記入ください">
@@ -53,9 +53,9 @@ export default {
   name : "TicketContentPlanChange",
   mixins: [Disp],
   props: {
-    readOnly: {
-      type: Boolean,
-      default: false
+    operation: {
+      type: String,
+      default: ""
     },
     id: {
       type: String,
@@ -94,9 +94,9 @@ export default {
     //Store processing
     plan: {
       get(){
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           return this.content.ExpectedPlan;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           return this.$store.state.t.updateParams.Content.ExpectedPlan;
         }else{
           return this.$store.state.t.createParams.Content[this.type].ExpectedPlan 
@@ -106,9 +106,9 @@ export default {
     },
     note: {
       get(){
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           return this.content.Note;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Note 
@@ -123,7 +123,7 @@ export default {
       return new Promise((resolve, reject) => {
         // el-form validator
         this.$refs["form"].validate((valid, detail) => {
-          if(this.readOnly){
+          if(this.isReadOnly){
             resolve([]);
           }else{
             resolve(Object.keys(detail).map(d => detail[d][0].message));

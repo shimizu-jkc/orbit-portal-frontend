@@ -1,27 +1,35 @@
 <template>
   <div id="TicketContentSimple">
-    <el-form-item label="備考">
-      <div class="form-item">
-        <el-input
-          v-model="note"
-          v-if="!this.readOnly"
-          type="textarea"
-          :rows="2"
-          placeholder="連絡事項がある場合は、こちらにご記入ください">
-        </el-input>
-        <span v-else>{{note}}</span>
-      </div>
-    </el-form-item>
+    <el-form
+      label-width="25%"
+      :label-position="isCreate ? 'top':'left'"
+    >
+      <el-form-item label="備考">
+        <div class="form-item">
+          <el-input
+            v-model="note"
+            v-if="!isReadOnly"
+            type="textarea"
+            :rows="2"
+            placeholder="連絡事項がある場合は、こちらにご記入ください">
+          </el-input>
+          <span v-else>{{note}}</span>
+        </div>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
+import Disp from "../../../mixins/disp";
+
 export default {
   name : "TicketContentSimple",
+  mixins: [Disp],
   props: {
-    readOnly: {
-      type: Boolean,
-      default: false
+    operation: {
+      type: String,
+      default: ""
     },
     id: {
       type: String,
@@ -44,9 +52,9 @@ export default {
     //Store processing
     note: {
       get(){
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           return this.content.Note;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Note 

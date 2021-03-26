@@ -15,6 +15,7 @@
         </span>
       </el-row>
       <role
+        class="role-row"
         ref="role"
         v-for="(role, index) in roles"
         :key="index"
@@ -121,7 +122,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 table {
   margin: 0
 }
@@ -131,14 +132,16 @@ table {
 .el-table tr{
   background-color: #FFFFFF;
 }
-.role-header {
-  font-size: 80%;
-  text-align: center;
+.role-row {
+  margin: 1px;
 }
 .button-row {
   margin-top: 1.5em;
 }
-.form-item {
-  padding: 0 16px;
+</style>
+<style>
+.role-header {
+  font-size: 90%;
+  text-align: center;
 }
 </style>

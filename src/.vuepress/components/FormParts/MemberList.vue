@@ -2,14 +2,15 @@
   <div id="MemberList">
     <div id="EditableMemberList" v-if="!readOnly"> 
       <el-row :gutter="3">
-        <span class="member-header">
+        <div class="member-header">
           <el-col :span="2">管理者</el-col>
           <el-col :span="8">所属部署名</el-col>
           <el-col :span="5">名前</el-col>
           <el-col :span="8">Eメールアドレス</el-col>
-        </span>
+        </div>
       </el-row>
-      <member 
+      <member
+        class="member-row"
         ref="member"
         v-for="(member, index) in members"
         :key="index"
@@ -113,6 +114,14 @@ export default {
 }
 </script>
 
+<style scoped>
+.member-row {
+  margin: 1px;
+}
+.button-row {
+  margin-top: 1.5em;
+}
+</style>
 <style>
 table {
   margin: 0
@@ -124,13 +133,7 @@ table {
   background-color: #FFFFFF;
 }
 .member-header {
-  font-size: 80%;
+  font-size: 90%;
   text-align: center;
-}
-.button-row {
-  margin-top: 1.5em;
-}
-.form-item {
-  padding: 0 16px;
 }
 </style>

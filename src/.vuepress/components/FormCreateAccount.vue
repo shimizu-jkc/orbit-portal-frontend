@@ -6,24 +6,26 @@
     <div id="postAuth" v-else>
       <el-form>
         <el-form-item label="申請する前の確認" required>
-          <el-col>
-            <el-checkbox 
-              label="申請者には「プロジェクト管理者」の権限が付与されている必要があります。" 
-              v-model="agreements[0]"
-            ></el-checkbox>
-          </el-col>
-          <el-col>
-            <el-checkbox 
-              label="クラウド環境を利用する為には、審査があります。" 
-              v-model="agreements[1]"
-            ></el-checkbox>
-          </el-col>
-          <el-col>
-            <el-checkbox 
-              label="クラウド環境が利用可能になるまで、最大5営業日程度掛かることがあります。" 
-              v-model="agreements[2]"
-            ></el-checkbox>
-          </el-col>
+          <div class="form-item">
+            <el-col>
+              <el-checkbox 
+                label="申請者には「プロジェクト管理者」の権限が付与されている必要があります。" 
+                v-model="agreements[0]"
+              ></el-checkbox>
+            </el-col>
+            <el-col>
+              <el-checkbox 
+                label="クラウド環境を利用する為には、審査があります。" 
+                v-model="agreements[1]"
+              ></el-checkbox>
+            </el-col>
+            <el-col>
+              <el-checkbox 
+                label="クラウド環境が利用可能になるまで、最大5営業日程度掛かることがあります。" 
+                v-model="agreements[2]"
+              ></el-checkbox>
+            </el-col>
+          </div>
         </el-form-item>
       </el-form>
       <info ref="info" operation="create" id=""/>

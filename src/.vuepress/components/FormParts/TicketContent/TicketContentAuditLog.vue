@@ -11,47 +11,54 @@
       :hide-required-asterisk="readOnly"
     >
       <el-form-item label="対象サービス" prop="Service">
-        <el-select 
-          v-model="service" 
-          v-if="!readOnly"
-          placeholder="確認したいサービスを選択してください"
-        >
-          <el-option
-            v-for="(item, index) in getDispNameSets('ServiceForAudit')"
-            :key="index"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <span class="form-item" v-else>
-          {{getDispName("ServiceForAudit", service)}}
-        </span>
+        <div class="form-item">
+          <el-select
+            class="form-item-vshort"
+            v-model="service" 
+            v-if="!readOnly"
+            placeholder="確認したいサービスを選択してください"
+          >
+            <el-option
+              v-for="(item, index) in getDispNameSets('ServiceForAudit')"
+              :key="index"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span v-else>
+            {{getDispName("ServiceForAudit", service)}}
+          </span>
+        </div>
       </el-form-item>
       <el-form-item label="確認期間" prop="StartDate">
-        <div id="EditableAuditDate" v-if="!readOnly">
-          <el-date-picker
-            v-model="date"
-            type="datetimerange"
-            range-separator="~"
-            start-placeholder="開始時刻"
-            end-placeholder="終了時刻">
-          </el-date-picker>
-        </div>
-        <div id="ReadOnlyAuditDate" v-else>
-          <span class="form-item">{{epochSecToJST(startDate)}}</span>
-          <span class="form-item">～</span>
-          <span class="form-item">{{epochSecToJST(endDate)}}</span>
+        <div class="form-item">
+          <div id="EditableAuditDate" v-if="!readOnly">
+            <el-date-picker
+              v-model="date"
+              type="datetimerange"
+              range-separator="~"
+              start-placeholder="開始時刻"
+              end-placeholder="終了時刻">
+            </el-date-picker>
+          </div>
+          <div id="ReadOnlyAuditDate" v-else>
+            <span >{{epochSecToJST(startDate)}}</span>
+            <span >～</span>
+            <span >{{epochSecToJST(endDate)}}</span>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="備考" prop="Note">
-        <el-input
-          v-model="note"
-          v-if="!readOnly"
-          type="textarea"
-          :rows="2"
-          placeholder="連絡事項がある場合は、こちらにご記入ください">
-        </el-input>
-        <span class="form-item" v-else>{{note}}</span>
+        <div class="form-item">
+          <el-input
+            v-model="note"
+            v-if="!readOnly"
+            type="textarea"
+            :rows="2"
+            placeholder="連絡事項がある場合は、こちらにご記入ください">
+          </el-input>
+          <span v-else>{{note}}</span>
+        </div>
       </el-form-item>
     </el-form>
   </div>

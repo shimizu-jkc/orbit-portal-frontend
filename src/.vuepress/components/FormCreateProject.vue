@@ -2,18 +2,20 @@
   <div id="FormCreateProject">
     <el-form>
       <el-form-item label="登録する前の確認" required>
-        <el-col>
-          <el-checkbox 
-            label="プロジェクトとしての体制が構築されている。" 
-            v-model="agreements[0]"
-          ></el-checkbox>
-        </el-col>
-        <el-col>
-          <el-checkbox 
-            label="クラウド利用料金の配賦先が明確になっている。" 
-            v-model="agreements[1]"
-          ></el-checkbox>
-        </el-col>
+        <div class="form-item">
+          <el-col>
+            <el-checkbox 
+              label="プロジェクトとしての体制が構築されている。" 
+              v-model="agreements[0]"
+            ></el-checkbox>
+          </el-col>
+          <el-col>
+            <el-checkbox 
+              label="クラウド利用料金の配賦先が明確になっている。" 
+              v-model="agreements[1]"
+            ></el-checkbox>
+          </el-col>
+      </div>
       </el-form-item>
     </el-form>
     <info ref="info" operation="create" />

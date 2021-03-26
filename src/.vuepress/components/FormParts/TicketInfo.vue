@@ -57,10 +57,10 @@
         </div>
       </el-form-item>
       <div id="TicketContent">
-        <simple v-if="isShowContent('REQ_CF_KEYPAIR')" type="REQ_CF_KEYPAIR" :readOnly="isReadOnly" :id="id"/>
-        <simple v-if="isShowContent('REQ_OTHER')" type="REQ_OTHER" :readOnly="isReadOnly" :id="id"/>
-        <audit ref="content" v-if="isShowContent('REQ_AUDIT_LOG')" :readOnly="isReadOnly" :id="id"/>
-        <plan ref="content" v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :readOnly="isReadOnly" :id="id"/>
+        <simple v-if="isShowContent('REQ_CF_KEYPAIR')" type="REQ_CF_KEYPAIR" :operation="operation" :id="id"/>
+        <simple v-if="isShowContent('REQ_OTHER')" type="REQ_OTHER" :operation="operation" :id="id"/>
+        <audit ref="content" v-if="isShowContent('REQ_AUDIT_LOG')" :operation="operation" :id="id"/>
+        <plan ref="content" v-if="isShowContent('REQ_SUPPORT_PLAN_CHANGE')" :operation="operation" :id="id"/>
       </div>
       <el-form-item label="登録日" v-if="isReadOnly">
         <span class="form-item">{{epochSecToJST(createdAt)}}</span>

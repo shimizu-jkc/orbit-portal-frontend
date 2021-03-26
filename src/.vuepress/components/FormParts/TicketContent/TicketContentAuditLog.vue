@@ -5,17 +5,17 @@
       inline-message
       status-icon
       label-width="25%"
-      :label-position="!readOnly?'top':'left'"
+      :label-position="isCreate ?'top':'left'"
       :model="contentModel"
       :rules="rules"
-      :hide-required-asterisk="readOnly"
+      :hide-required-asterisk="isReadOnly"
     >
       <el-form-item label="対象サービス" prop="Service">
         <div class="form-item">
           <el-select
             class="form-item-vshort"
             v-model="service" 
-            v-if="!readOnly"
+            v-if="!isReadOnly"
             placeholder="確認したいサービスを選択してください"
           >
             <el-option
@@ -32,7 +32,7 @@
       </el-form-item>
       <el-form-item label="確認期間" prop="StartDate">
         <div class="form-item">
-          <div id="EditableAuditDate" v-if="!readOnly">
+          <div id="EditableAuditDate" v-if="!isReadOnly">
             <el-date-picker
               v-model="date"
               type="datetimerange"
@@ -52,7 +52,7 @@
         <div class="form-item">
           <el-input
             v-model="note"
-            v-if="!readOnly"
+            v-if="!isReadOnly"
             type="textarea"
             :rows="2"
             placeholder="連絡事項がある場合は、こちらにご記入ください">
@@ -72,9 +72,9 @@ export default {
   name : "TicketContentAuditLog",
   mixins: [Util, Disp],
   props: {
-    readOnly: {
-      type: Boolean,
-      default: false
+    operation: {
+      type: String,
+      default: ""
     },
     id: {
       type: String,
@@ -126,9 +126,9 @@ export default {
     //Store processing
     service: {
       get(){
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           return this.content.Service;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           return this.$store.state.t.updateParams.Content.Service;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Service;
@@ -139,10 +139,10 @@ export default {
     date: {
       get(){
         let start, end;
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           start = this.content.StartDate;
           end = this.content.EndDate;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           start = this.$store.state.t.updateParams.Content.StartDate;
           end = this.$store.state.t.updateParams.Content.EndDate;
         }else{
@@ -158,9 +158,9 @@ export default {
     },
     note: {
       get(){
-        if(this.hasId && this.readOnly){
+        if(this.hasId && this.isReadOnly){
           return this.content.Note;
-        }else if(this.hasId && !this.readOnly){
+        }else if(this.hasId && !this.isReadOnly){
           return this.$store.state.t.updateParams.Content.Note;
         }else{
           return this.$store.state.t.createParams.Content[this.type].Note;
@@ -175,7 +175,7 @@ export default {
       return new Promise((resolve, reject) => {
         // el-form validator
         this.$refs["form"].validate((valid, detail) => {
-          if(this.readOnly){
+          if(this.isReadOnly){
             resolve([]);
           }else{
             resolve(Object.keys(detail).map(d => detail[d][0].message));

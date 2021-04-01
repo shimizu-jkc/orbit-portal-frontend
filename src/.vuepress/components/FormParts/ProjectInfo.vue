@@ -8,7 +8,7 @@
       :label-position="isEditableAttr('page')?'top':'left'"
       :model="projectModel"
       :rules="rules"
-      :hide-required-asterisk="!isEditable"
+      :hide-required-asterisk="!isCreate"
     >
       <el-form-item label="プロジェクト名" prop="ProjectId">
         <div class="form-item">

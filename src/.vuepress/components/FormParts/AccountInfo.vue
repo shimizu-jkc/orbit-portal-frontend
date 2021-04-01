@@ -8,7 +8,7 @@
       :label-position="isEditableAttr('page')?'top':'left'"
       :model="accountModel"
       :rules="rules"
-      :hide-required-asterisk="!isEditable"
+      :hide-required-asterisk="!isCreate"
     >
       <el-form-item label="クラウド環境ID" v-show="isExist">
         <span class="form-item">{{accountId}}</span>

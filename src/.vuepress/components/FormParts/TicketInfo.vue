@@ -8,7 +8,7 @@
       :label-position="isEditableAttr('page')?'top':'left'"
       :model="ticketModel"
       :rules="rules"
-      :hide-required-asterisk="!isEditable"
+      :hide-required-asterisk="!isCreate"
     >
       <el-form-item label="作業ID" v-show="isExist">
         <span class="form-item">{{ticketId}}</span>

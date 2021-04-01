@@ -8,7 +8,7 @@
       :label-position="isEditableAttr('page')?'top':'left'"
       :model="accountModel"
       :rules="rules"
-      :hide-required-asterisk="!isEditable"
+      :hide-required-asterisk="!isCreate"
     >
       <el-form-item label="クラウド環境ID" v-show="isExist">
         <span class="form-item">{{accountId}}</span>
@@ -35,18 +35,39 @@
             placeholder="利用目的を選択してください"
           >
             <el-option
-                v-for="(item, index) in getDispNameSets('Env')"
-                :key="index"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select> 
-            <span v-else>
-              {{getDispName("Env", env)}}
-              <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
-            </span>
+              v-for="(item, index) in getDispNameSets('Env')"
+              :key="index"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select> 
+          <span v-else>
+            {{getDispName("Env", env)}}
+            <span class="attention" v-show="isUpdate">※利用目的は変更できません</span>
+          </span>
+        </div>
+      </el-form-item>
+      <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
+        <div class="form-item">
+          <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
+            <el-date-picker
+              v-model="operationDate"
+              type="daterange"
+              range-separator="～"
+              start-placeholder="開始予定日"
+              end-placeholder="終了予定日"
+              format="yyyy年M月d日"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            <span class="attention">※5営業日以降から選択できます。</span>
           </div>
-        </el-form-item>
+          <div id="ReadOnlyOpsDate" v-else>
+            <span>{{epochSecToJST(startOperationDate)}}</span>
+            <span>～</span>
+            <span>{{epochSecToJST(expireOperationDate)}}</span>
+          </div>
+        </div>
+      </el-form-item>
       <el-form-item v-show="isPrd" :error="fileError" label="申請ファイル">
         <div class="form-item">
           <files
@@ -83,27 +104,6 @@
             maxlength=100
           ></el-input>
           <span v-else>{{billingAFFCode}}</span>
-        </div>
-      </el-form-item>
-      <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
-        <div class="form-item">
-          <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
-            <el-date-picker
-              v-model="operationDate"
-              type="daterange"
-              range-separator="～"
-              start-placeholder="開始予定日"
-              end-placeholder="終了予定日"
-              format="yyyy年M月d日"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-            <span class="attention">※5営業日以降から選択できます。</span>
-          </div>
-          <div id="ReadOnlyOpsDate" v-else>
-            <span>{{epochSecToJST(startOperationDate)}}</span>
-            <span>～</span>
-            <span>{{epochSecToJST(expireOperationDate)}}</span>
-          </div>
         </div>
       </el-form-item>
       <el-form-item label="プロジェクトメンバーの役割" required>

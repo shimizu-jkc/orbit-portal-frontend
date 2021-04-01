@@ -8,7 +8,7 @@
       :label-position="isCreate ?'top':'left'"
       :model="contentModel"
       :rules="rules"
-      :hide-required-asterisk="isReadOnly"
+      :hide-required-asterisk="!isCreate"
     >
       <el-form-item label="対象サービス" prop="Service">
         <div class="form-item">

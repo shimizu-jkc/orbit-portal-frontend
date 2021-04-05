@@ -30,7 +30,12 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item label="確認期間" prop="StartDate">
+      <el-form-item prop="StartDate">
+        <span slot="label">確認期間
+          <hint>
+            カレンダーから期間を選択してください。時分秒で指定可能です。<br>一度に依頼できる期間は最大30日間です。
+          </hint>
+        </span>
         <div class="form-item">
           <div id="EditableAuditDate" v-if="!isReadOnly">
             <el-date-picker
@@ -69,9 +74,13 @@
 <script>
 import Util from "../../../mixins/util";
 import Disp from "../../../mixins/disp";
+import ItemHint from "../../common/ItemHint";
 
 export default {
   name : "TicketContentAuditLog",
+  components : {
+    hint: ItemHint
+  },
   mixins: [Util, Disp],
   props: {
     operation: {
@@ -109,7 +118,7 @@ export default {
             picker.$emit("pick", [start, end]);
           }
         }, {
-          text: "直近1週間",
+          text: "最近7日間",
           onClick(picker) {
             const start = new Date();
             const end = new Date(start);
@@ -117,11 +126,11 @@ export default {
             picker.$emit("pick", [start, end]);
           }
         }, {
-          text: "直近1ヶ月",
+          text: "最近30日間",
           onClick(picker) {
             const start = new Date();
             const end = new Date(start);
-            start.setMonth(start.getMonth() - 1);
+            start.setDate(start.getDate() - 30);
             picker.$emit("pick", [start, end]);
           }
         }],
@@ -131,7 +140,19 @@ export default {
           { required: true, message: "対象サービスは必須です。" }
         ],
         StartDate: [
-          { required: true, type:"number", min: 1, message: "確認期間は必須です。" }
+          { required: true, type:"number", min: 1, message: "確認期間は必須です。" },
+          { validator: (r, v, callback) => {
+            if(this.date) {
+              const start = new Date(this.date[0]);
+              const end = new Date(this.date[1]);
+              if(start.getTime() === end.getTime()){
+                callback("確認期間の開始日時と終了日時が同じです。");
+              }
+              if(start < end.setDate(end.getDate() - 30)) {
+                callback("確認期間は30日を越えて指定できません。");
+              }
+            }
+          }}
         ],
         EndDate: [
           // check only startDate (el-form restriction)

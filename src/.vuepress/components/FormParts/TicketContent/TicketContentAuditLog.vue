@@ -33,7 +33,9 @@
       <el-form-item prop="StartDate">
         <span slot="label">確認期間
           <hint>
-            カレンダーから期間を選択してください。時分秒で指定可能です。<br>一度に依頼できる期間は最大30日間です。
+            ログを確認したい期間を選択してください。<br>
+            期間は時分秒まで指定することができます。<br>
+            ただし、一度に依頼できる期間は最大で30日間です。
           </hint>
         </span>
         <div class="form-item">
@@ -146,10 +148,10 @@ export default {
               const start = new Date(this.date[0]);
               const end = new Date(this.date[1]);
               if(start.getTime() === end.getTime()){
-                callback("確認期間の開始日時と終了日時が同じです。");
+                callback("確認期間の開始時刻と終了時刻が同じです。");
               }
               if(start < end.setDate(end.getDate() - 30)) {
-                callback("確認期間は30日を越えて指定できません。");
+                callback("一度に依頼できる期間は最大で30日間です。");
               }
             }
           }}

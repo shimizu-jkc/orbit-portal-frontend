@@ -38,7 +38,9 @@
               type="datetimerange"
               range-separator="~"
               start-placeholder="開始時刻"
-              end-placeholder="終了時刻">
+              end-placeholder="終了時刻"
+              :picker-options="pickerOptions"
+              :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
           </div>
           <div id="ReadOnlyAuditDate" v-else>
@@ -84,6 +86,46 @@ export default {
   data() {
     return {
       type: "REQ_AUDIT_LOG",
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > new Date().setHours(23, 59, 59);
+        },
+        shortcuts: [{
+          text: "今日",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setHours(0, 0, 0);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "昨日",
+          onClick(picker) {
+            const start = new Date();
+            start.setDate(start.getDate() - 1);
+            const end = new Date(start);
+            start.setHours(0, 0, 0);
+            end.setHours(23, 59, 59);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "直近1週間",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setDate(start.getDate() - 7);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "直近1ヶ月",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setMonth(start.getMonth() - 1);
+            picker.$emit("pick", [start, end]);
+          }
+        }],
+      },
       rules: {
         Service: [
           { required: true, message: "対象サービスは必須です。" }

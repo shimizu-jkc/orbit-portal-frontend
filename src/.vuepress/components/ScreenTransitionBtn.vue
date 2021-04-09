@@ -11,7 +11,7 @@ export default {
   props: ["btnName", "path"],
   methods: {
     async onClick(){
-      this.$router.push({ path: this.path });
+      this.$router.back();
     }
   }
 }

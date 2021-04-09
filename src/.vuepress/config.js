@@ -83,16 +83,16 @@ module.exports = {
         ]
       },
       { 
-        text: "カタログ", 
+        text: "ナレッジ", 
         items: [
-          { text: "カタログとは", link: "/catalog/introduction" },
-          { text: "カタログ一覧", link: "/catalog/list" },
-          { text: "フィードバック", link: "/catalog/feedback" }
+          { text: "はじめに", link: "/knowledge/introduction" },
+          { text: "ナレッジ一覧", link: "/knowledge/search" }
         ]
       },
       { 
         text: "サポート", 
         items: [
+          { text: "利用規約", link: "/support/agreement" },
           { text: "リリースノート", link: "/support/release" },
           { text: "お問い合わせ", link: "/support/contact" }
         ]

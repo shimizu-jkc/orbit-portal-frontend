@@ -1,6 +1,6 @@
 # 「負荷試験」カタログ
 
-<ScreenTransitionBtn btnName="一覧に戻る" path="/catalog/list" />
+<ScreenTransitionBtn btnName="戻る" path="/knowledge/search" />
 
 本カタログでは、設計したシステムに対して大量のアクセスを行い、
 システムに負荷をかけるための環境を作成することで、以下のような目的を達成することができます。

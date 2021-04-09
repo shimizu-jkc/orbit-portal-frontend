@@ -1,6 +1,6 @@
 # 「ユーザー管理＆認証」カタログ
 
-<ScreenTransitionBtn btnName="一覧に戻る" path="/catalog/list" />
+<ScreenTransitionBtn btnName="戻る" path="/knowledge/search" />
 
 本カタログでは、Webサービスにおける一般的なユーザ管理機能や認証機能を提供します。 
 例えば、以下のような機能をRestfulなAPIとして提供します。

@@ -11,7 +11,7 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
 <Badge text="AWS" type="note" vertical="bottom"/>
 
-**投稿日 : 2020/4/19(月)**
+**投稿日 : 2021/4/19(月)**
 
 本日より、OrBITポータルのクローズドβ版の提供を開始しました。
 

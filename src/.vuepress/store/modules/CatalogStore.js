@@ -1,31 +1,22 @@
+const LIST = require("../../../knowledge/list");
+
 // Initial state
 const state = () => ({
-  Catalogs: [
-    {
-      Name: "ユーザー管理＆認証",
-      Type: "テンプレート",
-      Genre: "API",
-      Vender: "AWS",
-      Version: "v0.9.7 β",
-      Link: "items/user-management"
-    },
-    {
-      Name: "負荷試験",
-      Type: "ソースコード",
-      Genre: "テスト",
-      Vender: "AWS",
-      Version: "v0.9.0 α",
-      Link: "items/loadtest"
-    }
-  ]
+  Knowledges: [...LIST]
 });
 
 // Getters
 const getters = {
-  searchCatalog: (state) => ({keyword}) => {
-    return state.Catalogs.filter(catalog => {
-      return keyword.length ? catalog.Name.toLowerCase().includes(keyword.toLowerCase()) : true;
+  searchKnowledge: (state) => ({keyword}) => {
+    return state.Knowledges.filter(knowledge => {
+      return keyword.length ? knowledge.Name.toLowerCase().includes(keyword.toLowerCase()) : true;
     });
+  },
+  getKnowledgeById: (state) => (id) => {
+    console.log(state.Knowledges)
+    console.log(id)
+    console.log( state.Knowledges.find(k => k.Id === id))
+    return state.Knowledges.find(k => k.Id === id);
   }
 };
 

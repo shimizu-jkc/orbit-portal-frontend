@@ -36,7 +36,7 @@
             <i v-if="scope.row.Admin" class="el-icon-check"></i>
           </template>
         </el-table-column>
-        <el-table-column prop="Department" label="所属部署名"></el-table-column>
+        <el-table-column prop="Department" label="所属部署名" sortable></el-table-column>
         <el-table-column prop="Name" label="名前"></el-table-column>
         <el-table-column prop="Email" label="Eメールアドレス"></el-table-column>
       </el-table>

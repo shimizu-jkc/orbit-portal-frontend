@@ -7,8 +7,17 @@ const state = () => ({
 
 // Getters
 const getters = {
-  searchKnowledge: (state) => ({keyword}) => {
+  searchKnowledge: (state) => ({keyword, phases, types, envs}) => {
     return state.Knowledges.filter(knowledge => {
+      if(phases && phases.length && !phases.includes(knowledge.Phase)) {
+        return false;
+      }
+      if(types && types.length && !types.includes(knowledge.Type)) {
+        return false;
+      }
+      if(envs && envs.length && !envs.includes(knowledge.Env)) {
+        return false;
+      }
       return keyword.length ? knowledge.Name.toLowerCase().includes(keyword.toLowerCase()) : true;
     });
   },

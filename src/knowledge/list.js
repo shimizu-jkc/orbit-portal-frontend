@@ -47,7 +47,7 @@ const knowledgeList = [
     Author  : "shimizu.yusuke53@jvckenwood.com",
     Link    : {
       Type  : LINK.INTERNAL,
-      Path  : `${DEFAULT_PATH}/user-management`
+      Path  : `${DEFAULT_PATH}/user-management/`
     }
   },
   //20210409 add by shimizu
@@ -60,7 +60,7 @@ const knowledgeList = [
     Author  : "tanaka.kodai@jvckenwood.com",
     Link    : {
       Type  : LINK.INTERNAL,
-      Path  :  `${DEFAULT_PATH}/loadtest`
+      Path  :  `${DEFAULT_PATH}/loadtest/`
     }
   },
   //20210409 add by shimizu
@@ -85,7 +85,7 @@ const knowledgeList = [
     Env     : ENV.GITHUB,
     Link    : {
       Type  : LINK.INTERNAL,
-      Path  : `${DEFAULT_PATH}/image-scan`
+      Path  : `${DEFAULT_PATH}/image-scan/`
     }
   }
 ];

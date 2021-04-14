@@ -1,6 +1,9 @@
 ---
+prev: false
+next: false
 sidebarDepth: 2
 displayAllHeaders: true
+collapsable: false
 ---
 
 # はじめに

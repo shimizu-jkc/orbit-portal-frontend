@@ -36,6 +36,7 @@
             v-model="keyword"
             placeholder="キーワード検索"
             prefix-icon="el-icon-search"
+            clearable
           ></el-input>
         </el-row>
         <el-row>

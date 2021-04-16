@@ -39,54 +39,62 @@ const DEFAULT_PATH = "/knowledge/items";
 const knowledgeList = [
   //20210409 add by shimizu
   {
-    Id      : "UserManagement",
-    Name    : "ユーザー認証とユーザ管理機能を実現するためのアーキテクチャ",
-    Phase   : PHASE.CODE,
-    Type    : TYPE.ARCH,
-    Env     : ENV.AWS,
-    Author  : "shimizu.yusuke53@jvckenwood.com",
-    Link    : {
-      Type  : LINK.INTERNAL,
-      Path  : `${DEFAULT_PATH}/user-management/`
-    }
+    Id        : "UserManagement",
+    Name      : "ユーザー認証とユーザ管理機能を実現するためのアーキテクチャ",
+    Desc      : "詳細",
+    Phase     : PHASE.CODE,
+    Type      : TYPE.ARCH,
+    Env       : ENV.AWS,
+    Author    : "shimizu.yusuke53@jvckenwood.com",
+    Link      : {
+      Type    : LINK.INTERNAL,
+      Path    : `${DEFAULT_PATH}/user-management/`
+    },
+    UpdatedAt : new Date("2021/4/9")
   },
   //20210409 add by shimizu
   {
-    Id      : "LoadTest",
-    Name    : "クラウド上で実行可能な負荷試験ツール",
-    Phase   : PHASE.TEST,
-    Type    : TYPE.TOOL,
-    Env     : ENV.AWS,
-    Author  : "tanaka.kodai@jvckenwood.com",
-    Link    : {
-      Type  : LINK.INTERNAL,
-      Path  :  `${DEFAULT_PATH}/loadtest/`
-    }
+    Id        : "LoadTest",
+    Name      : "クラウド上で実行可能な負荷試験ツール",
+    Desc      : "詳細",
+    Phase     : PHASE.TEST,
+    Type      : TYPE.TOOL,
+    Env       : ENV.AWS,
+    Author    : "tanaka.kodai@jvckenwood.com",
+    Link      : {
+      Type    : LINK.INTERNAL,
+      Path    : `${DEFAULT_PATH}/loadtest/`
+    },
+    UpdatedAt : new Date("2021/4/9")
   },
   //20210409 add by shimizu
   {
-    Id      : "DevContainer",
-    Name    : "コンテナを利用した共通開発環境の構築",
-    Phase   : PHASE.CODE,
-    Type    : TYPE.TOOL,
-    Env     : ENV.ANY,
-    Author  : "kaniwa.teruaki@jvckenwood.com",
-    Link    : {
-      Type  : LINK.EXTERNAL,
-      Url   : `https://github.com/jkc-cloud/orbit-dev-container`
-    }
+    Id        : "DevContainer",
+    Name      : "コンテナを利用した共通開発環境の構築",
+    Desc      : "詳細",
+    Phase     : PHASE.CODE,
+    Type      : TYPE.TOOL,
+    Env       : ENV.ANY,
+    Author    : "kaniwa.teruaki@jvckenwood.com",
+    Link      : {
+      Type    : LINK.EXTERNAL,
+      Url     : `https://github.com/jkc-cloud/orbit-dev-container`
+    },
+    UpdatedAt : new Date("2021/4/9")
   },
   //20210409 add by shimizu
   {
-    Id      : "ImageScan",
-    Name    : "コンテナイメージの脆弱性を自動でスキャンするCI/CD",
-    Phase   : PHASE.BUILD,
-    Type    : TYPE.KNOW,
-    Env     : ENV.GITHUB,
-    Link    : {
-      Type  : LINK.INTERNAL,
-      Path  : `${DEFAULT_PATH}/image-scan/`
-    }
+    Id        : "ImageScan",
+    Name      : "コンテナイメージの脆弱性を自動でスキャンするCI/CD",
+    Desc      : "詳細",
+    Phase     : PHASE.BUILD,
+    Type      : TYPE.KNOW,
+    Env       : ENV.GITHUB,
+    Link      : {
+      Type    : LINK.INTERNAL,
+      Path    : `${DEFAULT_PATH}/image-scan/`
+    },
+    UpdatedAt : new Date("2021/4/9")
   }
 ];
 

@@ -18,13 +18,18 @@ const getters = {
       if(envs && envs.length && !envs.includes(knowledge.Env)) {
         return false;
       }
-      return keyword.length ? knowledge.Name.toLowerCase().includes(keyword.toLowerCase()) : true;
+      if(keyword.length) {
+        const k = keyword.toLowerCase();
+        if(!(knowledge.Name && knowledge.Name.toLowerCase().includes(k)) &&
+           !(knowledge.Desc && knowledge.Desc.toLowerCase().includes(k)) &&
+           !(knowledge.Author && knowledge.Author.toLowerCase().includes(k))) {
+          return false;
+        }
+      }
+      return true;
     });
   },
   getKnowledgeById: (state) => (id) => {
-    console.log(state.Knowledges)
-    console.log(id)
-    console.log( state.Knowledges.find(k => k.Id === id))
     return state.Knowledges.find(k => k.Id === id);
   }
 };

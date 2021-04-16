@@ -3,25 +3,42 @@ next: false
 ---
 
 # 利用料金アラート通知サービス
-ここでは、複数のプロジェクトアカウントでの利用料金を合算し、プロジェクトの指定予算額を超えた、あるいは超えると予測された時にアラートを受け取るための手順について説明します。
+
+OrBITでは、プロジェクトで利用している複数のAWSアカウントの利用料金を合算し、プロジェクトの指定予算額を超えた、あるいは超えると予測された時にアラートを発行する仕組みを提供しています。
 
 [[toc]]
 
-## 前提知識
-このチュートリアルでは、AWSにおける請求アラートの設定に関する基本的な知識が必要となります。
+## 利用するAWSサービス
+OrBITでは、利用料金のアラートを通知するために、以下のサービスを利用します。
 
-一般的に、請求アラートを受け取るには、***AWS Budgets*** もしくは ***Amazon CloudWatch*** を利用する方法があります。各々の設定に関しては、以下を参照して下さい。
-- [「AWS Budgetsを使用したコストの管理」](https://docs.aws.amazon.com/ja_jp/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html)
-- [「Amazon CloudWatchを使用した請求額のモニタリング」](https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html)
+- ***AWS Budgets***
+
+  利用料金に対して予算を設定し、コストまたは使用量が予算額や予算量を超えたとき、あるいは超えると予測されたときにアラートを発信するサービスです。
+
+  詳細は以下を参照してください。
+  - [「AWS Budgetsを使用したコストの管理」](https://docs.aws.amazon.com/ja_jp/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html)
+  - [「AWS Budgets料金」](https://aws.amazon.com/jp/aws-cost-management/pricing/)
+
+  ::: tip INFO
+    *AWS Budgets*は、OrBITコアにより管理されますので、プロジェクト側での利用料金は発生しません。
+  :::
+
+- ***Amazon Simple Notification Service (Amzaon SNS)***
+
+  サブスクライブしているクライアントへのメッセージの配信、管理を行うサービスです。
+  Eメールをはじめとした、様々なプロトコルでサブスクライブすることが可能であり、検知した内容を本サービスを通じて通知することにより、アラート通知を実現します。
+
+  詳細は以下を参照してください。
+  - [「予算の通知に関する Amazon SNS トピックの作成」](https://docs.aws.amazon.com/ja_jp/awsaccountbilling/latest/aboutv2/budgets-sns-policy.html)
+  - [「Amazon SNS料金」](https://aws.amazon.com/jp/sns/pricing/)    
 
 ## 前提条件
-本機能の利用にあたって、以下の条件を満たしている必要があります。
-
+本サービスを利用するためには、以下の条件を満たしている必要があります。
 - 合算対象とするすべてのAWSアカウントがOrBITから払い出されている。
 - OrBIT利用時、もしくは利用開始後に予算額を指定している。
 
 ## 制限
-合算した請求アラートの機能は、OrBITにより全プロジェクト共通で提供されるため、以下の設定を任意に変更することはできません。
+合算した請求アラートの機能は、OrBITによりすべてのプロジェクトに共通で提供されるため、以下の設定を任意に変更することはできません。
 - 予算の設定
 - 請求アラートの数や設定
 - 通知内容
@@ -96,10 +113,11 @@ arn:aws:sns:us-east-1:904580840362:orbit-ProjectBudgetAlertFor${PROJECT}
 ```
 
 ::: tip INFO
-`message`属性の内容がJSON形式でないのは、*AWS Budgets*の仕様です。
+`message`属性の内容がJSON形式でないのは、*AWS Budgets*の仕様のため変更できません。
 :::
 
-## マネジメントコンソールで合算した請求アラートのEメール通知を設定する
+## チュートリアル
+### マネジメントコンソールで合算した請求アラートのEメール通知を設定する
 
 1. マネジメントコンソールにサインインし、[「Amazon SNSコンソール」](https://console.aws.amazon.com/sns/v3/home)を開きます。
 
@@ -119,7 +137,7 @@ arn:aws:sns:us-east-1:904580840362:orbit-ProjectBudgetAlertFor${PROJECT}
 
 ウェブブラウザに Amazon SNSの確認画面が表示され、**[確認済み]** になっていれば設定は完了です。
 
-## AWS CLIを使用して合算した請求アラートのEメール通知を設定する
+### AWS CLIを使用して合算した請求アラートのEメール通知を設定する
 
 1. AWS CLIを使用して次のコマンドを実行します。
 
@@ -130,4 +148,3 @@ aws sns subscribe --topic-arn arn:aws:sns:us-east-1:904580840362:orbit-ProjectBu
 2. EメールアプリケーションでAWSから届いたメッセージを開き、リンクを開きます。
 
 ウェブブラウザに Amazon SNSの確認画面が表示され、**[確認済み]** になっていれば設定は完了です。
-

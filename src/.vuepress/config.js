@@ -110,7 +110,7 @@ module.exports = {
         },
         {
           title: "利用手順",
-          collapsable: true,
+          collapsable: false,
           children: [
             "setup/startup",
             "setup/routine",
@@ -119,7 +119,7 @@ module.exports = {
         },
         {
           title: "提供サービス",
-          collapsable: true,
+          collapsable: false,
           children: [  
             "service/account-management",
             "service/billing",
@@ -133,7 +133,7 @@ module.exports = {
         },
         {
           title: "リファレンス",
-          collapsable: true,
+          collapsable: false,
           children: [
             "reference/baseline"
           ]

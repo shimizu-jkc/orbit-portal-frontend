@@ -79,7 +79,7 @@ const DispNameTable = {
   knowledgeEnv: [
     { value: "AWS"    , label: "AWS" },
     { value: "GITHUB" , label: "GitHub" },
-    { value: "ANY"    , label: "環境非依存" },
+    { value: "ANY"    , label: "非依存" },
     { value: "OTHER"  , label: "その他" }
   ]
 };

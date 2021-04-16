@@ -161,5 +161,6 @@ a {
   padding: 8px 10px 0;
   height: 28px;
   font-size: 12px;
+  width: 100%;
 }
 </style>

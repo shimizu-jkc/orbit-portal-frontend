@@ -70,7 +70,7 @@ const DispNameTable = {
     { value: "MONITOR" , label: "MONITOR" }
   ],
   knowledgeType: [
-    { value: "KNOW"  , label: "ナレッジ" },
+    { value: "KNOW"  , label: "ノウハウ" },
     { value: "ARCH"  , label: "アーキテクチャ" },
     { value: "TMPL"  , label: "テンプレート" },
     { value: "TOOL"  , label: "ツール" },

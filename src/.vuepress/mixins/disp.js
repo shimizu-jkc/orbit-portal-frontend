@@ -58,6 +58,29 @@ const DispNameTable = {
     { value: "BUSINESS" , label: "ビジネス" },
     { value: "DEVELOPER" , label: "デベロッパー" },
     { value: "BASIC"     , label: "ベーシック" } 
+  ],
+  knowledgePhase: [
+    { value: "PLAN"    , label: "PLAN" },
+    { value: "CODE"    , label: "CODE" },
+    { value: "BUILD"   , label: "BUILD" },
+    { value: "TEST"    , label: "TEST" },
+    { value: "RELEASE" , label: "RELEASE" },
+    { value: "DEPLOY"  , label: "DEPLOY" },
+    { value: "OPERATE" , label: "OPERATE" },
+    { value: "MONITOR" , label: "MONITOR" }
+  ],
+  knowledgeType: [
+    { value: "KNOW"  , label: "ノウハウ" },
+    { value: "ARCH"  , label: "アーキテクチャ" },
+    { value: "TMPL"  , label: "テンプレート" },
+    { value: "TOOL"  , label: "ツール" },
+    { value: "OTHER" , label: "その他" }
+  ],
+  knowledgeEnv: [
+    { value: "AWS"    , label: "AWS" },
+    { value: "GITHUB" , label: "GitHub" },
+    { value: "ANY"    , label: "非依存" },
+    { value: "OTHER"  , label: "その他" }
   ]
 };
 

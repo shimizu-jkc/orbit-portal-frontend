@@ -11,4 +11,4 @@ DevSecOpsやその利用については、[「はじめに」](/knowledge/introd
 
 ---
 
-<AppKnowledgeList />
+<AppKnowledgeGridList />

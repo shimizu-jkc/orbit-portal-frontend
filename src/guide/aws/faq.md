@@ -4,14 +4,14 @@ next: false
 ---
 
 # よくある質問
-ここでは、プロジェクトからの問い合わせの中で、特に多かったものを記載しています。
+ここでは、特に問い合わせの多い質問と回答を記載しています。
 
 [[toc]]
 
 ## 全般
 
 ### Q. 導入実績はありますか？
-現在、社内のいくつかのサービスでご利用頂いています。
+現在、社内のいくつかのプロジェクトでご利用頂いています。
 
 ## AWSアカウント関連
 
@@ -37,3 +37,5 @@ OrBITではセキュリティポリシーに準拠するため、*AWS Config*の
 - 記録対象のリソースを制限します。詳細は下記を参照してください。
     -  [「AWS Config でサポートされている AWS リソースタイプとリソース関係」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/resource-config-reference.html)
     - [「AWS Config で記録するリソースの選択」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/select-resources.html)
+
+<Footer />

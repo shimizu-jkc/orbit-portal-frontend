@@ -8,71 +8,171 @@
 
 ___
 
-## 脆弱性スキャンについて
+## 目的
 
-セキュリティうんぬん
+IPAの[脆弱性対応ガイドライン](https://www.ipa.go.jp/security/ciadr/partnership_guide.html)より、サイバーセキュリティの現状が述べられています。
 
-### 脆弱性スキャンをするメリット
+> 2000 年頃より、日本国内においてソフトウエアやウェブアプリケーションの脆弱性が発見されることが増えており、これらの脆弱性を悪用した不正アクセス行為やコンピュータウイルスの増加により、企業活動が停止したり情報資産が滅失したり個人情報が漏えいしたりといった、重大な被害が生じています。
+
+上記のような状況に対応できるよう、脆弱性を検出できる環境が必要になります。今回は、コンテナを扱うケースを例に、脆弱性を検出するツールや自動で検出できるCI/CDの環境整備を紹介します。
+
+## 脆弱性スキャンをするメリット
 
 - コンテナのセキュリティを向上できる
-    - 外部から攻撃されても
-- 複数の問題があるときに、どの脆弱性の対策から行うべきかわかる
-    - それぞれの脆弱性に対して脅威レベルが定められている
+    - 外部から攻撃/侵入される余地が少なくなります。
+    - 侵入されても、被害を最小限に留めることができます。
+- どの脆弱性の対策から行うべきかわかる
+    - それぞれの脆弱性に対して脅威レベルが定められているため、脆弱性の対策の順番を定めやすくなります。
+    - 脆弱性の原因が具体的に指摘されるため、修正が容易です。
 
-### 脆弱性スキャン方法
+## 脆弱性の基準
 
-- Dockerfileの検査
-    - ベストプラクティスに沿わない書き方がされている箇所を抽出する。
-    - 例：以下のようなベストプラクティスに沿って書かれているかどうかチェックする
-    - [Dockerベストプラクティス(日本語版)](https://docs.docker.jp/develop/develop-images/dockerfile_best-practices.html)、[Dockerベストプラクティス(英語版)](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
-- コンテナイメージのスキャン
-    - ベストプラクティスに沿わない書き方がされている箇所を抽出する。
-    - 脆弱性を含んでいる外部ライブラリやOSが含まれていた場合に抽出する。
+- [Dockerベストプラクティス](https://docs.docker.jp/develop/develop-images/dockerfile_best-practices.html)
+    - コンテナを定義する際に、適切な書き方を提示しています。
+    - ベストプラクティスに沿わない場合、コンテナに脆弱性が含まれる可能性があります。
+- [共通脆弱性識別子CVE](https://www.ipa.go.jp/security/vuln/CVE.html)
+    - 外部のライブラリやOSが脆弱性を含んでいる場合、CVEが割り当てられます。
+    - 該当するライブラリやOSを使用している場合、そのコンテナは脆弱性が含まれています。
+    - CVEは脆弱性データベース(NVDなど)から取得でき、該当するバージョンや脆弱性の詳細な情報が得られます。
 
 ## コンテナ脆弱性スキャンツール紹介
 
 ### [Hadolint](https://github.com/hadolint/hadolint)
 
-Docker公式が出しているベストプラクティスを元に、Dockerfileを検査する。（元イメージは検査しない）
+Docker公式が出しているベストプラクティスを元に、Dockerfileを検査します（引用元のイメージは検査しない）。 Dockerfile内に記載されているshellスクリプトは`shellcheck`を使用してスキャンしています。
 
 - スキャン対象：Dockerfile
-- 検査基準：Hadolintオリジナルルール、[shellcheck](https://github.com/koalaman/shellcheck)
+- 検査基準：Dockerベストプラクティス、[shellcheck](https://github.com/koalaman/shellcheck)
+
+**検出ログのサンプル**
+
+```
+container/jmeter/Dockerfile:15 DL3047 warning: Avoid use of wget without progress bar. Use `wget --progress=dot:giga <url>`.Or consider using `-q` or `-nv` (shorthands for `--quiet` or `--no-verbose`).
+container/jmeter/Dockerfile:15 DL3017 error: Do not use apk upgrade
+container/jmeter/Dockerfile:15 DL4001 warning: Either use Wget or Curl but not both
+container/jmeter/Dockerfile:15 DL3019 info: Use the `--no-cache` switch to avoid the need to use `--update` and remove `/var/cache/apk/*` when done installing packages
+container/jmeter/Dockerfile:15 DL3018 warning: Pin versions in apk add. Instead of `apk add <package>` use `apk add <package>=<version>`
+```
 
 ### [Dockle](https://github.com/goodwithtech/dockle)
 
-コンテナイメージをスキャンし、DockerのベストプラクティスとDockle独自のルールに沿っているか検査する。元のイメージに含まれる脆弱性も検出する。
+コンテナイメージをスキャンし、DockerのベストプラクティスとCISベンチマークに加え、Dockle独自のルールに沿っているか検査します。元のイメージに含まれる脆弱性も検出します。外部のライブラリやOSは検出対象にはなりません。
 
 - スキャン対象：コンテナイメージ
-- 検査基準：Dockerベストプラクティス、CISベンチマーク(Docker)、
+- 検査基準：Dockerベストプラクティス、CISベンチマーク(Docker)
+
+**検出ログのサンプル**
+
+```
+FATAL	- DKL-DI-0003: Avoid apt-get/apk/dist-upgrade
+	* Avoid upgrade in container : |2 JMETER_VERSION=5.2.1 TZ=Asia/Tokyo /bin/sh -c apk update 	&& apk upgrade 	&& apk add ca-certificates 	&& update-ca-certificates 	&& apk add --update openjdk8-jre tzdata curl unzip bash 	&& apk add --no-cache nss 	&& rm -rf /var/cache/apk/* 	&& mkdir -p /tmp/dependencies  	&& curl -L --silent ${JMETER_DOWNLOAD_URL} >  /tmp/dependencies/apache-jmeter-${JMETER_VERSION}.tgz  	&& mkdir -p /opt  	&& tar -xzf /tmp/dependencies/apache-jmeter-${JMETER_VERSION}.tgz -C /opt  	&& rm -rf /tmp/dependencies     && wget -O ${JMETER_HOME}/lib/ext/mqtt-xmeter-1.13.jar "emqx/mqtt-jmeter@master/Download/v1.13.0/mqtt-xmeter-1.13-jar-with-dependencies.jar?raw=true"
+WARN	- CIS-DI-0001: Create a user for the container
+	* Last user should not be root
+INFO	- CIS-DI-0006: Add HEALTHCHECK instruction to the container image
+	* not found HEALTHCHECK statement
+```
 
 ### [Docker Bench for Security](https://github.com/docker/docker-bench-security)
 
-Docker公式のベンチマークツール。CISのベンチマーク(Docker)をベースにDockerのベストプラクティスに沿っているか検査する。
+Docker公式のベンチマークツール。CISのベンチマーク(Docker)をベースにDockerのベストプラクティスに沿っているか検査します。
 
 - スキャン対象：コンテナイメージ
-- 検査基準：CISベンチマーク(Docker)、Dockerオリジナルルール
+- 検査基準：Dockerベストプラクティス、CISベンチマーク(Docker)
+
+**検出ログのサンプル**
+
+```
+[INFO] 4 - Container Images and Build File
+[INFO] 4.1  - Ensure a user for the container has been created
+[INFO]      * No containers running
+[NOTE] 4.2  - Ensure that containers use trusted base images
+[NOTE] 4.3  - Ensure unnecessary packages are not installed in the container
+[NOTE] 4.4  - Ensure images are scanned and rebuilt to include security patches
+[WARN] 4.5  - Ensure Content trust for Docker is Enabled
+[WARN] 4.6  - Ensure HEALTHCHECK instructions have been added to the container image
+```
 
 ### [Trivy](https://github.com/aquasecurity/trivy)
 
-コンテナイメージからNVDから得た脆弱性を検出する。OSやライブラリで発生した脆弱性をリストアップする他、アプリケーションと依存関係にあるパッケージも含んで検出する。
+コンテナイメージからNVDから得た脆弱性を検出します。OSやライブラリで発生した脆弱性をリストアップする他、アプリケーションと依存関係にあるパッケージも含んで検出します。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)
+
+**検出ログのサンプル**
+
+```
+jmeter_jmeter:latest (alpine 3.11.5)
+====================================
+Total: 19 (UNKNOWN: 1, LOW: 2, MEDIUM: 8, HIGH: 8, CRITICAL: 0)
+
++--------------+------------------+----------+-------------------+---------------+---------------------------------------+
+|   LIBRARY    | VULNERABILITY ID | SEVERITY | INSTALLED VERSION | FIXED VERSION |                 TITLE                 |
++--------------+------------------+----------+-------------------+---------------+---------------------------------------+
+| apk-tools    | CVE-2021-30139   | UNKNOWN  | 2.10.4-r3         | 2.10.6-r0     | -->avd.aquasec.com/nvd/cve-2021-30139 |
++--------------+------------------+----------+-------------------+---------------+---------------------------------------+
+| busybox      | CVE-2021-28831   | HIGH     | 1.31.1-r9         | 1.31.1-r10    | busybox: invalid free or segmentation |
+|              |                  |          |                   |               | fault via malformed gzip data         |
+|              |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2021-28831 |
++--------------+------------------+          +-------------------+---------------+---------------------------------------+
+| libcrypto1.1 | CVE-2020-1967    |          | 1.1.1d-r3         | 1.1.1g-r0     | openssl: Segmentation                 |
+|              |                  |          |                   |               | fault in SSL_check_chain              |
+|              |                  |          |                   |               | causes denial of service              |
+|              |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-1967  |
++              +------------------+          +                   +---------------+---------------------------------------+
+|              | CVE-2021-23840   |          |                   | 1.1.1j-r0     | openssl: integer                      |
+|              |                  |          |                   |               | overflow in CipherUpdate              |
+|              |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2021-23840 |
++              +------------------+----------+                   +---------------+---------------------------------------+
+|              | CVE-2020-1971    | MEDIUM   |                   | 1.1.1i-r0     | openssl: EDIPARTYNAME                 |
+|              |                  |          |                   |               | NULL pointer de-reference             |
+|              |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-1971  |
+.              .                  .          .                   .               .                                       .
+.              .                  .          .                   .               .                                       .
+.              .                  .          .                   .               .                                       .
+
+```
 
 ### [Clair](https://github.com/quay/clair)
 
-コンテナイメージからOSやライブラリで発生した脆弱性をリストアップする。curlやwgetなどのパッケージ管理ツール外で入れたパッケージは検査の対象にならない。
+コンテナイメージからOSやライブラリで発生した脆弱性をリストアップします。curlやwgetなどのパッケージ管理ツール外で入れたパッケージは検査の対象になりません。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)
 
+**検出ログのサンプル**
+
+```
+[ERRO] ▶ Image [httpd:2.4.37] contains 146 unapproved vulnerabilities
++------------+-----------------------------+--------------+------------------------+--------------------------------------------------------------+
+| STATUS     | CVE SEVERITY                | PACKAGE NAME | PACKAGE VERSION        | CVE DESCRIPTION                                              |
++------------+-----------------------------+--------------+------------------------+--------------------------------------------------------------+
+| Unapproved | High CVE-2018-14614         | linux        | 4.9.130-2              | An issue was discovered in the Linux kernel                  |
+|            |                             |              |                        | through 4.17.10. There is an out-of-bounds                   |
+|            |                             |              |                        | access in __remove_dirty_segment() in                        |
+|            |                             |              |                        | fs/f2fs/segment.c when mounting an f2fs image.               |
+|            |                             |              |                        | https://security-tracker.debian.org/tracker/CVE-2018-14614   |
++------------+-----------------------------+--------------+------------------------+--------------------------------------------------------------+
+| Unapproved | High CVE-2018-14610         | linux        | 4.9.130-2              | An issue was discovered in the Linux kernel                  |
+|            |                             |              |                        | through 4.17.10. There is out-of-bounds access               |
+|            |                             |              |                        | in write_extent_buffer() when mounting and                   |
+|            |                             |              |                        | operating a crafted btrfs image, because of a                |
+|            |                             |              |                        | lack of verification that each block group has               |
+|            |                             |              |                        | a corresponding chunk at mount time, within                  |
+|            |                             |              |                        | btrfs_read_block_groups in fs/btrfs/extent-tree.c.           |
+|            |                             |              |                        | https://security-tracker.debian.org/tracker/CVE-2018-14610   |
+.            .                             .              .                        .                                                              .
+.            .                             .              .                        .                                                              .
+.            .                             .              .                        .                                                              .
+```
+
 ### 比較表
 
-|              |             Hadolint             |                       Dockle                        |                      Docker Bench for Security                       |                                Trivy                                 |              Clair               |
-| :----------: | -------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------- |
-| スキャン対象 | Dockerfile                       | コンテナイメージ                                    | コンテナイメージ                                                     | コンテナイメージ                                                     | コンテナイメージ                 |
-|   検査基準   | Hadolintオリジナル<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク(Docker) | NVD                                                                  | NVD                                                                  | NVD                              |
-|   対象範囲   | Dockerfile記法                   | コンテナイメージ内                                  | OS、インストールしたパッケージ、アプリケーションが使用するパッケージ | OS、インストールしたパッケージ、アプリケーションが使用するパッケージ | OS、インストールしたパッケージ、 |
+|              |                Hadolint                |                       Dockle                        | Docker Bench for Security |                                  Trivy                                   |              Clair               |
+| :----------: | -------------------------------------- | --------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------ | -------------------------------- |
+| スキャン対象 | Dockerfile                             | コンテナイメージ                                    | コンテナイメージ          | コンテナイメージ                                                         | コンテナイメージ                 |
+|   検査基準   | Dockerベストプラクティス<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク(Docker) | NVD                       | NVD                                                                      | NVD                              |
+|   対象範囲   | Dockerfile記法                         | コンテナイメージ                                    | コンテナイメージ          | OS<br>インストールしたパッケージ<br>アプリケーションが使用するパッケージ | OS<br>インストールしたパッケージ |
 
 ## コンテナをスキャンする
 
@@ -80,15 +180,26 @@ Docker公式のベンチマークツール。CISのベンチマーク(Docker)を
 
 ### GitHub Actionsで動かすワークフローの紹介
 
-このフローは以下の仕様で動作します。
+このフローは以下の仕様で記述しました。
 
-- devブランチに対してプルリクを作成したとき
-- `container/`フォルダが更新されたとき
-- 
+- プルリクエストを作成したとき動作する
+    - 以下のフォルダが更新されたとき動作する
+    - `container/`フォルダ
+    - `.github/workflows`フォルダ
+- `Hadolint`, `Dockle`, `Trivy`を動かす
+    - 3つのツールを並列で動作させる
+    - 脆弱性が検出されてもフローは継続する
+- 結果を出力する
+    - 脆弱性が検出されたときにNG判定になる
+    - 結果をログで出力する
+    - 結果ファイルをGitHubActionsのアーティファクトに保存する
 
 #### ソースコード全体
 
+- もしくは[リンク](https://github.com/jkc-cloud/orbit-catalog-LoadTest/blob/tanaka-cicd/.github/workflows/DockerImageLinter.yaml)
+
 ::: details GitHub Actionsワークフローのソースコード(全体)
+
 ```yaml
 name: Check docker image 
 
@@ -191,17 +302,96 @@ jobs:
           SLACK_TITLE: "failed to scan docker image"
           SLACK_COLOR: "#FF0000"
 ```
+
 :::
 
 #### ソースコードの解説
 
-あああ
+##### GitHub Actionsのトリガー設定
+
+- `on`で、いつワークフローを起動するか設定する
+- `pull_request`でプルリク作成時(および更新時)に起動できる。
+
+::: details Gitトリガー設定
+
+```yaml{4}
+name: Check docker image 
+
+on:
+  pull_request:        # プルリクエスト作成時に起動
+    branches:
+      - dev
+    paths:
+      - 'container/**'
+      - '.github/workflows/**'
+```
+
+:::
+
+##### 実行環境と環境変数を指定する
+
+- `runs-on`で実行環境を設定する
+- `env`で環境変数を設定する
+    - `secrets.XXXXXXX`で、GitHubに設定したシークレットの変数（例えばアクセスキーなど）を利用できます。
+        - アクセスキーをソースコード上に公開せずに実行が可能になります。
+
+::: details 実行環境と環境変数の設定
+
+```yaml{4-5}
+jobs:
+  deploy:
+    name: scan and lint
+    runs-on: ubuntu-latest        # ubuntuの最新版で実行する
+    env:                          # 環境変数を設定する
+      DEPLOY_ENV: "dev"
+      AWS_REGION: "us-west-2"
+      IMAGE_TAG: "test"
+      RESULT_DIR: "result"
+      TARGET_CONTAINER: "container/jmeter"
+      CONTAINER_NAME: "jmeter"
+      SSH_KEY_FOR_ORBIT_LIB_COMMON: ${{ secrets.SSH_KEY_FOR_ORBIT_LIB_COMMON }}
+      SLACK_WEBHOOK_URL: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
+      SLACK_ICON_URL: "https://www.docker.com/sites/default/files/d8/2019-07/vertical-logo-monochromatic.png"
+```
+
+:::
+
+##### ソースコードの取得とコンテナのビルド
+
+- `uses: actions/checkout@v2`でソースコードの取得([GitHub公式の提供](https://github.com/actions))
+- Checkout submodulesは、上記のソースコードの取得で取得できないsubmodulesのソースを取得している
+- Build containerは、スキャンする対象となるコンテナイメージをビルドする
+
+::: details GitHubからソースコードを取得＆コンテナのビルド
+
+```yaml{2,3,10}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: |
+          mkdir -p /home/runner/.ssh/
+          echo -e "${SSH_KEY_FOR_ORBIT_LIB_COMMON}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
+          git submodule sync --recursive
+          git submodule update --init --force --recursive --remote
+      - name: Build container
+        env:
+          IMAGE_REF: ${{ env.CONTAINER_NAME }}:${{ env.IMAGE_TAG }}
+        run: |
+          docker build -t $IMAGE_REF $TARGET_CONTAINER
+```
+
+:::
+
+##### スキャンの実施
+
+～～～
 
 ## 用語集
 
-|        用語        |                     正式名称                      |                           意味                           |
-| -----------------: | ------------------------------------------------: | -------------------------------------------------------: |
-| ベストプラクティス |                                                 - | そのツールを利用する際に推奨とされているプロセスや手法。 |
-|                CVE |              Common Vulnerabilities and Exposures |             脆弱性に対して共通の識別子を付与したリスト。 |
-|               NIST | National Institute of<br>Standards and Technology |                       アメリカ国立標準技術研究所のこと。 |
-|                NVD |                   National Vulnerability Database |          NISTが提供する脆弱性のデータベース。CVEを含む。 |
+|        用語        |                     正式名称                      |                             意味                             |
+| -----------------: | ------------------------------------------------: | -----------------------------------------------------------: |
+| ベストプラクティス |                                                 - | そのツールを利用する際に推奨とされているプロセスや手法のこと |
+|                CVE |              Common Vulnerabilities and Exposures |             脆弱性に対して共通の識別子を付与したリストのこと |
+|               NIST | National Institute of<br>Standards and Technology |                             アメリカ国立標準技術研究所のこと |
+|                NVD |                   National Vulnerability Database |          NISTが提供する脆弱性のデータベースのこと。CVEを含む |

@@ -2,13 +2,13 @@
 
 <ScreenTransitionBtn btnName="戻る" path="/knowledge/search" />
 
-## 目次
+___
 
 [[toc]]
 
 ___
 
-## 目的
+## 当ナレッジについて
 
 IPAの[脆弱性対応ガイドライン](https://www.ipa.go.jp/security/ciadr/partnership_guide.html)より、サイバーセキュリティの現状が述べられています。
 
@@ -39,7 +39,7 @@ IPAの[脆弱性対応ガイドライン](https://www.ipa.go.jp/security/ciadr/p
 
 ### [Hadolint](https://github.com/hadolint/hadolint)
 
-Docker公式が出しているベストプラクティスを元に、Dockerfileを検査します（引用元のイメージは検査しない）。 Dockerfile内に記載されているshellスクリプトは`shellcheck`を使用してスキャンしています。
+Docker公式が出しているベストプラクティスを元に、Dockerfileを検査します（引用元のイメージは検査しない）。 Dockerfile内に記載されているshellスクリプトは`shellcheck`を使用してスキャンします。
 
 - スキャン対象：Dockerfile
 - 検査基準：Dockerベストプラクティス、[shellcheck](https://github.com/koalaman/shellcheck)
@@ -127,7 +127,7 @@ $ docker run --rm --net host --pid host --userns host --cap-add audit_control \
 
 ### [Trivy](https://github.com/aquasecurity/trivy)
 
-NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。インストール方法に関わらず、アプリケーションと依存関係にあるパッケージを含めて検査します。
+NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。アプリケーションと依存関係にあるパッケージも含めて検出することができます。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)

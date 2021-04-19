@@ -44,6 +44,13 @@ Docker公式が出しているベストプラクティスを元に、Dockerfile�
 - スキャン対象：Dockerfile
 - 検査基準：Dockerベストプラクティス、[shellcheck](https://github.com/koalaman/shellcheck)
 
+#### 使用方法
+
+```shell
+$ brew install hadolint
+$ hadolint /path/to/dir/Dockerfile
+```
+
 **検出ログのサンプル**
 
 ```
@@ -56,10 +63,17 @@ container/jmeter/Dockerfile:15 DL3018 warning: Pin versions in apk add. Instead 
 
 ### [Dockle](https://github.com/goodwithtech/dockle)
 
-コンテナイメージをスキャンし、DockerのベストプラクティスとCISベンチマークに加え、Dockle独自のルールに沿っているか検査します。元のイメージに含まれる脆弱性も検出します。外部のライブラリやOSは検出対象にはなりません。
+DockerのベストプラクティスとCISベンチマークに加え、Dockle独自のルールに沿っているコンテナイメージであるか検査します。元のイメージに含まれる脆弱性も検出します。外部のライブラリやOSは検出対象にはなりません。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：Dockerベストプラクティス、CISベンチマーク(Docker)
+
+#### 使用方法
+
+```shell
+$ brew install dockle
+$ dockle target_image_name:tag_name
+```
 
 **検出ログのサンプル**
 
@@ -74,10 +88,26 @@ INFO	- CIS-DI-0006: Add HEALTHCHECK instruction to the container image
 
 ### [Docker Bench for Security](https://github.com/docker/docker-bench-security)
 
-Docker公式のベンチマークツール。CISのベンチマーク(Docker)をベースにDockerのベストプラクティスに沿っているか検査します。
+Docker公式のベンチマークツール。CISのベンチマーク(Docker)をベースにDockerのベストプラクティスに沿っているコンテナイメージか検査します。複数のイメージを同時にスキャン可能です。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：Dockerベストプラクティス、CISベンチマーク(Docker)
+
+#### 使用方法
+
+```shell
+$ docker run --rm --net host --pid host --userns host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /etc:/etc:ro \
+    -v /usr/bin/containerd:/usr/bin/containerd:ro \
+    -v /usr/bin/runc:/usr/bin/runc:ro \
+    -v /usr/lib/systemd:/usr/lib/systemd:ro \
+    -v /var/lib:/var/lib:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    --label docker_bench_security \
+    -t target_image_name:tag_name \
+    docker/docker-bench-security
+```
 
 **検出ログのサンプル**
 
@@ -90,14 +120,24 @@ Docker公式のベンチマークツール。CISのベンチマーク(Docker)を
 [NOTE] 4.4  - Ensure images are scanned and rebuilt to include security patches
 [WARN] 4.5  - Ensure Content trust for Docker is Enabled
 [WARN] 4.6  - Ensure HEALTHCHECK instructions have been added to the container image
+.
+.
+.
 ```
 
 ### [Trivy](https://github.com/aquasecurity/trivy)
 
-コンテナイメージからNVDから得た脆弱性を検出します。OSやライブラリで発生した脆弱性をリストアップする他、アプリケーションと依存関係にあるパッケージも含んで検出します。
+NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。インストール方法に関わらず、アプリケーションと依存関係にあるパッケージを含めて検査します。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)
+
+#### 使用方法
+
+```shell
+$ brew install trivy
+$ trivy image target_image_name:tag_name
+```
 
 **検出ログのサンプル**
 
@@ -135,10 +175,16 @@ Total: 19 (UNKNOWN: 1, LOW: 2, MEDIUM: 8, HIGH: 8, CRITICAL: 0)
 
 ### [Clair](https://github.com/quay/clair)
 
-コンテナイメージからOSやライブラリで発生した脆弱性をリストアップします。curlやwgetなどのパッケージ管理ツール外で入れたパッケージは検査の対象になりません。
+NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。パッケージ管理ツールを使わずにインストール(curlやwgetなど)した場合、そのパッケージは検査の対象になりません。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)
+
+#### 使用方法
+
+```shell
+$ ～調整中～
+```
 
 **検出ログのサンプル**
 
@@ -168,11 +214,11 @@ Total: 19 (UNKNOWN: 1, LOW: 2, MEDIUM: 8, HIGH: 8, CRITICAL: 0)
 
 ### 比較表
 
-|              |                Hadolint                |                       Dockle                        | Docker Bench for Security |                                  Trivy                                   |              Clair               |
-| :----------: | -------------------------------------- | --------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------ | -------------------------------- |
-| スキャン対象 | Dockerfile                             | コンテナイメージ                                    | コンテナイメージ          | コンテナイメージ                                                         | コンテナイメージ                 |
-|   検査基準   | Dockerベストプラクティス<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク(Docker) | NVD                       | NVD                                                                      | NVD                              |
-|   対象範囲   | Dockerfile記法                         | コンテナイメージ                                    | コンテナイメージ          | OS<br>インストールしたパッケージ<br>アプリケーションが使用するパッケージ | OS<br>インストールしたパッケージ |
+|              |                Hadolint                |                                 Dockle                                  |              Docker Bench for Security              |                                  Trivy                                   |              Clair               |
+| :----------: | -------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------- |
+| スキャン対象 | Dockerfile                             | コンテナイメージ                                                        | コンテナイメージ                                    | コンテナイメージ                                                         | コンテナイメージ                 |
+|   検査基準   | Dockerベストプラクティス<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク(Docker)<br>Dockle独自ルール | Dockerベストプラクティス<br>CISベンチマーク(Docker) | NVD                                                                      | NVD                              |
+|   対象範囲   | Dockerfile記法                         | コンテナイメージ                                                        | コンテナイメージ                                    | OS<br>インストールしたパッケージ<br>アプリケーションが使用するパッケージ | OS<br>インストールしたパッケージ |
 
 ## コンテナをスキャンする
 
@@ -341,8 +387,8 @@ on:
 jobs:
   deploy:
     name: scan and lint
-    runs-on: ubuntu-latest        # ubuntuの最新版で実行する
-    env:                          # 環境変数を設定する
+    runs-on: ubuntu-latest        # ubuntuの最新版で実行
+    env:                          # 環境変数の設定
       DEPLOY_ENV: "dev"
       AWS_REGION: "us-west-2"
       IMAGE_TAG: "test"
@@ -366,15 +412,15 @@ jobs:
 
 ```yaml{2,3,10}
     steps:
-      - uses: actions/checkout@v2
-      - name: Checkout submodules
+      - uses: actions/checkout@v2        # ソースコードの取得
+      - name: Checkout submodules        # submoduleのソースコード取得
         run: |
           mkdir -p /home/runner/.ssh/
           echo -e "${SSH_KEY_FOR_ORBIT_LIB_COMMON}" > /home/runner/.ssh/id_rsa
           chmod 600 /home/runner/.ssh/id_rsa
           git submodule sync --recursive
           git submodule update --init --force --recursive --remote
-      - name: Build container
+      - name: Build container            # コンテナのビルド
         env:
           IMAGE_REF: ${{ env.CONTAINER_NAME }}:${{ env.IMAGE_TAG }}
         run: |
@@ -385,13 +431,12 @@ jobs:
 
 ##### スキャンの実施
 
-～～～
+～～～作成中～～～
 
 ## 用語集
 
-|        用語        |                     正式名称                      |                             意味                             |
-| -----------------: | ------------------------------------------------: | -----------------------------------------------------------: |
-| ベストプラクティス |                                                 - | そのツールを利用する際に推奨とされているプロセスや手法のこと |
-|                CVE |              Common Vulnerabilities and Exposures |             脆弱性に対して共通の識別子を付与したリストのこと |
-|               NIST | National Institute of<br>Standards and Technology |                             アメリカ国立標準技術研究所のこと |
-|                NVD |                   National Vulnerability Database |          NISTが提供する脆弱性のデータベースのこと。CVEを含む |
+|        用語        |               正式名称               |                                 意味                                 |
+| -----------------: | -----------------------------------: | -------------------------------------------------------------------: |
+| ベストプラクティス |                                    - |         そのツールを利用する際に推奨とされているプロセスや手法のこと |
+|                CVE | Common Vulnerabilities and Exposures |                     脆弱性に対して共通の識別子を付与したリストのこと |
+|                NVD |      National Vulnerability Database | NIST(アメリカ国立標準技術研究所)が提供する脆弱性のデータベースのこと |

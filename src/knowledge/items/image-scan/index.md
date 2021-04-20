@@ -1,6 +1,7 @@
 # コンテナイメージを自動で脆弱性スキャンするCI/CD
 
-<ScreenTransitionBtn btnName="戻る" path="/knowledge/search" />
+<ScreenTransitionBtn btnName="戻る" />
+
 
 ___
 

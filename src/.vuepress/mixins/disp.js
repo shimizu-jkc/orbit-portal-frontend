@@ -2,10 +2,10 @@
 const DispNameTable = {
   Division: [
     { value: "CORP" , label: "コーポレート" },
-    { value: "AM"   , label: "AM事業部" },
-    { value: "MS"   , label: "MS事業部" },
-    { value: "PS"   , label: "PS事業部" },
-    { value: "DX"   , label: "DX事業部" } 
+    { value: "AM"   , label: "AM分野" },
+    { value: "MS"   , label: "MS分野" },
+    { value: "PS"   , label: "PS分野" },
+    { value: "DX"   , label: "DXビジネス事業部" }
   ],
   Env: [
     { value: "PRD", label: "本番" },

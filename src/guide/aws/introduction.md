@@ -1,7 +1,6 @@
 ---
 prev: false
 next: false
-displayAllHeaders: true
 ---
 
 # ご利用の前に

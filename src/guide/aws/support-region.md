@@ -1,7 +1,6 @@
 ---
 prev: false
 next: false
-displayAllHeaders: true
 ---
 
 # サポートリージョン

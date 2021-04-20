@@ -40,7 +40,8 @@ module.exports = {
             text: "AWS利用者向け", 
             items: [
               { text: "ご利用の前に", link: "/guide/aws/introduction" },
-              { text: "利用手順", link: "/guide/aws/setup" },
+              { text: "AWSの利用を開始する", link: "/guide/aws/startup" },
+              { text: "基本的な使い方", link: "/guide/aws/usecase" },
               { text: "提供サービス", link: "/guide/aws/service" },
               { text: "リファレンス", link: "/guide/aws/reference" }
             ]
@@ -78,7 +79,7 @@ module.exports = {
       { 
         text: "ナレッジ", 
         items: [
-          { text: "はじめに", link: "/knowledge/introduction" },
+          { text: "ナレッジとは", link: "/knowledge/introduction" },
           { text: "ナレッジ一覧", link: "/knowledge/search" }
         ]
       },
@@ -92,7 +93,7 @@ module.exports = {
       },
     ],
     //Sidebar Setting
-    sidebarDepth: 1,
+    sidebarDepth: 0,
     sidebar: {
       "/guide/common/": [
         "introduction",
@@ -104,17 +105,18 @@ module.exports = {
           collapsable: false,
           children: [
             "introduction",
+            "startup",
             "support-region",
             "faq"
           ]
         },
         {
-          title: "利用手順",
+          title: "基本的な使い方",
           collapsable: false,
           children: [
-            "setup/startup",
-            "setup/routine",
-            "setup/admin"
+            "usecase/user-management",
+            "usecase/request",
+            "usecase/close"
           ]
         },
         {
@@ -133,13 +135,22 @@ module.exports = {
         },
         {
           title: "リファレンス",
-          collapsable: false,
+          collapsable: true,
           children: [
             "reference/baseline"
           ]
         }
       ],
       "/request/": [
+        {
+          title: "使い方",
+          collapsable: true,
+          children: [
+            "manual/create-project",
+            "manual/get-update-project",
+            "manual/delete-project"
+          ]
+        },
         {
           title: "プロジェクト関連",
           collapsable: false,

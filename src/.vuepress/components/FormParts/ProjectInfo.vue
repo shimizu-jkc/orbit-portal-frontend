@@ -100,7 +100,7 @@
             詳細は
             <el-link type="primary" href="/guide/aws/startup.html#申請ファイルについて" target="_blank">こちら</el-link>
             を参照してください。<br>
-            添付可能なファイルは最大 3 つです。
+            ファイルは最大で 3 つまで添付できます。
           </hint>
         </span>
         <div class="form-item">

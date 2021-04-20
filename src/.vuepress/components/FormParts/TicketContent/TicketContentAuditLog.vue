@@ -13,7 +13,8 @@
       <el-form-item prop="Service">
         <span slot="label">対象サービス
           <hint>
-            対象サービスの詳細は
+            確認したい監査ログの種別に応じたサービス名を選択してください。
+            詳細は
             <el-link type="primary" href="/guide/aws/service/audit.html#ログ種別" target="_blank">こちら</el-link>
             を参照してください。
           </hint>

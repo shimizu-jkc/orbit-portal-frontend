@@ -5,8 +5,9 @@
         <div class="member-header">
           <el-col :span="2">管理者
             <hint v-show="!readOnly">
-              少なくとも 1 人以上をプロジェクトの管理者にする必要があります。<br>
-              管理者の詳細は
+              プロジェクト管理者にすると、プロジェクト情報の更新や削除を行うことができます。<br>
+              少なくとも 1 人以上をプロジェクト管理者にしてください。<br>
+              詳細は
               <el-link type="primary" href="/guide/aws/startup.html#プロジェクト管理者について" target="_blank">こちら</el-link>
               を参照してください。
             </hint>

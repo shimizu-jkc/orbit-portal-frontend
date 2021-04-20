@@ -31,7 +31,7 @@
       <el-form-item prop="ProjectEmail">
         <span slot="label">代表者Eメールアドレス
           <hint v-show="isEditableAttr('ProjectEmail')">
-            このメールアドレスには、OrBIT利用に関する重要なメールが配信されます。<br>
+            このEメールアドレスには、OrBIT管理者からの連絡や重要な情報が配信されます。<br>
             詳細は
             <el-link type="primary" href="" target="_blank">こちら</el-link>
             を参照してください。

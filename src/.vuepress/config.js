@@ -148,7 +148,12 @@ module.exports = {
           children: [
             "manual/create-project",
             "manual/get-update-project",
-            "manual/delete-project"
+            "manual/delete-project",
+            "manual/create-account",
+            "manual/get-update-account",
+            "manual/delete-account",
+            "manual/create-ticket",
+            "manual/get-update-ticket"
           ]
         },
         {

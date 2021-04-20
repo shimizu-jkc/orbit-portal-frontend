@@ -149,9 +149,10 @@ export default {
               const end = new Date(this.date[1]);
               if(start.getTime() === end.getTime()){
                 callback("確認期間の開始時刻と終了時刻が同じです。");
-              }
-              if(start < end.setDate(end.getDate() - 30)) {
+              }else if(start < end.setDate(end.getDate() - 30)) {
                 callback("一度に依頼できる期間は最大で30日間です。");
+              }else{
+                callback();
               }
             }
           }}

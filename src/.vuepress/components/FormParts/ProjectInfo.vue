@@ -73,8 +73,8 @@
       <el-form-item>
         <span slot="label">クラウド利用の予算(月額)
           <hint v-show="isEditableAttr('Budget')">
-            プロジェクトで確保されているクラウド利用料金の月額予算をUSドルで入力してください。<br>
-            入力可能な最大値は 10000 USドルです。
+            プロジェクトで確保しているクラウド利用料金の月額予算をUSドルで入力してください。<br>
+            最大で10000 USドルまで設定できます。
           </hint>
         </span>
         <div class="form-item">

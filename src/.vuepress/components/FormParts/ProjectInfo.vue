@@ -41,13 +41,13 @@
           <span v-else>{{projectEmail}}</span>
         </div>
       </el-form-item>
-      <el-form-item label="事業部" prop="DivisionName">
+      <el-form-item label="事業分野" prop="DivisionName">
         <div class="form-item">
           <el-select
             class="form-item-vshort"
             v-model="divisionName" 
             v-if="isEditableAttr('DivisionName')"
-            placeholder="所属する事業部を選択してください"
+            placeholder="所属する事業分野を選択してください"
           >
             <el-option
               v-for="(item, index) in getDispNameSets('Division')"
@@ -58,7 +58,7 @@
           </el-select>
           <span v-else>
             {{getDispName("Division", divisionName)}}
-            <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
+            <span class="attention" v-show="isUpdate">※事業分野は変更できません</span>
           </span>
         </div>
       </el-form-item>
@@ -178,7 +178,7 @@ export default {
             message: "代表者Eメールアドレスはメールアドレス形式で入力してください。", trigger: "blur" }
         ],
         DivisionName: [
-          { required: true, message: "事業部は必須です。" }
+          { required: true, message: "事業分野は必須です。" }
         ]
       }
     }

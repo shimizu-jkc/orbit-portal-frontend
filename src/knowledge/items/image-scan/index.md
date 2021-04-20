@@ -1,6 +1,12 @@
 # コンテナイメージを自動で脆弱性スキャンするCI/CD
 
-<ScreenTransitionBtn btnName="戻る" path="/knowledge/search" />
+<ScreenTransitionBtn btnName="戻る" />
+
+IPAの[脆弱性対応ガイドライン](https://www.ipa.go.jp/security/ciadr/partnership_guide.html)より、サイバーセキュリティの現状が述べられています。
+
+> 2000 年頃より、日本国内においてソフトウエアやウェブアプリケーションの脆弱性が発見されることが増えており、これらの脆弱性を悪用した不正アクセス行為やコンピュータウイルスの増加により、企業活動が停止したり情報資産が滅失したり個人情報が漏えいしたりといった、重大な被害が生じています。
+
+上記のような被害を未然に防ぐため、ソフトウェアやアプリケーションの脆弱性を検出できる環境が必要になります。本ナレッジでは、コンテナを扱うケースを例に、脆弱性を検出するツールや、継続的に検出可能な CI/CD 環境について紹介します。
 
 ___
 
@@ -8,24 +14,24 @@ ___
 
 ___
 
-## 当ナレッジについて
+## 用語集
 
-IPAの[脆弱性対応ガイドライン](https://www.ipa.go.jp/security/ciadr/partnership_guide.html)より、サイバーセキュリティの現状が述べられています。
-
-> 2000 年頃より、日本国内においてソフトウエアやウェブアプリケーションの脆弱性が発見されることが増えており、これらの脆弱性を悪用した不正アクセス行為やコンピュータウイルスの増加により、企業活動が停止したり情報資産が滅失したり個人情報が漏えいしたりといった、重大な被害が生じています。
-
-上記のような状況に対応できるよう、脆弱性を検出できる環境が必要になります。今回は、コンテナを扱うケースを例に、脆弱性を検出するツールや自動で検出できるCI/CDの環境整備を紹介します。
+|        用語        |               正式名称               |                                 意味                                 |
+| -----------------: | -----------------------------------: | -------------------------------------------------------------------: |
+| ベストプラクティス |                                    - |         そのツールを利用する際に推奨とされているプロセスや手法のこと |
+|                CVE | Common Vulnerabilities and Exposures |                     脆弱性に対して共通の識別子を付与したリストのこと |
+|                NVD |      National Vulnerability Database | NIST(アメリカ国立標準技術研究所)が提供する脆弱性のデータベースのこと |
 
 ## 脆弱性スキャンをするメリット
 
 - コンテナのセキュリティを向上できる
     - 外部から攻撃/侵入される余地が少なくなります。
     - 侵入されても、被害を最小限に留めることができます。
-- どの脆弱性の対策から行うべきかわかる
+- 脆弱性の脅威レベルや原因が把握できる
     - それぞれの脆弱性に対して脅威レベルが定められているため、脆弱性の対策の順番を定めやすくなります。
     - 脆弱性の原因が具体的に指摘されるため、修正が容易です。
 
-## 脆弱性の基準
+## 脆弱性スキャンの基準
 
 - [Dockerベストプラクティス](https://docs.docker.jp/develop/develop-images/dockerfile_best-practices.html)
     - コンテナを定義する際に、適切な書き方を提示しています。
@@ -175,7 +181,7 @@ Total: 19 (UNKNOWN: 1, LOW: 2, MEDIUM: 8, HIGH: 8, CRITICAL: 0)
 
 ### [Clair](https://github.com/quay/clair)
 
-NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。パッケージ管理ツールを使わずにインストール(curlやwgetなど)した場合、そのパッケージは検査の対象になりません。
+NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含まれているライブラリやOSが使用されているか検出します。パッケージ管理ツールを使わずにインストール(curlやwgetなど)した場合、そのパッケージは検査の対象になりません。 AWSのECRのリポジトリの公式スキャンツールに採用されており、ワンクリックでスキャンを実行できます。
 
 - スキャン対象：コンテナイメージ
 - 検査基準：NVD(脆弱性データベース)
@@ -241,8 +247,6 @@ $ ～調整中～
     - 結果ファイルをGitHubActionsのアーティファクトに保存する
 
 #### ソースコード全体
-
-- もしくは[リンク](https://github.com/jkc-cloud/orbit-catalog-LoadTest/blob/tanaka-cicd/.github/workflows/DockerImageLinter.yaml)
 
 ::: details GitHub Actionsワークフローのソースコード(全体)
 
@@ -429,14 +433,26 @@ jobs:
 
 :::
 
-##### スキャンの実施
+##### 3つのスキャンツールの実行
 
-～～～作成中～～～
+- `Hadolint`, `Dockle`, `Trivy`をそれぞれ実行し、ログファイルに出力する
 
-## 用語集
+::: details スキャンの実行
 
-|        用語        |               正式名称               |                                 意味                                 |
-| -----------------: | -----------------------------------: | -------------------------------------------------------------------: |
-| ベストプラクティス |                                    - |         そのツールを利用する際に推奨とされているプロセスや手法のこと |
-|                CVE | Common Vulnerabilities and Exposures |                     脆弱性に対して共通の識別子を付与したリストのこと |
-|                NVD |      National Vulnerability Database | NIST(アメリカ国立標準技術研究所)が提供する脆弱性のデータベースのこと |
+```yaml{5-8}
+      - name: Exec hadolint, dockle, trivy
+        env:
+          IMAGE_REF: ${{ env.CONTAINER_NAME }}:${{ env.IMAGE_TAG }}
+        run: |
+          hadolint $TARGET_CONTAINER/Dockerfile --no-fail > $RESULT_DIR/hadolint.log &
+          dockle --exit-code 0 $IMAGE_REF > $RESULT_DIR/dockle.log &
+          trivy image --exit-code 0 $IMAGE_REF > $RESULT_DIR/trivy.log &
+          wait
+      - name: Upload to artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: ${{ env.RESULT_DIR }}/*.log
+```
+
+:::

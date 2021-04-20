@@ -10,7 +10,14 @@
       :rules="rules"
       :hide-required-asterisk="!isCreate"
     >
-      <el-form-item label="対象サービス" prop="Service">
+      <el-form-item prop="Service">
+        <span slot="label">対象サービス
+          <hint>
+            対象サービスの詳細は
+            <el-link type="primary" href="/guide/aws/service/audit.html#ログ種別" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>
         <div class="form-item">
           <el-select
             class="form-item-vshort"

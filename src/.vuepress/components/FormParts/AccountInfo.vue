@@ -19,13 +19,28 @@
       <el-form-item label="クラウド環境名" v-show="isExist">
         <span class="form-item">{{accountName}}</span>
       </el-form-item>
-      <el-form-item label="クラウド環境Eメールアドレス" v-show="isExist">
+      <el-form-item v-show="isExist">
+        <span slot="label">クラウド環境Eメールアドレス
+          <hint>
+            ルートユーザーのEメールアドレスです。<br>
+            詳細は
+            <el-link type="primary" href="/guide/aws/service/account-management.html#ルートユーザーのeメールアドレス" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>        
         <span class="form-item">{{accountEmail}}</span>
       </el-form-item>
       <el-form-item label="ステータス" v-show="isExist">
         <span class="form-item">{{getDispName("AccountStatus", status)}}</span>
       </el-form-item>
-      <el-form-item label="利用目的" prop="Env">
+      <el-form-item label="" prop="Env">
+        <span slot="label">利用目的
+          <hint v-show="isEditableAttr('Env')">
+            利用目的の詳細は
+            <el-link type="primary" href="/guide/aws/service/account-management.html#利用目的" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>
         <div class="form-item">
           <el-select 
             class="form-item-vshort"
@@ -47,7 +62,12 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item v-show="isPrd" label="実運用予定日" prop="StartOperationDate">
+      <el-form-item v-show="isPrd" prop="StartOperationDate">
+        <span slot="label">実運用予定日
+          <hint v-show="isEditableAttr('OperationDate')">
+            5営業日以降から選択できます。
+          </hint>
+        </span>
         <div class="form-item">
           <div id="EditableOpsDate" v-if="isEditableAttr('OperationDate')">
             <el-date-picker
@@ -59,7 +79,6 @@
               format="yyyy年M月d日"
               :picker-options="pickerOptions">
             </el-date-picker>
-            <span class="attention">※5営業日以降から選択できます。</span>
           </div>
           <div id="ReadOnlyOpsDate" v-else>
             <span>{{epochSecToJST(startOperationDate)}}</span>
@@ -91,7 +110,9 @@
       </el-form-item>
       <el-form-item prop="BillingAFFCode">
         <span slot="label">AFFコード
-          <hint v-show="isEditable">AFF(会計フレックスフィールド)コードは10個のコードをドットでつないだ文字列です。</hint>
+          <hint v-show="isEditableAttr('BillingAFFCode')">
+            AFF(会計フレックスフィールド)コードは10個のコードをドットでつないだ文字列です。
+          </hint>
         </span>
         <div class="form-item">
           <el-input

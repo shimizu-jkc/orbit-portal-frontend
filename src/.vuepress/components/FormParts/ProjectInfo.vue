@@ -28,7 +28,15 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item label="代表者Eメールアドレス" prop="ProjectEmail">
+      <el-form-item prop="ProjectEmail">
+        <span slot="label">代表者Eメールアドレス
+          <hint v-show="isEditableAttr('ProjectEmail')">
+            このメールアドレスには、OrBIT利用に関する重要なメールが配信されます。<br>
+            詳細は
+            <el-link type="primary" href="" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>
         <div class="form-item">
           <el-input 
             type="text"
@@ -62,7 +70,13 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item label="クラウド利用の予算(月額)">
+      <el-form-item>
+        <span slot="label">クラウド利用の予算(月額)
+          <hint v-show="isEditableAttr('Budget')">
+            プロジェクトで確保されているクラウド利用料金の月額予算をUSドルで入力してください。<br>
+            入力可能な最大値は 10000 USドルです。
+          </hint>
+        </span>
         <div class="form-item">
           <div id="EditableBudget" style="margin: 1px" v-if="isEditableAttr('Budget')">
             <el-input-number
@@ -79,7 +93,15 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item :error="fileError" label="申請ファイル">
+      <el-form-item :error="fileError">
+        <span slot="label">申請ファイル
+          <hint v-show="isEditableAttr('Files')">
+            申請ファイルの詳細は
+            <el-link type="primary" href="/guide/aws/startup.html#申請ファイルについて" target="_blank">こちら</el-link>
+            を参照してください。<br>
+            添付可能なファイルは最大 3 つです。
+          </hint>
+        </span>
         <div class="form-item">
           <files
             v-if="isExist"
@@ -100,7 +122,12 @@
           ></upload>
         </div>
       </el-form-item>
-      <el-form-item label="プロジェクトメンバー" required>
+      <el-form-item required>
+        <span slot="label">プロジェクトメンバー
+          <hint v-show="isEditableAttr('Members')">
+            プロジェクトに参加するメンバー情報を登録してください。
+          </hint>
+        </span>
         <div class="form-item">
           <members ref="members" :readOnly="!isEditableAttr('Members')" :id="id"/>
         </div>
@@ -134,6 +161,7 @@
 import MemberList from './MemberList';
 import FileUpload from './FileUpload';
 import FileList from './FileList';
+import ItemHint from '../common/ItemHint';
 import Util from "../../mixins/util";
 import Disp from "../../mixins/disp";
 import ProjectApi from "../../api/ProjectApi"
@@ -144,7 +172,8 @@ export default {
   components : {
     members: MemberList,
     upload: FileUpload,
-    files: FileList
+    files: FileList,
+    hint: ItemHint
   },
   mixins: [Util, Disp],
   props: {

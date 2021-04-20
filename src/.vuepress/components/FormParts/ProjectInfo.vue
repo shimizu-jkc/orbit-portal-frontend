@@ -96,7 +96,8 @@
       <el-form-item :error="fileError">
         <span slot="label">申請ファイル
           <hint v-show="isEditableAttr('Files')">
-            申請ファイルの詳細は
+            プロジェクトの概要や計画が把握できる資料を添付してください。<br>
+            詳細は
             <el-link type="primary" href="/guide/aws/startup.html#申請ファイルについて" target="_blank">こちら</el-link>
             を参照してください。<br>
             添付可能なファイルは最大 3 つです。

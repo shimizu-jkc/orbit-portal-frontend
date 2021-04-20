@@ -20,6 +20,7 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 尚、現在対応しているクラウドはAWS (Amazon Web Service) のみとなります。
 
+<!--
 ## 合算した請求アラート機能の提供を開始しました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
 <Badge text="AWS" type="note" vertical="bottom"/>
@@ -32,6 +33,7 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 本機能を使えば、複数アカウントの利用料金を合算した上で、プロジェクトの指定予算額に対するコスト超過の通知を受け取ることができるようになります。
 
 詳細については、[こちら](/guide/aws/tutorial/project-budget-alert.html)を参照して下さい。
+-->
 
 <br><br>
 <Footer/>

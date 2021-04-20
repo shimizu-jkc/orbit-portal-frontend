@@ -123,7 +123,7 @@ a {
 .main .headline {
   overflow: hidden;
   line-height: 28px;
-  max-height: 54px;
+  max-height: 56px;
   margin: 0;
   font-size: 20px;
 }
@@ -137,7 +137,7 @@ a {
 .main .description {
   overflow: hidden;
   line-height: 24px;
-  max-height: 140px;
+  max-height: 144px;
   margin: 12px 0;
   font-size: 14px;
 }

@@ -20,6 +20,7 @@ module.exports = {
   ],
   themeConfig: {
     logo: "/img/logo.png",
+    search: false,
     //lastUpdated: "Last Updated",
     //Navigator Setting
     activeHeaderLinks: false,
@@ -32,24 +33,17 @@ module.exports = {
             text: "OrBITについて",
             items: [ 
               { text: "はじめに", link: "/guide/common/introduction" },
-              { text: "ロードマップ", link: "/guide/common/roadmap" },
               { text: "用語集", link: "/guide/common/glossary" }
             ]
           },
           { 
             text: "AWS利用者向け", 
             items: [
-              { text: "利用開始にあたって", link: "/guide/aws/introduction" },
-              { text: "セットアップ", link: "/guide/aws/setup" },
-              { text: "各種サービス", link: "/guide/aws/service" },
-              { text: "チュートリアル", link: "/guide/aws/tutorial" },
+              { text: "ご利用の前に", link: "/guide/aws/introduction" },
+              { text: "AWSの利用を開始する", link: "/guide/aws/startup" },
+              { text: "基本的な使い方", link: "/guide/aws/usecase" },
+              { text: "提供サービス", link: "/guide/aws/service" },
               { text: "リファレンス", link: "/guide/aws/reference" }
-            ]
-          },
-          { 
-            text: "GCP利用者向け",
-            items: [
-              { text: "利用開始にあたって", link: "/guide/gcp/introduction" },  
             ]
           }
         ]
@@ -85,7 +79,7 @@ module.exports = {
       { 
         text: "ナレッジ", 
         items: [
-          { text: "はじめに", link: "/knowledge/introduction" },
+          { text: "ナレッジとは", link: "/knowledge/introduction" },
           { text: "ナレッジ一覧", link: "/knowledge/search" }
         ]
       },
@@ -99,11 +93,10 @@ module.exports = {
       },
     ],
     //Sidebar Setting
-    sidebarDepth: 1,
+    sidebarDepth: 0,
     sidebar: {
       "/guide/common/": [
         "introduction",
-        "roadmap",
         "glossary"
       ],
       "/guide/aws/": [
@@ -112,21 +105,23 @@ module.exports = {
           collapsable: false,
           children: [
             "introduction",
-            "support-region"
+            "startup",
+            "support-region",
+            "faq"
           ]
         },
         {
-          title: "セットアップ",
-          collapsable: true,
+          title: "基本的な使い方",
+          collapsable: false,
           children: [
-            "setup/setup-initial",
-            "setup/setup-bp",
-            "setup/setup-continuous"
+            "usecase/user-management",
+            "usecase/request",
+            "usecase/close"
           ]
         },
         {
-          title: "各種サービス",
-          collapsable: true,
+          title: "提供サービス",
+          collapsable: false,
           children: [  
             "service/account-management",
             "service/billing",
@@ -135,14 +130,7 @@ module.exports = {
             "service/threat-detection",
             "service/monitoring",
             "service/audit",
-          ]
-        },
-        {
-          title: "チュートリアル",
-          collapsable: true,
-          children: [
-            "tutorial/project-budget-alert",
-            "tutorial/chatbot2slack"
+            "service/budget-alert"
           ]
         },
         {
@@ -151,17 +139,23 @@ module.exports = {
           children: [
             "reference/baseline"
           ]
-        },
-        {
-          title: "関連情報",
-          collapsable: true,
-          children: [
-            "info/faq",
-            "info/release"
-          ]
         }
       ],
       "/request/": [
+        {
+          title: "使い方",
+          collapsable: true,
+          children: [
+            "manual/create-project",
+            "manual/get-update-project",
+            "manual/delete-project",
+            "manual/create-account",
+            "manual/get-update-account",
+            "manual/delete-account",
+            "manual/create-ticket",
+            "manual/get-update-ticket"
+          ]
+        },
         {
           title: "プロジェクト関連",
           collapsable: false,
@@ -191,9 +185,9 @@ module.exports = {
       ]  
     },
     // GitHub setting
-    repo: "jkc-cloud/orbit-doc-UserManual",
+    repo: "jkc-cloud/orbit-portal-frontend",
     repoLabel: "GitHub",
-    docsRepo: "jkc-cloud/orbit-doc-UserManuals",
+    docsRepo: "jkc-cloud/orbit-portal-frontend",
     docsDir: "src",
     docsBranch: "master"
   }

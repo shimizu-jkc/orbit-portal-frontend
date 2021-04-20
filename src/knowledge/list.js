@@ -40,8 +40,8 @@ const knowledgeList = [
   //20210409 add by shimizu
   {
     Id        : "UserManagement",
-    Name      : "ユーザー認証とユーザ管理機能を実現するためのアーキテクチャ",
-    Desc      : "詳細",
+    Name      : "ユーザー認証と管理機能を実現するためのアーキテクチャですよ",
+    Desc      : "このナレッジでは、Webサービスにおける一般的なユーザ認証機能とユーザー管理機能の設計方法とリファレンスを紹介しています。 ",
     Phase     : PHASE.CODE,
     Type      : TYPE.ARCH,
     Env       : ENV.AWS,
@@ -56,7 +56,7 @@ const knowledgeList = [
   {
     Id        : "LoadTest",
     Name      : "クラウド上で実行可能な負荷試験ツール",
-    Desc      : "詳細",
+    Desc      : "このナレッジでは、システムの負荷テストを実施する際に必要となるクライアント端末をAWS上で実行するための手順とツールを紹介しています。",
     Phase     : PHASE.TEST,
     Type      : TYPE.TOOL,
     Env       : ENV.AWS,
@@ -71,7 +71,7 @@ const knowledgeList = [
   {
     Id        : "DevContainer",
     Name      : "コンテナを利用した共通開発環境の構築",
-    Desc      : "詳細",
+    Desc      : "プロジェクトが開発フェーズに入ると、「プロジェクトのメンバーが利用する開発環境を揃えたい」という要望を良く聞きます。このナレッジでは、Dockerを利用した共通開発環境の構築と運用手順について紹介しています。",
     Phase     : PHASE.CODE,
     Type      : TYPE.TOOL,
     Env       : ENV.ANY,
@@ -86,10 +86,11 @@ const knowledgeList = [
   {
     Id        : "ImageScan",
     Name      : "コンテナイメージの脆弱性を自動でスキャンするCI/CD",
-    Desc      : "詳細",
+    Desc      : "このナレッジでは、Dockerのコンテナイメージをスキャンし、脆弱性を検出するための一連の工程を自動化したCI/CDのパイプラインを紹介しています。",
     Phase     : PHASE.BUILD,
     Type      : TYPE.KNOW,
     Env       : ENV.GITHUB,
+    Author    : "tanaka.kodai@jvckenwood.com",
     Link      : {
       Type    : LINK.INTERNAL,
       Path    : `${DEFAULT_PATH}/image-scan/`

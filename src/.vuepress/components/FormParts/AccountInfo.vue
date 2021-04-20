@@ -65,7 +65,8 @@
       <el-form-item v-show="isPrd" prop="StartOperationDate">
         <span slot="label">実運用予定日
           <hint v-show="isEditableAttr('OperationDate')">
-            5営業日以降から選択できます。
+            実際にサービスの運用を行う期間を選択してください。<br>
+            期間は5営業日以降から選択できます。
           </hint>
         </span>
         <div class="form-item">

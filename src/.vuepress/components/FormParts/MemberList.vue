@@ -3,10 +3,23 @@
     <div id="EditableMemberList" v-if="!readOnly"> 
       <el-row :gutter="3">
         <div class="member-header">
-          <el-col :span="2">管理者</el-col>
+          <el-col :span="2">管理者
+            <hint v-show="!readOnly">
+              プロジェクト管理者にすると、プロジェクト情報の更新や削除を行うことができます。<br>
+              少なくとも 1 人以上をプロジェクト管理者にしてください。<br>
+              詳細は
+              <el-link type="primary" href="/guide/aws/startup.html#プロジェクト管理者について" target="_blank">こちら</el-link>
+              を参照してください。
+            </hint>
+          </el-col>
           <el-col :span="8">所属部署名</el-col>
           <el-col :span="5">名前</el-col>
-          <el-col :span="8">Eメールアドレス</el-col>
+          <el-col :span="8">Eメールアドレス
+            <hint v-show="hasId && !readOnly">
+              メンバーのEメールアドレスは編集できません。<br>
+              Eメールアドレスを編集する場合は、メンバーを削除してから再度追加してください。
+            </hint>
+          </el-col>
         </div>
       </el-row>
       <member
@@ -49,11 +62,13 @@
 
 <script>
 import MemberItem from './MemberItem';
+import ItemHint from '../common/ItemHint';
 
 export default {
   name : "MemberList",
   components: {
-    member: MemberItem
+    member: MemberItem,
+    hint: ItemHint
   },
   props: {
     readOnly: {

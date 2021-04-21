@@ -11,7 +11,7 @@
           </el-col>
           <el-col>
             <el-checkbox 
-              label="クラウド利用料金の配賦先が明確になっている。" 
+              label="クラウド利用料金の配賦先(AFFコード)が明確になっている。" 
               v-model="agreements[1]"
             ></el-checkbox>
           </el-col>

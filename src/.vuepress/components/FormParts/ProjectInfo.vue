@@ -33,7 +33,7 @@
           <hint v-show="isEditableAttr('ProjectEmail')">
             このEメールアドレスには、OrBIT管理者からの連絡や重要な情報が配信されます。<br>
             詳細は
-            <el-link type="primary" href="" target="_blank">こちら</el-link>
+            <el-link type="primary" href="/request/manual/create-project.html#代表者eメールアドレス" target="_blank">こちら</el-link>
             を参照してください。
           </hint>
         </span>
@@ -97,10 +97,10 @@
         <span slot="label">申請ファイル
           <hint v-show="isEditableAttr('Files')">
             プロジェクトの概要や計画が把握できる資料を添付してください。<br>
+            ファイルは最大で 3 つまで添付できます。<br>
             詳細は
-            <el-link type="primary" href="/guide/aws/startup.html#申請ファイルについて" target="_blank">こちら</el-link>
-            を参照してください。<br>
-            ファイルは最大で 3 つまで添付できます。
+            <el-link type="primary" href="/request/manual/create-project.html#申請ファイル" target="_blank">こちら</el-link>
+            を参照してください。
           </hint>
         </span>
         <div class="form-item">

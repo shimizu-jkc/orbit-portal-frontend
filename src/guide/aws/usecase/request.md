@@ -12,7 +12,7 @@ OrBITから払い出したAWSアカウントのルートユーザーは、プロ
 - 作業の依頼主が当該AWSアカウントにおいて、1つ以上の役割が割り当てられている必要があります。
 - ルートユーザーの扱いに関して、[こちら](/guide/aws/service/account-management.html#ルートユーザー)の内容を確認している必要があります。
 
-## 対象サービス
+## 関連サービス
 - [AWSアカウント管理サービス](/guide/aws/service/account-management.html)
 - [監査ログ記録・収集サービス](/guide/aws/service/audit.html)
 

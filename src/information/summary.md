@@ -15,8 +15,8 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 本日より、OrBITポータルのクローズドβ版の提供を開始しました。
 
-β版では、OrBITのユーザーガイドに加え、クラウド環境の利用申請や情報の確認を、本サイト上から行うことができます。
-詳細については、[こちら](/guide/aws/tutorial/project-budget-alert.html)を参照して下さい。
+β版では、OrBITの[ユーザーガイド](/guide/common/introduction.html)に加え、[クラウド環境の利用申請](/request/manual/create-account.html)や[情報の確認](/request/manual/get-update-account.html)を、本サイト上から行うことができます。
+また、[ナレッジ](/knowledge/introduction.html)も公開していますので、是非ご覧ください。
 
 尚、現在対応しているクラウドはAWS (Amazon Web Service) のみとなります。
 

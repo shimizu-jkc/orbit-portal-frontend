@@ -40,7 +40,7 @@ const knowledgeList = [
   //20210409 add by shimizu
   {
     Id        : "UserManagement",
-    Name      : "ユーザー認証と管理機能を実現するためのアーキテクチャですよ",
+    Name      : "ユーザー認証と管理機能を実現するためのアーキテクチャ",
     Desc      : "このナレッジでは、Webサービスにおける一般的なユーザ認証機能とユーザー管理機能の設計方法とリファレンスを紹介しています。 ",
     Phase     : PHASE.CODE,
     Type      : TYPE.ARCH,

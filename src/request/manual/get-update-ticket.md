@@ -25,5 +25,5 @@ next: false
 
 <CaptionedImage src="ticket_update_dialog.png" caption=""/>
 
-10. ページ右上に`作業情報を更新しました`と通知されたら、更新は完了です。
+10. ページ右上に`作業内容を更新しました`と通知されたら、更新は完了です。
 <CaptionedImage src="ticket_update_success.png" caption=""/>

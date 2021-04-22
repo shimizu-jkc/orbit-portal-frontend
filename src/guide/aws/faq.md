@@ -32,7 +32,7 @@ next: false
 ### Q. *AWS Config*の料金が少し高いのですが、抑える手段はありませんか？
 OrBITではセキュリティポリシーに準拠するため、*AWS Config*の設定変更や記録の停止をすることを許可していません。
 
-ですが、[「ベースラインの利用料金」](/guide/aws/reference/baseline.html#ベースラインの利用料金)でも示した通り、開発環境としての利用の場合、*AWS Config*の料金が嵩むようです。もし、どうしても抑える必要がある場合、以下のような対策が考えられます。
+ですが、[「利用料金の参考」](/guide/aws/reference/baseline.html#利用料金の参考)でも示した通り、開発環境としての利用の場合、*AWS Config*の料金が嵩むようです。もし、どうしても抑える必要がある場合、以下のような対策が考えられます。
 
 - 記録対象のリソースを制限します。詳細は下記を参照してください。
     -  [「AWS Config でサポートされている AWS リソースタイプとリソース関係」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/resource-config-reference.html)

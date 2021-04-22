@@ -157,7 +157,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITでは提供されません。
 
-#### 1.12 ルートユーザ－のアクセスキーが設定されていないこと <Badge text="必須" type="error"/>
+#### 1.12 ルートユーザーのアクセスキーが設定されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no root account access key exists*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -165,7 +165,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/service/account-management.html#ルートユーザーの代替管理)ことで遵守されます。
 
-#### 1.13 ルートユーザ－のMFAが有効化されていること <Badge text="必須" type="error"/>
+#### 1.13 ルートユーザーのMFAが有効化されていること <Badge text="必須" type="error"/>
 *(original) Ensure MFA is enabled for the "root" account*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -173,7 +173,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/service/account-management.html#ルートユーザーの代替管理)ことで遵守されます。
 
-#### 1.14 ルートユーザ－のハードウェアMFAが有効化されていること <Badge text="任意" type="tip"/>
+#### 1.14 ルートユーザーのハードウェアMFAが有効化されていること <Badge text="任意" type="tip"/>
 *(original) Ensure hardware MFA is enabled for the "root" account*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -242,7 +242,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 *(original) Do not setup access keys during initial user setup for all IAM users that have a console password*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
-| CIS v1.2.0 | 1.21 | 必須 | 一部あり |
+| CIS v1.2.0 | 1.21 | 必須 | 一部あり:warning: |
 
 この項目は、[SSOを利用してAWSアカウントへログイン](/guide/aws/service/id-management.html#AWSアカウントへのアクセス手段)することで遵守されます。
 ::: warning ATTENTION
@@ -261,6 +261,7 @@ AWSアカウントでは、フルコントロール権限を持つIAMユーザ�
 :::
 
 #### 1.23 MFAデバイス、もしくはMFAアプリケーションを含む端末を厳重に保管すること <Badge text="必須" type="error"/>
+*(original)いらないですかね？*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
 | なし | なし | 必須 | あり |
@@ -268,6 +269,7 @@ AWSアカウントでは、フルコントロール権限を持つIAMユーザ�
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/service/account-management.html#ルートユーザーの代替管理)ことで遵守されます。
 
 #### 1.24 コンソールログイン用のIAMユーザーは個別に作成し、認証情報を共有しないこと <Badge text="必須" type="error"/>
+*(original)いらないですかね？*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
 | なし | なし | 必須 | あり |
@@ -275,6 +277,7 @@ AWSアカウントでは、フルコントロール権限を持つIAMユーザ�
 この項目は、[SSOによる適切なユーザとアクセス権限の管理](/guide/aws/service/id-management.html#役割とアクセス権限のマッピング)によって遵守されます。
 
 #### 1.25 プロジェクトと無関係なユーザーは無効化すること <Badge text="必須" type="error"/>
+*(original)いらないですかね？*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
 | なし | なし | 必須 | あり |
@@ -373,6 +376,7 @@ AWSアカウントでは、フルコントロール権限を持つIAMユーザ�
 :::
 
 #### 2.10 CloudTrailログを解析可能な環境が整っていること <Badge text="推奨" type="warning"/>
+*(original)いらないですかね？*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
 | なし | なし | 推奨 | あり |
@@ -636,6 +640,7 @@ $.eventName = EnableVpcClassicLink
 '/>
 
 #### 3.15 各種アラームの通知先は常に最新状態にメンテナンスされていること <Badge text="必須" type="error"/>
+*(original)いらないですかね？*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
 | なし | なし | 必須 | なし |

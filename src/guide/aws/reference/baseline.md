@@ -114,7 +114,7 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[1.4]]()<br>準拠のため |
+| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[1.4]](以降全てリンク先がないが問題ない？)<br>準拠のため |
 | Config | ルール | orbit-CMKBackingKeyRotationEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.8]]()<br>準拠のため |
 | Config | ルール | orbit-VpcFlowLogsEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.9]]()<br>準拠のため |
 | Config | ルール | orbit-DisallowSpecifiedPort | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.1/4.2]]()<br>準拠のため |

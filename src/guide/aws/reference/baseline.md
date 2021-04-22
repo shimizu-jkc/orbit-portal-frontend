@@ -114,11 +114,11 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[1.4]](以降全てリンク先がないが問題ない？)<br>準拠のため |
-| Config | ルール | orbit-CMKBackingKeyRotationEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.8]]()<br>準拠のため |
-| Config | ルール | orbit-VpcFlowLogsEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.9]]()<br>準拠のため |
-| Config | ルール | orbit-DisallowSpecifiedPort | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.1/4.2]]()<br>準拠のため |
-| Config | ルール | orbit-VpcDefaultSecurityGroupClosed | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.3]]()<br>準拠のため |
+| Config | ルール | orbit-AccessKeyRotated | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[1.4]](/guide/aws/service/security.html#_1-4-アクセスキーが90日以内にローテーションされていること)<br>準拠のため |
+| Config | ルール | orbit-CMKBackingKeyRotationEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.8]](/guide/aws/service/security.html#_2-8-kmsマスタキーがローテーション設定-365日以内-されていること)<br>準拠のため |
+| Config | ルール | orbit-VpcFlowLogsEnabled | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[2.9]](/guide/aws/service/security.html#_2-9-全リージョンでvpc-flow-logsが有効化されていること)<br>準拠のため |
+| Config | ルール | orbit-DisallowSpecifiedPort | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.1]](/guide/aws/service/security.html#_4-1-security-groupにて、0-0-0-0-0からport-22-ssh-への接続が許可されていないこと) [[4.2]](/guide/aws/service/security.html#_4-2-security-groupにて、0-0-0-0-0からport-3389-rdp-への接続が許可されていないこと)<br>準拠のため |
+| Config | ルール | orbit-VpcDefaultSecurityGroupClosed | [サポートリージョン](/guide/aws/support-region.html) | ポリシー[[4.3]](/guide/aws/service/security.html#_4-3-デフォルトのsecurity-groupがすべての通信を許可していないこと)<br>準拠のため |
 
 ### セキュリティポリシー逸脱検出スタック
 ---
@@ -128,34 +128,34 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 
 | AWSサービス | リソース種別 | リソース名 | 展開リージョン | 用途 |
 | :---- | :---- | :---- | :---- | :---- |
-| CloudWatch<br>Logs | メトリクスフィルタ | AuthorizationFailuresMetricFilter*1 | オレゴン | ポリシー[[3.1]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailAuthorizationFailures | オレゴン | ポリシー[[3.1]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInWithoutMFAMetricFilter*1 | オレゴン | ポリシー[[3.2]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInWithoutMFA | オレゴン | ポリシー[[3.2]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | RootAccountUsedMetricFilter*1 | オレゴン | ポリシー[[3.3]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailRootAccountUsed | オレゴン | ポリシー[[3.3]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | IAMPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.4]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailIAMPolicyChanges | オレゴン | ポリシー[[3.4]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | CloudTrailChangesMetricFilter*1 | オレゴン | ポリシー[[3.5]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.5]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInFailuresMetricFilter*1 | オレゴン | ポリシー[[3.6]]()準拠のため 
-| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInFailures | オレゴン | ポリシー[[3.6]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | CMKsDisabledMetricFilter*1 | オレゴン | ポリシー[[3.7]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailCMKsDisabled | オレゴン | ポリシー[[3.7]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | S3BucketPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.8]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailS3BucketPolicyChanges | オレゴン | ポリシー[[3.8]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | ConfigChangesMetricFilter*1 | オレゴン | ポリシー[[3.9]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.9]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | SecurityGroupChangesMetricFilter*1 | オレゴン | ポリシー[[3.10]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailSecurityGroupChanges | オレゴン | ポリシー[[3.10]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | NetworkAclChangesMetricFilter*1 | オレゴン | ポリシー[[3.11]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailNetworkAclChanges | オレゴン | ポリシー[[3.11]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | GatewayChangesMetricFilter*1 | オレゴン | ポリシー[[3.12]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailGatewayChanges | オレゴン | ポリシー[[3.12]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | RouteTableChangesMetricFilter*1 | オレゴン | ポリシー[[3.13]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailRouteTableChanges | オレゴン | ポリシー[[3.13]]()準拠のため |
-| CloudWatch<br>Logs | メトリクスフィルタ | VpcChangesMetricFilter*1 | オレゴン | ポリシー[[3.14]]()準拠のため |
-| CloudWatch | アラーム | orbit-CloudTrailVpcChanges | オレゴン | ポリシー[[3.14]]()準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | AuthorizationFailuresMetricFilter*1 | オレゴン | ポリシー[[3.1]](/guide/aws/service/security.html#_3-1-許可されていないapiコールに対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailAuthorizationFailures | オレゴン | ポリシー[[3.1]](/guide/aws/service/security.html#_3-1-許可されていないapiコールに対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInWithoutMFAMetricFilter*1 | オレゴン | ポリシー[[3.2]](/guide/aws/service/security.html#_3-2-mfa無しでのコンソールログインに対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInWithoutMFA | オレゴン | ポリシー[[3.2]](/guide/aws/service/security.html#_3-2-mfa無しでのコンソールログインに対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | RootAccountUsedMetricFilter*1 | オレゴン | ポリシー[[3.3]](/guide/aws/service/security.html#_3-3-ルートユーザーの利用に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailRootAccountUsed | オレゴン | ポリシー[[3.3]](/guide/aws/service/security.html#_3-3-ルートユーザーの利用に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | IAMPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.4]](/guide/aws/service/security.html#_3-4-iamポリシーの変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailIAMPolicyChanges | オレゴン | ポリシー[[3.4]](/guide/aws/service/security.html#_3-4-iamポリシーの変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | CloudTrailChangesMetricFilter*1 | オレゴン | ポリシー[[3.5]](/guide/aws/service/security.html#_3-5-cloudtrail設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.5]](/guide/aws/service/security.html#_3-5-cloudtrail設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConsoleSignInFailuresMetricFilter*1 | オレゴン | ポリシー[[3.6]](/guide/aws/service/security.html#_3-6-コンソールへのログイン失敗に対して、アラーム通知設定されていること)準拠のため 
+| CloudWatch | アラーム | orbit-CloudTrailConsoleSignInFailures | オレゴン | ポリシー[[3.6]](/guide/aws/service/security.html#_3-6-コンソールへのログイン失敗に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | CMKsDisabledMetricFilter*1 | オレゴン | ポリシー[[3.7]](/guide/aws/service/security.html#_3-7-kmsマスターキーの無効化またはスケジュール削除に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailCMKsDisabled | オレゴン | ポリシー[[3.7]](/guide/aws/service/security.html#_3-7-kmsマスターキーの無効化またはスケジュール削除に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | S3BucketPolicyChangesMetricFilter*1 | オレゴン | ポリシー[[3.8]](/guide/aws/service/security.html#_3-8-s3バケットポリシー変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailS3BucketPolicyChanges | オレゴン | ポリシー[[3.8]](/guide/aws/service/security.html#_3-8-s3バケットポリシー変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | ConfigChangesMetricFilter*1 | オレゴン | ポリシー[[3.9]](/guide/aws/service/security.html#_3-9-aws-config設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailConfigChanges | オレゴン | ポリシー[[3.9]](/guide/aws/service/security.html#_3-9-aws-config設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | SecurityGroupChangesMetricFilter*1 | オレゴン | ポリシー[[3.10]](/guide/aws/service/security.html#_3-10-security-group設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailSecurityGroupChanges | オレゴン | ポリシー[[3.10]](/guide/aws/service/security.html#_3-10-security-group設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | NetworkAclChangesMetricFilter*1 | オレゴン | ポリシー[[3.11]](/guide/aws/service/security.html#_3-11-network-acl設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailNetworkAclChanges | オレゴン | ポリシー[[3.11]](/guide/aws/service/security.html#_3-11-network-acl設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | GatewayChangesMetricFilter*1 | オレゴン | ポリシー[[3.12]](/guide/aws/service/security.html#_3-12-internet-gateway設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailGatewayChanges | オレゴン | ポリシー[[3.12]](/guide/aws/service/security.html#_3-12-internet-gateway設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | RouteTableChangesMetricFilter*1 | オレゴン | ポリシー[[3.13]](/guide/aws/service/security.html#_3-13-route-table設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailRouteTableChanges | オレゴン | ポリシー[[3.13]](/guide/aws/service/security.html#_3-13-route-table設定の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch<br>Logs | メトリクスフィルタ | VpcChangesMetricFilter*1 | オレゴン | ポリシー[[3.14]](/guide/aws/service/security.html#_3-14-vpc設定-新規作成、削除やvpc-peering-classic-link等-の変更に対して、アラーム通知設定されていること)準拠のため |
+| CloudWatch | アラーム | orbit-CloudTrailVpcChanges | オレゴン | ポリシー[[3.14]](/guide/aws/service/security.html#_3-14-vpc設定-新規作成、削除やvpc-peering-classic-link等-の変更に対して、アラーム通知設定されていること)準拠のため |
 
 *1 正確には以下のリソース名が完全リソース名となります。
 `SC-012345678910-pp-wavzgnmpgn4ng-XXXMetricFilter-XXX`

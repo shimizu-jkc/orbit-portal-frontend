@@ -166,5 +166,5 @@ AWSアカウント払い出しの際に「セキュリティ担当者」の役�
 検知した脅威への具体的な対策例については、 [「GuardDuty によって検出されたセキュリティ問題の修復」](https://docs.aws.amazon.com/ja_jp/guardduty/latest/ug/guardduty_remediate.html)を参照してください。
 
 ::: tip NOTE
-具体的な対策案を立てられない際は、[問い合わせ窓口](/support/contact)よりお問い合わせください。
+具体的な対策案を立てられない際は、[問い合わせ窓口](/support/contact.html)よりお問い合わせください。
 :::

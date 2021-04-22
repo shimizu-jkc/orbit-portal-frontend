@@ -8,7 +8,7 @@
               プロジェクト管理者にすると、プロジェクト情報の更新や削除を行うことができます。<br>
               少なくとも 1 人以上をプロジェクト管理者にしてください。<br>
               詳細は
-              <el-link type="primary" href="/guide/aws/startup.html#プロジェクト管理者について" target="_blank">こちら</el-link>
+              <el-link type="primary" href="/request/manual/create-project.html#管理者" target="_blank">こちら</el-link>
               を参照してください。
             </hint>
           </el-col>

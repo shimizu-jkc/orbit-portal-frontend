@@ -15,13 +15,13 @@
             </el-col>
             <el-col>
               <el-checkbox 
-                label="クラウド環境を利用する為には、審査があります。" 
+                label="クラウド環境を利用する際には、審査があります。" 
                 v-model="agreements[1]"
               ></el-checkbox>
             </el-col>
             <el-col>
               <el-checkbox 
-                label="クラウド環境が利用可能になるまで、最大5営業日程度掛かることがあります。" 
+                label="クラウド環境が利用可能になるまで、最大で5営業日程度掛かることがあります。" 
                 v-model="agreements[2]"
               ></el-checkbox>
             </el-col>

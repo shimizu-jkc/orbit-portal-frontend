@@ -33,7 +33,7 @@
           <hint v-show="isEditableAttr('ProjectEmail')">
             このEメールアドレスには、OrBIT管理者からの連絡や重要な情報が配信されます。<br>
             詳細は
-            <el-link type="primary" href="" target="_blank">こちら</el-link>
+            <el-link type="primary" href="/request/manual/create-project.html#代表者eメールアドレス" target="_blank">こちら</el-link>
             を参照してください。
           </hint>
         </span>
@@ -49,13 +49,13 @@
           <span v-else>{{projectEmail}}</span>
         </div>
       </el-form-item>
-      <el-form-item label="事業部" prop="DivisionName">
+      <el-form-item label="事業分野" prop="DivisionName">
         <div class="form-item">
           <el-select
             class="form-item-vshort"
             v-model="divisionName" 
             v-if="isEditableAttr('DivisionName')"
-            placeholder="所属する事業部を選択してください"
+            placeholder="所属する事業分野を選択してください"
           >
             <el-option
               v-for="(item, index) in getDispNameSets('Division')"
@@ -66,7 +66,7 @@
           </el-select>
           <span v-else>
             {{getDispName("Division", divisionName)}}
-            <span class="attention" v-show="isUpdate">※事業部は変更できません</span>
+            <span class="attention" v-show="isUpdate">※事業分野は変更できません</span>
           </span>
         </div>
       </el-form-item>
@@ -97,10 +97,10 @@
         <span slot="label">申請ファイル
           <hint v-show="isEditableAttr('Files')">
             プロジェクトの概要や計画が把握できる資料を添付してください。<br>
+            ファイルは最大で 3 つまで添付できます。<br>
             詳細は
-            <el-link type="primary" href="/guide/aws/startup.html#申請ファイルについて" target="_blank">こちら</el-link>
-            を参照してください。<br>
-            ファイルは最大で 3 つまで添付できます。
+            <el-link type="primary" href="/request/manual/create-project.html#申請ファイル" target="_blank">こちら</el-link>
+            を参照してください。
           </hint>
         </span>
         <div class="form-item">
@@ -208,7 +208,7 @@ export default {
             message: "代表者Eメールアドレスはメールアドレス形式で入力してください。", trigger: "blur" }
         ],
         DivisionName: [
-          { required: true, message: "事業部は必須です。" }
+          { required: true, message: "事業分野は必須です。" }
         ]
       }
     }

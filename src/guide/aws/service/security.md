@@ -157,7 +157,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITでは提供されません。
 
-#### 1.12 ルートユーザ－のアクセスキーが設定されていないこと <Badge text="必須" type="error"/>
+#### 1.12 ルートユーザーのアクセスキーが設定されていないこと <Badge text="必須" type="error"/>
 *(original) Ensure no root account access key exists*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -165,7 +165,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/service/account-management.html#ルートユーザーの代替管理)ことで遵守されます。
 
-#### 1.13 ルートユーザ－のMFAが有効化されていること <Badge text="必須" type="error"/>
+#### 1.13 ルートユーザーのMFAが有効化されていること <Badge text="必須" type="error"/>
 *(original) Ensure MFA is enabled for the "root" account*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -173,7 +173,7 @@ OrBITでも本書の更新に即して、随時内容の精査と更新を行っ
 
 この項目は、OrBITが[プロジェクトに代わってルートユーザーを管理する](/guide/aws/service/account-management.html#ルートユーザーの代替管理)ことで遵守されます。
 
-#### 1.14 ルートユーザ－のハードウェアMFAが有効化されていること <Badge text="任意" type="tip"/>
+#### 1.14 ルートユーザーのハードウェアMFAが有効化されていること <Badge text="任意" type="tip"/>
 *(original) Ensure hardware MFA is enabled for the "root" account*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
@@ -242,7 +242,7 @@ OrBITでは、AWSアカウントの払い出し申請の際に設定する、**�
 *(original) Do not setup access keys during initial user setup for all IAM users that have a console password*
 | 引用元 | 引用項番 | 遵守レベル | OrBITでの提供 |
 | :----: | :-----: | :-------: | :----------: |
-| CIS v1.2.0 | 1.21 | 必須 | 一部あり |
+| CIS v1.2.0 | 1.21 | 必須 | 一部あり:warning: |
 
 この項目は、[SSOを利用してAWSアカウントへログイン](/guide/aws/service/id-management.html#AWSアカウントへのアクセス手段)することで遵守されます。
 ::: warning ATTENTION
@@ -702,7 +702,3 @@ OrBITではセキュリティポリシーに準拠するため、AWSアカウン
 ::: warning ATTENTION
 基本的にこれらの操作制限の緩和はできませんが、サービス開発に大きな支障をきたす場合は、[「問い合わせ窓口」](/support/contact.html)よりお問い合わせください。
 :::
-
-
-
-

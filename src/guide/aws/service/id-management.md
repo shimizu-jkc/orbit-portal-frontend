@@ -194,7 +194,7 @@ OrBITの実運用が進むにつれ、アクセス権限は変更される可能
 | 役割 | 付与されるアクセス権限 | 概念実証<br>開発環境 | ステージング環境<br>本番環境 |
 | :---: | :---: | :---: | :---: |
 | クラウド環境責任者 | AdministratorAccess | :heavy_check_mark: | :heavy_check_mark: |
-| コスト管理者	| BillingAccess | :heavy_check_mark: | :heavy_check_mark: |
+| 請求管理者	| BillingAccess | :heavy_check_mark: | :heavy_check_mark: |
 | セキュリティ担当者 | SecurityAuditorAccess | :heavy_check_mark: | :heavy_check_mark: |
 | 特権運用者	| AdministratorAccess | | :heavy_check_mark: |
 | 運用者 | SystemManagerAccess<br>NetworkManagerAccess | | :heavy_check_mark: |

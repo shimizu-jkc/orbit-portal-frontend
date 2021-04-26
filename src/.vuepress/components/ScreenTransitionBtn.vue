@@ -11,7 +11,11 @@ export default {
   props: ["btnName", "path"],
   methods: {
     async onClick(){
-      this.$router.push({ path: this.path });
+      if(this.path){
+        this.$router.push({ path: this.path });
+      }else{
+        this.$router.back();
+      }
     }
   }
 }

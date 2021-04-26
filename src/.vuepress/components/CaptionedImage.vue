@@ -1,9 +1,7 @@
 <template>
   <figure>
     <img :src="imagesrc" alt=""/>
-    <div style="text-align:right">
-      <figcaption><i>{{ caption }}</i></figcaption>
-    </div>
+    <figcaption>{{ caption }}</figcaption>
   </figure>
 </template>
 
@@ -17,3 +15,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+figcaption {
+  font: italic bold smaller sans-serif;
+  text-align: center;
+}
+</style>

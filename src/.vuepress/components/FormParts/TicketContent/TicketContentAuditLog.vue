@@ -8,9 +8,17 @@
       :label-position="isCreate ?'top':'left'"
       :model="contentModel"
       :rules="rules"
-      :hide-required-asterisk="isReadOnly"
+      :hide-required-asterisk="!isCreate"
     >
-      <el-form-item label="対象サービス" prop="Service">
+      <el-form-item prop="Service">
+        <span slot="label">対象サービス
+          <hint>
+            確認したい監査ログの種別に応じたサービス名を選択してください。<br>
+            詳細は
+            <el-link type="primary" href="/guide/aws/service/audit.html#ログ種別" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>
         <div class="form-item">
           <el-select
             class="form-item-vshort"
@@ -30,7 +38,14 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item label="確認期間" prop="StartDate">
+      <el-form-item prop="StartDate">
+        <span slot="label">確認期間
+          <hint>
+            ログを確認したい期間を選択してください。<br>
+            期間は時分秒まで指定することができます。<br>
+            ただし、一度に依頼できる期間は最大で30日間です。
+          </hint>
+        </span>
         <div class="form-item">
           <div id="EditableAuditDate" v-if="!isReadOnly">
             <el-date-picker
@@ -38,7 +53,9 @@
               type="datetimerange"
               range-separator="~"
               start-placeholder="開始時刻"
-              end-placeholder="終了時刻">
+              end-placeholder="終了時刻"
+              :picker-options="pickerOptions"
+              :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
           </div>
           <div id="ReadOnlyAuditDate" v-else>
@@ -67,9 +84,13 @@
 <script>
 import Util from "../../../mixins/util";
 import Disp from "../../../mixins/disp";
+import ItemHint from "../../common/ItemHint";
 
 export default {
   name : "TicketContentAuditLog",
+  components : {
+    hint: ItemHint
+  },
   mixins: [Util, Disp],
   props: {
     operation: {
@@ -84,12 +105,65 @@ export default {
   data() {
     return {
       type: "REQ_AUDIT_LOG",
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > new Date().setHours(23, 59, 59);
+        },
+        shortcuts: [{
+          text: "今日",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setHours(0, 0, 0);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "昨日",
+          onClick(picker) {
+            const start = new Date();
+            start.setDate(start.getDate() - 1);
+            const end = new Date(start);
+            start.setHours(0, 0, 0);
+            end.setHours(23, 59, 59);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "最近7日間",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setDate(start.getDate() - 7);
+            picker.$emit("pick", [start, end]);
+          }
+        }, {
+          text: "最近30日間",
+          onClick(picker) {
+            const start = new Date();
+            const end = new Date(start);
+            start.setDate(start.getDate() - 30);
+            picker.$emit("pick", [start, end]);
+          }
+        }],
+      },
       rules: {
         Service: [
           { required: true, message: "対象サービスは必須です。" }
         ],
         StartDate: [
-          { required: true, type:"number", min: 1, message: "確認期間は必須です。" }
+          { required: true, type:"number", min: 1, message: "確認期間は必須です。" },
+          { validator: (r, v, callback) => {
+            if(this.date) {
+              const start = new Date(this.date[0]);
+              const end = new Date(this.date[1]);
+              if(start.getTime() === end.getTime()){
+                callback("確認期間の開始時刻と終了時刻が同じです。");
+              }else if(start < end.setDate(end.getDate() - 30)) {
+                callback("一度に依頼できる期間は最大で30日間です。");
+              }else{
+                callback();
+              }
+            }
+          }}
         ],
         EndDate: [
           // check only startDate (el-form restriction)

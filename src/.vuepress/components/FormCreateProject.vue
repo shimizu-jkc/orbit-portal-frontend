@@ -11,7 +11,7 @@
           </el-col>
           <el-col>
             <el-checkbox 
-              label="クラウド利用料金の配賦先が明確になっている。" 
+              label="クラウド利用料金の配賦先(AFFコード)が明確になっている。" 
               v-model="agreements[1]"
             ></el-checkbox>
           </el-col>
@@ -103,12 +103,6 @@ export default {
           this.loading.show = true;
           try{
             projectId = await this.$store.dispatch("reqCreateProject");
-            this.$store.commit("clearProjectCreateParams");
-            await this.$refs.notification.notify({
-              status: "success",
-              title: this.$page.title,
-              message: "プロジェクトを登録しました。"
-            });
           }catch(e){
             await this.$refs.notification.notify({
               status: "error",
@@ -120,27 +114,38 @@ export default {
             this.loading.show = false;
           }
           // file upload proccess
-          this.loading.message = "ファイルのアップロード中です";
-          this.loading.show = true;
-          try{
-            if(await this.$store.dispatch("reqUploadProjectFiles", {id: projectId, isCreate: true})){
-              // upload success
+          if(this.$store.getters.isExistUploadProjectFiles()){
+            this.loading.message = "ファイルのアップロード中です";
+            this.loading.show = true;
+            try{
+              await this.$store.dispatch("reqUploadProjectFiles", {id: projectId, isCreate: true});
               await this.$store.dispatch("reqUpdateProjectFiles", {id: projectId});
+              await this.$refs.notification.notify({
+                status: "success",
+                title: this.$page.title,
+                message: "プロジェクトを登録しました。"
+              });
+            }catch(e){
+              await this.$refs.notification.notify({
+                status: "warning",
+                title: this.$page.title,
+                message: "ファイルのアップロードに失敗しました。プロジェクトの編集画面から再アップロードしてください。"
+              });
+            }finally{
+              this.loading.show = false;
             }
-          }catch(e){
-            console.error(e);
+          }else{
             await this.$refs.notification.notify({
-              status: "warning",
+              status: "success",
               title: this.$page.title,
-              message: "ファイルのアップロードに失敗しました。プロジェクトの編集画面から再アップロードしてください。"
-            });
-          }finally{
-            this.loading.show = false;
-            this.$router.push({
-              path: "show-project.html",
-              query: { id: projectId, operation: "create" }
+              message: "プロジェクトを登録しました。"
             });
           }
+          this.$store.commit("clearProjectCreateParams");
+          this.$router.push({
+            path: "show-project.html",
+            query: { id: projectId, operation: "create" }
+          });
           break;
         }
         case "ALERT":

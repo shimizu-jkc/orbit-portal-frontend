@@ -8,9 +8,16 @@
       :label-position="isCreate ? 'top':'left'"
       :model="contentModel"
       :rules="rules"
-      :hide-required-asterisk="isReadOnly"
+      :hide-required-asterisk="!isCreate"
     >
-      <el-form-item label="サポートプラン" prop="ExpectedPlan">
+      <el-form-item prop="ExpectedPlan">
+        <span slot="label">サポートプラン
+          <hint>
+            サポートプランの詳細は
+            <el-link type="primary" href="https://aws.amazon.com/jp/premiumsupport/plans/" target="_blank">こちら</el-link>
+            を参照してください。
+          </hint>
+        </span>
         <div class="form-item">
           <el-select
             class="form-item-vshort"
@@ -48,9 +55,13 @@
 
 <script>
 import Disp from "../../../mixins/disp";
+import ItemHint from "../../common/ItemHint";
 
 export default {
   name : "TicketContentPlanChange",
+  components : {
+    hint: ItemHint
+  },
   mixins: [Disp],
   props: {
     operation: {

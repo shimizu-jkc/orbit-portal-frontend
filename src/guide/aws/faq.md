@@ -1,5 +1,4 @@
 ---
-prev: false
 next: false
 ---
 
@@ -37,5 +36,3 @@ OrBITではセキュリティポリシーに準拠するため、*AWS Config*の
 - 記録対象のリソースを制限します。詳細は下記を参照してください。
     -  [「AWS Config でサポートされている AWS リソースタイプとリソース関係」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/resource-config-reference.html)
     - [「AWS Config で記録するリソースの選択」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/select-resources.html)
-
-<Footer />

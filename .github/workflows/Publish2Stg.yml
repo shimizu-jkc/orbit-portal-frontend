@@ -41,9 +41,11 @@ jobs:
       - name: Build
         run: npm install && npm run build
       - name: Deploy
-        uses: ItsKarma/aws-cli@v1.70.0
-        with:
-          args: s3 sync --delete --acl bucket-owner-read --exact-timestamps release/ s3://${{ env.DEPLOY_BUCKET_NAME }}/
+        run: aws s3 sync --delete --acl bucket-owner-read --exact-timestamps release/ s3://${{ env.DEPLOY_BUCKET_NAME }}/
+      - name: CloudFront cache invalidation
+        run: |
+          aws cloudfront list-distributions --query 'DistributionList.Items[?starts_with(Aliases.Items[0],`${{env.DEPLOY_BUCKET_NAME}}`)].Id' --output text | \
+            xargs -IID aws cloudfront create-invalidation --distribution-id ID --paths "/*"
       - name: Notify success to slack
         if: success()
         uses: rtCamp/action-slack-notify@v2

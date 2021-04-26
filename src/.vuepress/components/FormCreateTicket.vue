@@ -10,7 +10,7 @@
             <div class="form-item">
               <el-col>
                 <el-checkbox
-                  label="作業の実施には、最大5営業日程度掛かることがあります。"
+                  label="作業の実施には、最大5で営業日程度掛かることがあります。"
                   v-model="agreements[0]"
                 ></el-checkbox>
               </el-col>

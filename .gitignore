@@ -1,4 +1,4 @@
 *node_modules*
 *.cache*
 release
-env.json
+**env.json**

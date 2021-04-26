@@ -2,16 +2,16 @@
 const DispNameTable = {
   Division: [
     { value: "CORP" , label: "コーポレート" },
-    { value: "AM"   , label: "AM事業部" },
-    { value: "MS"   , label: "MS事業部" },
-    { value: "PS"   , label: "PS事業部" },
-    { value: "DX"   , label: "DX事業部" } 
+    { value: "AM"   , label: "AM分野" },
+    { value: "MS"   , label: "MS分野" },
+    { value: "PS"   , label: "PS分野" },
+    { value: "DX"   , label: "DXビジネス事業部" }
   ],
   Env: [
     { value: "PRD", label: "本番" },
     { value: "STG", label: "ステージング" },
     { value: "DEV", label: "開発" },
-    { value: "POC", label: "概念検証" }
+    { value: "POC", label: "概念実証" }
   ],
   AccountStatus: [
     { value: "WAITING_CONFIRM"  , label: "承認待ち" },
@@ -52,12 +52,35 @@ const DispNameTable = {
   ],
   ServiceForAudit: [
     { value: "AWS_CONFIG"     , label: "AWS Config" }, 
-    { value: "AWS_CLOUDTRAIL" , label: "Amazon CloudTrail" }
+    { value: "AWS_CLOUDTRAIL" , label: "AWS CloudTrail" }
   ],
   SupportPlan: [
     { value: "BUSINESS" , label: "ビジネス" },
     { value: "DEVELOPER" , label: "デベロッパー" },
     { value: "BASIC"     , label: "ベーシック" } 
+  ],
+  knowledgePhase: [
+    { value: "PLAN"    , label: "PLAN" },
+    { value: "CODE"    , label: "CODE" },
+    { value: "BUILD"   , label: "BUILD" },
+    { value: "TEST"    , label: "TEST" },
+    { value: "RELEASE" , label: "RELEASE" },
+    { value: "DEPLOY"  , label: "DEPLOY" },
+    { value: "OPERATE" , label: "OPERATE" },
+    { value: "MONITOR" , label: "MONITOR" }
+  ],
+  knowledgeType: [
+    { value: "KNOW"  , label: "ノウハウ" },
+    { value: "ARCH"  , label: "アーキテクチャ" },
+    { value: "TMPL"  , label: "テンプレート" },
+    { value: "TOOL"  , label: "ツール" },
+    { value: "OTHER" , label: "その他" }
+  ],
+  knowledgeEnv: [
+    { value: "AWS"    , label: "AWS" },
+    { value: "GITHUB" , label: "GitHub" },
+    { value: "ANY"    , label: "非依存" },
+    { value: "OTHER"  , label: "その他" }
   ]
 };
 

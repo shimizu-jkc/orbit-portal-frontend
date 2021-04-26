@@ -47,6 +47,9 @@ const getters = {
   },
   isExistProjectUpdateCache: (state, getters) => (id) => {
     return (id === state.updateParams.ProjectId) && getters.isProjectEdited(id);
+  },
+  isExistUploadProjectFiles: (state) => () => {
+    return state.uploadList.length > 0;
   }
 };
 

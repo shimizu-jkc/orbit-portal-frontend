@@ -12,7 +12,7 @@
     >
       <el-form-item prop="ExpectedPlan">
         <span slot="label">サポートプラン
-          <hint>
+          <hint v-show="isEditable">
             サポートプランの詳細は
             <el-link type="primary" href="https://aws.amazon.com/jp/premiumsupport/plans/" target="_blank">こちら</el-link>
             を参照してください。

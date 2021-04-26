@@ -11,7 +11,7 @@ const DispNameTable = {
     { value: "PRD", label: "本番" },
     { value: "STG", label: "ステージング" },
     { value: "DEV", label: "開発" },
-    { value: "POC", label: "概念検証" }
+    { value: "POC", label: "概念実証" }
   ],
   AccountStatus: [
     { value: "WAITING_CONFIRM"  , label: "承認待ち" },
@@ -52,7 +52,7 @@ const DispNameTable = {
   ],
   ServiceForAudit: [
     { value: "AWS_CONFIG"     , label: "AWS Config" }, 
-    { value: "AWS_CLOUDTRAIL" , label: "Amazon CloudTrail" }
+    { value: "AWS_CLOUDTRAIL" , label: "AWS CloudTrail" }
   ],
   SupportPlan: [
     { value: "BUSINESS" , label: "ビジネス" },

@@ -185,7 +185,7 @@ StackSet-AWSControlTowerBP-BASELINE-XXX
 どの程度の料金が掛かるのか、以下に3つのプロジェクトにおける、過去2か月分の請求サンプルを載せますので、参考にしてください。
 
 ::: tip NOTE
-実際には、*AWS Config*、*Amazon CloudTrail*、*Amazon GuardDuty* 以外のサービスもベースラインでは利用していますが、大きく割合を占めるものでは無いため、ここでは割愛します。
+実際には、*AWS Config*、*AWS CloudTrail*、*Amazon GuardDuty* 以外のサービスもベースラインでは利用していますが、大きく割合を占めるものでは無いため、ここでは割愛します。
 :::
 
 - サンプル１

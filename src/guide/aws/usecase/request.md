@@ -18,6 +18,8 @@ OrBITから払い出したAWSアカウントのルートユーザーは、プロ
 
 ## ルートユーザーでの作業を依頼する
 ルートユーザーでしか実施できない作業を行う場合は、OrBIT管理者へ作業依頼をする必要があります。
+対象となる作業の一覧は、[こちら](/guide/aws/service/account-management.html#ルートユーザーでしか実行できないタスク)をご覧ください。
+
 依頼は[「作業の依頼」](/request/create-ticket.html)ページから行うことができます。
 詳細な手順については、[こちら](/request/manual/create-ticket.html)をご覧ください。
 

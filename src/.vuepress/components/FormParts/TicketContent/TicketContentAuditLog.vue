@@ -12,7 +12,7 @@
     >
       <el-form-item prop="Service">
         <span slot="label">対象サービス
-          <hint>
+          <hint v-show="isEditable">
             確認したい監査ログの種別に応じたサービス名を選択してください。<br>
             詳細は
             <el-link type="primary" href="/guide/aws/service/audit.html#ログ種別" target="_blank">こちら</el-link>
@@ -40,10 +40,10 @@
       </el-form-item>
       <el-form-item prop="StartDate">
         <span slot="label">確認期間
-          <hint>
+          <hint v-show="isEditable">
             ログを確認したい期間を選択してください。<br>
             期間は時分秒まで指定することができます。<br>
-            ただし、一度に依頼できる期間は最大で30日間です。
+            ただし、一度に依頼できる期間は最大で31日間です。
           </hint>
         </span>
         <div class="form-item">
@@ -133,6 +133,7 @@ export default {
             const start = new Date();
             const end = new Date(start);
             start.setDate(start.getDate() - 7);
+            start.setHours(0, 0, 0);
             picker.$emit("pick", [start, end]);
           }
         }, {
@@ -141,6 +142,7 @@ export default {
             const start = new Date();
             const end = new Date(start);
             start.setDate(start.getDate() - 30);
+            start.setHours(0, 0, 0);
             picker.$emit("pick", [start, end]);
           }
         }],
@@ -157,8 +159,8 @@ export default {
               const end = new Date(this.date[1]);
               if(start.getTime() === end.getTime()){
                 callback("確認期間の開始時刻と終了時刻が同じです。");
-              }else if(start < end.setDate(end.getDate() - 30)) {
-                callback("一度に依頼できる期間は最大で30日間です。");
+              }else if(start < end.setDate(end.getDate() - 31)) {
+                callback("一度に依頼できる期間は最大で31日間です。");
               }else{
                 callback();
               }

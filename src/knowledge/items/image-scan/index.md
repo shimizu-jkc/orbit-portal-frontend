@@ -283,7 +283,8 @@ jobs:
       - name: Setup hadolint, dockle, trivy
         run: |
           mkdir $RESULT_DIR
-          brew instal hadolint goodwithtech/r/dockle aquasecurity/trivy/trivy
+          brew install hadolint goodwithtech/r/dockle aquasecurity/trivy/trivy
+
       - name: Exec hadolint, dockle, trivy
         run: |
           hadolint $TARGET_CONTAINER/Dockerfile --no-fail > $RESULT_DIR/hadolint.log &

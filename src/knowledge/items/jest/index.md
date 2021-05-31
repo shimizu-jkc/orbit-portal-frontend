@@ -114,10 +114,10 @@ Jestの基本的な使用方法を説明します。
 
   describe('sample test', () => {
     test('[sum] 1 + 2 = 3', () => {
-      expect(sample.sum(1, 2)).toBe(3);
+      expect(sample.sum(1, 2)).toBe(3);     // toBe()はmatcher
     });
     test('[diff] 5 - 2 = 3', () => {
-      expect(sample.diff(5, 2)).toBe(3);
+      expect(sample.diff(5, 2)).toBe(3);    // toBe()はmatcher
     });
   });
   ```

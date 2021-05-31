@@ -16,15 +16,14 @@ ___
 
 ## 用語集
 
-|        用語        |                正式名称                |                                       意味                                        |
-| -----------------: | -------------------------------------: | --------------------------------------------------------------------------------: |
-|             脆弱性 |                                      - |            ソフトウェアの不具合や設計不備により発生したセキュリティ上の欠陥のこと |
-| ベストプラクティス |                                      - |                      そのツールを利用する際に推奨とされているプロセスや手法のこと |
-|    CISベンチマーク | Center for Internet Security Benchmark | CISが提供するベストプラクティス。本ナレッジではCISベンチマーク for Dockerを指す。 |
-|                CVE |   Common Vulnerabilities and Exposures |                                  脆弱性に対して共通の識別子を付与したリストのこと |
-|                NVD |        National Vulnerability Database |              NIST(アメリカ国立標準技術研究所)が提供する脆弱性のデータベースのこと |
+|      用語       |                  正式名称                   |                                       意味                                        |
+| :-------------- | :------------------------------------------ | :-------------------------------------------------------------------------------- |
+| CI/CD           | Continuous Integration／Continuous Delivery | ソフトウェアを自動でテストし自動でデプロイする開発手法/環境のこと。               |
+| CISベンチマーク | Center for Internet Security Benchmark      | CISが提供するベストプラクティス。本ナレッジではCISベンチマーク for Dockerを指す。 |
+| CVE             | Common Vulnerabilities and Exposures        | 脆弱性に対して共通の識別子を付与したリストのこと                                  |
+| NVD             | National Vulnerability Database             | NIST(アメリカ国立標準技術研究所)が提供する脆弱性のデータベースのこと              |
 
-## 脆弱性スキャンをするメリット
+## 脆弱性スキャンのメリット
 
 - コンテナのセキュリティを向上できる
     - 外部から攻撃/侵入される余地が少なくなります。
@@ -33,7 +32,7 @@ ___
     - それぞれの脆弱性に対して脅威レベルが定められているため、脆弱性の対策の順番を定めやすくなります。
     - 脆弱性の原因と対策方法が具体的に指摘されるため、修正が容易です。
 
-## 脆弱性スキャンの基準
+## 脆弱性の主な基準
 
 - [Dockerベストプラクティス](https://docs.docker.jp/develop/develop-images/dockerfile_best-practices.html)
     - コンテナを定義する際に、適切な書き方を提示しています。
@@ -78,7 +77,7 @@ container/jmeter/Dockerfile:15 DL3018 warning: Pin versions in apk add. Instead 
 DockerのベストプラクティスとCISベンチマークに加え、Dockle独自のルールに沿っているコンテナイメージであるか検査します。元のイメージに含まれる脆弱性も検出します。外部のライブラリやOSは検出対象にはなりません。
 
 - スキャン対象　：コンテナイメージ
-- 検査基準　　　：Dockerベストプラクティス、CISベンチマーク(Docker)
+- 検査基準　　　：Dockerベストプラクティス、CISベンチマーク
 - 検出ルール　　：[Dockle Checkpoint](https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md)
 - 脅威レベル分類： 高: `FATAL`, 中: `WARN`, 低: `INFO`
 
@@ -102,10 +101,10 @@ INFO	- CIS-DI-0006: Add HEALTHCHECK instruction to the container image
 
 ### [Docker Bench for Security](https://github.com/docker/docker-bench-security)
 
-Docker公式のベンチマークツール。CISのベンチマーク(Docker)をベースにDockerのベストプラクティスに沿っているコンテナイメージか検査します。複数のイメージを同時にスキャン可能です。
+Docker公式のベンチマークツール。CISのベンチマークをベースにDockerのベストプラクティスに沿っているコンテナイメージか検査します。複数のイメージを同時にスキャン可能です。
 
 - スキャン対象　：コンテナイメージ
-- 検査基準　　　：Dockerベストプラクティス、CISベンチマーク(Docker)
+- 検査基準　　　：Dockerベストプラクティス、CISベンチマーク
 - 検出ルール　　：[Docker Bench Available Checks](https://github.com/docker/docker-bench-security/blob/master/tests/TESTS.md)
 - 脅威レベル分類： 高: `WARN`, 中: `NOTE`, 低: `INFO`
 
@@ -147,7 +146,7 @@ NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含�
 
 - スキャン対象　：コンテナイメージ
 - 検査基準　　　：NVD(脆弱性データベース)
-- 脅威レベル分類： 高: `CRITICAL`, `HIGH`, 中: `MEDIUM`, 低: `LOW`, 不明: `UNKNOWN`
+- 脅威レベル分類： 重大: `CRITICAL`, 高: `HIGH`, 中: `MEDIUM`, 低: `LOW`, 不明: `UNKNOWN`
 
 #### 使用方法
 
@@ -196,7 +195,7 @@ NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含�
 
 - スキャン対象　：コンテナイメージ
 - 検査基準　　　：NVD(脆弱性データベース)
-- 脅威レベル分類： 高: `Critical`, `High`, 中: `Medium`, 低: `Low`, 不明: `Undefined`
+- 脅威レベル分類： 重大: `Critical`, 高: `High`, 中: `Medium`, 低: `Low`, 備考: `informational`, 不明: `Undefined`
 
 #### 使用方法
 
@@ -210,19 +209,19 @@ NVDから得た脆弱性を元に、コンテナイメージに脆弱性が含�
 
 ![スキャン方法](./ecr_scan_result.png)
 
-### 比較表
+### 各スキャンツールの比較
 
 |              |                Hadolint                |                                 Dockle                                  |              Docker Bench for Security              |                                  Trivy                                   |              Clair               |
 | :----------: | -------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------- |
 | スキャン対象 | Dockerfile                             | コンテナイメージ                                                        | コンテナイメージ                                    | コンテナイメージ                                                         | コンテナイメージ                 |
-|   検査基準   | Dockerベストプラクティス<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク(Docker)<br>Dockle独自ルール | Dockerベストプラクティス<br>CISベンチマーク(Docker) | NVD                                                                      | NVD                              |
+|   検査基準   | Dockerベストプラクティス<br>shellcheck | Dockerベストプラクティス<br>CISベンチマーク<br>Dockle独自ルール | Dockerベストプラクティス<br>CISベンチマーク | NVD                                                                      | NVD                              |
 |   対象範囲   | Dockerfile記法                         | コンテナイメージ                                                        | コンテナイメージ                                    | OS<br>インストールしたパッケージ<br>アプリケーションが使用するパッケージ | OS<br>インストールしたパッケージ |
 
 ___
 
 ## コンテナを自動でスキャンするワークフローの紹介
 
-今回、例としてコンテナをスキャンするツールに、`Hadolint`, `Dockle`, `Trivy`の3つを使います。CICDのツールは`GitHub Actions`を利用します。
+今回、例としてコンテナをスキャンするツールに、`Hadolint`, `Dockle`, `Trivy`の3つを使います。CI/CDのツールは`GitHub Actions`を利用します。
 
 このワークフローは、マージの前に脆弱性のスキャンを行い、問題ないコンテナであるかチェックすることができます。スキャンを通過できない場合、本流のブランチへマージできないよう制御することもできます。
 
@@ -243,7 +242,21 @@ ___
 
 ::: details GitHub Actionsワークフローのソースコードはこちら
 
+フォルダ構成
+
+```javascript
+root
+├ .github/workflows
+│   └ ContainerScan.yml    // コンテナスキャンのワークフロー
+└ container
+    └ web_server
+        └ Dockerfile       // スキャン対象のコンテナのDockerfile
+```
+
+ワークフロー
+
 ```yaml
+# ContainerScan.yml
 name: Check docker image 
 
 on:
@@ -259,21 +272,11 @@ jobs:
     name: scan and lint
     runs-on: ubuntu-latest
     env:
-      IMAGE_REF: "jmeter:test"
+      IMAGE_REF: "web_server:test"
       RESULT_DIR: "result"
-      TARGET_CONTAINER: "container/jmeter"
-      SSH_KEY_FOR_ORBIT_LIB_COMMON: ${{ secrets.SSH_KEY_FOR_ORBIT_LIB_COMMON }}
-      SLACK_WEBHOOK_URL: ${{ secrets.ORBIT_CICD_TEST_SLACK_WEBHOOK }}
-      SLACK_ICON_URL: "https://www.docker.com/sites/default/files/d8/2019-07/vertical-logo-monochromatic.png"
+      TARGET_CONTAINER: "container/web_server"
     steps:
       - uses: actions/checkout@v2
-      - name: Checkout submodules
-        run: |
-          mkdir -p /home/runner/.ssh/
-          echo -e "${SSH_KEY_FOR_ORBIT_LIB_COMMON}" > /home/runner/.ssh/id_rsa
-          chmod 600 /home/runner/.ssh/id_rsa
-          git submodule sync --recursive
-          git submodule update --init --force --recursive --remote
       - name: Build container
         run: |
           docker build -t $IMAGE_REF $TARGET_CONTAINER
@@ -320,24 +323,6 @@ jobs:
           else
               exit 1
           fi
-      - name: Notify success to slack
-        if: success()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_USERNAME: ${{ github.repository }}
-          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK_URL }}
-          SLACK_ICON: ${{ env.SLACK_ICON_URL }}
-          SLACK_TITLE: "success"
-          SLACK_MESSAGE: "container scan was finished"
-      - name: Notify failure to slack
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_USERNAME: ${{ github.repository }}
-          SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK_URL }}
-          SLACK_ICON: ${{ env.SLACK_ICON_URL }}
-          SLACK_TITLE: "failed to scan docker image"
-          SLACK_COLOR: "#FF0000"
 ```
 
 :::
@@ -399,7 +384,12 @@ jobs:
 ## まとめ
 
 スキャンツールを使うことで、セキュリティの問題を可視化し対処しやすくなりました。
-また、スキャンツールとCICDを組み合わせることで、自動でスキャンを実施したり、新しくリリースするソフトウェアに対してスキャンを徹底することができした。
+また、スキャンツールとCI/CDを組み合わせることで、自動でスキャンを実施したり、新しくリリースするソフトウェアに対してスキャンを徹底することができました。
 
 本ナレッジはリリース前のスキャンを例にしましたが、リリース後にも定期スキャンを行うことでよりセキュリティを高めることも可能です。
-プロジェクトに対して必要なツールと実行タイミングを選択して、CICDのワークフローをカスタマイズすることをおすすめします。
+例えば、今回の方法の派生として以下のようなスキャンを行うこともできます。
+
+- ワークフローをスケジュール起動させ、定期的にビルドとスキャンを行う。
+- Clair on ECRを定期的に起動させ、プッシュ済みイメージのスキャンを行う。
+
+プロジェクトに対して必要なツールと実行タイミングを選択し、セキュリティ要件を満たしたCI/CDの構築をおすすめします。

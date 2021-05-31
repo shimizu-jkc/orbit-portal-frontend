@@ -36,14 +36,14 @@ JestとはFacebook社がオープンソースとして開発しているJavaScri
 ## Jest導入
 Jestの導入について説明します。以降では、`Node.js`、`GitHub Actions`について、ある程度の知識があること前提としています。
 ### 前提条件
-- Node.jsとnpmがインストール済みであること。
+- Node.jsとnpmがインストール済みであること。なお、記事執筆時に使用していたバージョンはNode.js`12.14.1`、npm`6.13.4`です。
 ### インストール
-必要なものは`jest`パッケージのみです。下記コマンドでnpmから入手します。
-```
+必要なものは`jest`パッケージのみです。下記コマンドでnpmから入手します。なお、記事執筆時に使用していたJestのバージョンは`26.6.3`です。
+```sh
 $ npm install --save-dev jest
 ```
 `npm test`で実行できるように`package.json`に下記のように追加します。
-```
+```json
 {
   "scripts": {
     "test": "jest"
@@ -55,13 +55,13 @@ $ npm install --save-dev jest
 - jest.config.jsファイルをプロジェクト直下に作成するか、package.jsonのjestフィールドにJSONで追記します。  
 設定ファイルの詳細オプションは[公式ガイド](https://jestjs.io/ja/docs/configuration)を参照してください。
 
-```javascript:jest.config.js
+```javascript
 // jest.config.js
 module.exports = {
   verbose: true
 }
 ```
-```javascript:pacage.json
+```json
 // pacage.json
 {
   "name": "my-project",
@@ -71,37 +71,77 @@ module.exports = {
 }
 ```
 
+### ディレクトリ構成例
+シンプルなディレクトリ構成は以下のようになります。[テストコードの実装](/knowledge/items/jest/#テストコードの実装) で説明しますが、テスト実行対象ファイルはプロジェクト配下のどこにあっても構わないので、モジュール毎にディレクトリを作成してソースコード（`sample.js`）とテストコード（`sample.test.js`）を配置してもよいです。
+  ```
+  .
+  |── node_modules
+  |── package.json
+  |── package-lock.json
+  |── sample.js              // テスト対象ファイル
+  |── sample.test.js         // テストコード記述ファイル
+  └── jest.config.js         // Jest設定ファイル
+  ```
+
 ### 使用方法
 Jestの基本的な使用方法を説明します。  
 詳細は**jest**の[公式ガイド](https://jestjs.io/ja/docs/getting-started)を参照してください。
 #### テストコードの実装
-- テスト対象
+- テスト実行対象ファイル
   - **.test.jsファイルを作成しテストコードを記述します。
-  - テスト対象ファイルは設定ファイル、またはCLIのオプションでも指定可能です。
-  - デフォルトではプロジェクトルート配下の全てのディレクトリにある `.spec.js` or `.test.js` ファイルが対象となります。
+  - テスト実行対象ファイルは設定ファイル、またはCLIのオプションでも指定可能です。
+  - デフォルトではプロジェクトルート配下の全てのディレクトリにある `.spec.js` or `.test.js` ファイルがテスト実行対象となります。
 - テスト記述
   - [test関数](https://jestjs.io/ja/docs/api#testname-fn-timeout)にテストを記述します。
   - [expect関数](https://jestjs.io/docs/ja/expect)で期待動作を記述します。
   - expect関数では[matcher](https://jestjs.io/docs/ja/using-matchers)を使用して、値のテストを行います。
   - [describe関数](https://jestjs.io/docs/ja/api#describename-fn)でテスト対象をカテゴライズします。
+- 簡単なテスト記述例
+  - 2つの数値を加算、減算する関数を含む`sample.js`ファイルをテスト対象とします。
+  ```javascript
+  // sample.js
+  exports.sum = (a, b) => {
+    return a + b;
+  };
+  exports.diff = (a, b) => {
+    return a - b;
+  };
+  ```
+  - `sample.test.js`ファイルにテストコードを記述します。
+  ```javascript
+  // sample.test.js
+  const sample = require('./sample');
+
+  describe('sample test', () => {
+    test('[sum] 1 + 2 = 3', () => {
+      expect(sample.sum(1, 2)).toBe(3);
+    });
+    test('[diff] 5 - 2 = 3', () => {
+      expect(sample.diff(5, 2)).toBe(3);
+    });
+  });
+  ```
 
 #### テスト実行
 以下のコマンドで実行します。
-```
+```sh
 $ npm test
 ``` 
 テストが実行されて結果が表示されます。
-```
-PASS project-budget-alert-manager/test/index.test.js
+```sh
+PASS sample/sample.test.js
+  sample test
+    √ [sum] 1 + 2 = 3 (2 ms)
+    √ [diff] 5 - 2 = 3 (1 ms)
 
-Test Suites: 6 passed, 6 total
-Tests:       22 passed, 22 total
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
 Snapshots:   0 total
-Time:        9.275 s
-Ran all test suites.
+Time:        2.184 s
+Ran all test suites matching /sample/i.
 ```
 `coverage`オプションを使用するとカバレッジレポートが取得できます。
-```
+```sh
 $ npm test -- --coverage
 ```
 出力された`coverage`フォルダ内の`index.html`を開くと以下のようなレポートが表示されます。
@@ -111,7 +151,7 @@ $ npm test -- --coverage
 
 ![Report](./report.png)
 t オプションで`describe`に指定した文字列が含まれるテストのみ実施することもできます。
-```
+```sh
 $ npm test -- --t [unit]
 ```
 CLIで指定できるオプションの一覧は[公式ガイド](https://jestjs.io/docs/cli)を参照してください。

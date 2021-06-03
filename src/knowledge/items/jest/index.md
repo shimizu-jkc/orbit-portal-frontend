@@ -121,7 +121,12 @@ Jestの基本的な使用方法を説明します。
   });
   ```
   このテストでは、テスト対象の関数を実行した結果が正しい結果となっているのかを確認しています。
-  [describe関数](https://jestjs.io/docs/ja/api#describename-fn)で関連するテストのまとまりを、[test関数](https://jestjs.io/ja/docs/api#testname-fn-timeout)でひとつひとつのテストを表現し、[expect関数](https://jestjs.io/docs/ja/expect)で期待動作を記述します。expect関数では[matcher](https://jestjs.io/docs/ja/using-matchers)を使用して、値のテストを行います。多くの[matcher](https://jestjs.io/docs/ja/using-matchers)が用意されており、様々な方法で値のテストをすることができます。詳しくはリンク先をご覧ください。
+  
+- テスト記法
+  - [test関数](https://jestjs.io/ja/docs/api#testname-fn-timeout)にひとつひとつのテスト記述します。
+  - [expect関数](https://jestjs.io/docs/ja/expect)で期待動作を記述します。
+  - expect関数では[matcher](https://jestjs.io/docs/ja/using-matchers)を使用して、値のテストを行います。
+  - [describe関数](https://jestjs.io/docs/ja/api#describename-fn)で関連するテスト対象毎にカテゴライズします。
 
 #### テスト実行
 以下のコマンドで実行します。

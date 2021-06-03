@@ -93,14 +93,8 @@ Jestの基本的な使用方法を説明します。
 #### テストコードの実装
 - テスト実行対象ファイル
   - `.test.js`ファイルを作成し、テストコードを記述します。
-
   - テスト実行対象ファイルは設定ファイル、またはCLIのオプションでも指定可能です。
   - デフォルトではプロジェクトルート配下の全てのディレクトリにある `.spec.js` or `.test.js` ファイルがテスト実行対象となります。
-- テスト記述
-  - [test関数](https://jestjs.io/ja/docs/api#testname-fn-timeout)にテストを記述します。
-  - [expect関数](https://jestjs.io/docs/ja/expect)で期待動作を記述します。
-  - expect関数では[matcher](https://jestjs.io/docs/ja/using-matchers)を使用して、値のテストを行います。
-  - [describe関数](https://jestjs.io/docs/ja/api#describename-fn)でテスト対象をカテゴライズします。
 - 簡単なテスト記述例
   - 2つの数値を加算、減算する関数を含む`sample.js`ファイルをテスト対象とします。
   ```javascript
@@ -126,6 +120,8 @@ Jestの基本的な使用方法を説明します。
     });
   });
   ```
+  このテストでは、テスト対象の関数を実行した結果が正しい結果となっているのかを確認しています。
+  [describe関数](https://jestjs.io/docs/ja/api#describename-fn)で関連するテストのまとまりを、[test関数](https://jestjs.io/ja/docs/api#testname-fn-timeout)でひとつひとつのテストを表現し、[expect関数](https://jestjs.io/docs/ja/expect)で期待動作を記述します。expect関数では[matcher](https://jestjs.io/docs/ja/using-matchers)を使用して、値のテストを行います。多くの[matcher](https://jestjs.io/docs/ja/using-matchers)が用意されており、様々な方法で値のテストをすることができます。詳しくはリンク先をご覧ください。
 
 #### テスト実行
 以下のコマンドで実行します。
@@ -151,10 +147,26 @@ $ npm test -- --coverage
 ```
 出力された`coverage`フォルダ内の`index.html`を開くと以下のようなレポートが表示されます。
 
+![SampleAllReport](./sample_report_all.png)
+レポートの各要素の意味は以下のようになります。
+- **File：** テスト対象のファイル
+- **Statements：** プログラム内の各命令が実行されたかの網羅率（命令網羅率）
+- **Branches：** `if`や`case`などの全ての分岐の処理が実行されたかの網羅率
+- **Functions：** プログラム内の各関数が呼び出されたかの網羅率
+- **Lines：** ソースファイルの各実行可能行が実行されたかの網羅率
+
+ 参考に、もう少し大きな規模のソフトウェアでテストした際のレポートを以下に載せておきます。
+
 ![AllReport](./report_all.png)
-ファイル名をクリックすることで各ファイルのテスト未実施の条件やパスが色分けして表示されます。
+
+ファイル名をクリックすることで各ファイルのテスト未実施の条件やパスが色分けして表示されます。なお、今回のテスト例では全て網羅されているため、色付きの箇所はありません。
+
+![SampleReport](./sample_report.png)
+
+参考に、テスト未実施箇所が存在するレポートを以下に載せておきます。<font color="Yellow">**黄色**</font> はテスト未実施の分岐条件を、<font color="Red">**赤色**</font> はテスト未実施の処理を表しています。
 
 ![Report](./report.png)
+
 `t` オプションで`describe`に指定した文字列が含まれるテストのみ実施することもできます。
 
 ```sh
@@ -162,7 +174,7 @@ $ npm test -- --t [unit]
 ```
 CLIで指定できるオプションの一覧は[公式ガイド](https://jestjs.io/docs/cli)を参照してください。
 
-## 自動でJestを実行する
+## Jestを自動で実行する環境を用意する
 [Github Actions](https://docs.github.com/ja/actions/learn-github-actions)を利用して、自動でテストを実行する方法を紹介します。`Github Actions`についてや、ワークフロー定義ファイルの記述方法などの詳細は本ナレッジでは割愛します。
 
 ### 前提条件
@@ -287,7 +299,7 @@ on:
 ```
 #### レポートアップロード
 - `actions/upload-artifact`でカバレッジレポートファイル(`./coverage`)をアーティファクトとして保存します。
-- 保存したファイルはGitHubのUIからダウンロードできます。
+- 保存したファイルはGitHubのUIからダウンロードできます。ダウンロード方法は、[テスト実行結果の確認](/knowledge/items/jest/#テスト実行結果の確認) を参照してください。
 ```yaml
       - name: Upload test coverage artifact
         uses: actions/upload-artifact@v1

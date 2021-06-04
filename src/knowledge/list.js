@@ -96,6 +96,20 @@ const knowledgeList = [
       Path    : `${DEFAULT_PATH}/image-scan/`
     },
     UpdatedAt : new Date("2021/4/9")
+  },
+  {
+    Id        : "Jest",
+    Name      : "Jestを利用したテスト自動化環境の構築",
+    Desc      : "このナレッジでは、JavaScriptのためのテストフレームワークであるJestの使い方と、Jestを利用したテスト自動化の方法を紹介しています。",
+    Phase     : PHASE.TEST,
+    Type      : TYPE.KNOW,
+    Env       : ENV.GITHUB,
+    Author    : "aoki.takeshi@jvckenwood.com",
+    Link      : {
+      Type    : LINK.INTERNAL,
+      Path    : `${DEFAULT_PATH}/jest/`
+    },
+    UpdatedAt : new Date("2021/5/25")
   }
 ];
 

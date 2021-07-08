@@ -14,7 +14,7 @@ displayAllHeaders: true
 外部企業へ委託することにより、「サービスの構成を把握してる人がいない」「社内にノウハウが蓄積されない」といった課題を認識しているプロジェクトも多く、クラウド基盤チームではそのような課題を解決すべく、当社でのサービスビジネス内製、および準内製を実現するための体制や仕組み作りを検討しています。また、実際に幾つかのプロジェクトでは開発や運用の支援を行っています。
 -->
 
-[**OrBIT**](/guide/common/glossary.html#orbit-organization-s-cloud-baseline-integrated-with-devops-tools)<!--(<font color="blue">**Or**</font>ganization's cloud <font color="blue">**B**</font>aseline <font color="blue">**I**</font>ntegrated with devops <font color="blue">**T**</font>ools)-->とは「技術開発部 先行技術検証グループ クラウド技術担当」が開発した
+[**OrBIT**](/guide/common/glossary.html#orbit-organization-s-cloud-baseline-integrated-with-devops-tools)<!--(<font color="blue">**Or**</font>ganization's cloud <font color="blue">**B**</font>aseline <font color="blue">**I**</font>ntegrated with devops <font color="blue">**T**</font>ools)-->とは「未来創造研究所 先行技術検証グループ クラウド担当」が開発した
 「**クラウドを利用したサービスの開発や運用を支援するための様々な仕組みを備える基盤**」です。
 
 近年、AWS・GCP・Azureなどに代表されるパブリッククラウドは、サービスビジネスを展開する上で今や当たり前のように利用されており、DXを加速させる上で無視のできないものとなっていますが、実際にサービスをローンチするまでには
@@ -47,9 +47,13 @@ OrBITでは、**SoR**と**SoE**の両方の側面に対して支援を提供し�
 ---
 **SoR**に基づいたシステムでは、競合するサービスとの差別化を図ることができないため、この部分の構築や運用に対して、如何にコストを掛けないかが重要になります。
 
-OrBITでは、クラウドを利用する際に必須となる**手続きを代行する**ことでより <font color="#1761b4">**「簡単に」**</font>、**統合的な管理体系**や**ガードレール的なセキュリティ予防**を提供することで、<font color="#1761b4">**「安全に」**</font> クラウドを利用することができます。
+OrBITでは、クラウドを利用する際に必要となるいくつかの**手続きを代行**しますので、 <font color="#1761b4">**「簡単に」**</font>クラウドを始めることができます。
+クラウドを利用する際の一般的な手順とOrBITを利用した際の比較については以下をご覧ください。
+- [AWSの利用開始手順とOrBITを利用した場合の手順比較](/guide/aws/startup.html#一般的な利用開始手順との比較)
 
-提供するサービスの詳細については、以下をご覧ください。
+また、**統合的なID管理**や**セキュリティ脅威を予防するガードレール**などのサービスを提供することで、<font color="#1761b4">**「安全に」**</font> クラウドを利用することができます。
+
+提供するサービスについては、以下をご覧ください。
 - [提供サービス(AWSをご利用の場合)](/guide/aws/service.html)
 
 ### SoEの側面における支援
@@ -58,7 +62,7 @@ OrBITでは、クラウドを利用する際に必須となる**手続きを代�
 
 OrBITでは、サービスを迅速に開発するための**リファレンスとなるアーキテクチャ**や、運用の手助けをする**支援ツール**などをナレッジとして紹介しています。これらを参考にすることで、作業工数を削減でき、アイデアに集中する時間を確保できるようになるため、<font color="#1761b4">**「効率的に」**</font> プロジェクトを進められます。
 
-どのようなナレッジがあるかは、[こちら](/knowledge/introduction.html)をご覧ください。
+ナレッジの詳細については、[こちら](/knowledge/introduction.html)をご覧ください。
 
 ## OrBITの構成と構成要素
 ここでは、OrBIT自体がどのような構成で支援を実現しているかを紹介します。

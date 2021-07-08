@@ -7,6 +7,19 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 ---
 
+## ユーザーガイドの更新やナレッジの追加を行いました
+<Badge text="リリース情報" type="tip" vertical="bottom"/>
+
+**投稿日 : 2021/7/8(木)**
+
+本日、ユーザーガイドを以下の通り更新しました。
+- [「AWSの利用開始手順とOrBITを利用した場合の手順比較」](/guide/aws/startup.html#一般的な利用開始手順との比較)を追加しました。
+- OrBITの運用を担当する部署名を「技術開発部」から **「未来創造研究所」** へと変更しました。
+- その他、軽微な修正を行いました。
+
+また、以下のナレッジを新たに公開しましたので、是非ご覧ください。
+- [「Jestを利用したテスト自動化環境の構築」](/knowledge/items/jest/index.html)
+
 ## β版の提供を開始しました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
 <Badge text="AWS" type="note" vertical="bottom"/>

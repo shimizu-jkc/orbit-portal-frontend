@@ -167,7 +167,7 @@ OrBITでは以下のアクセス権限を用意しており、役割や用途に
 
 | アクセス権限名称 | セッション<br>(単位:時間) | 内容 |
 | :--- | :---: | :--- |
-| [AdministratorAccess](https://console.aws.amazon.com/iam/home#policies/arn:aws:iam::aws:policy/AdministratorAccess)	| 1 | フルアクセスの許可 |
+| [AdministratorAccess](https://console.aws.amazon.com/iam/home#policies/arn:aws:iam::aws:policy/AdministratorAccess)	| 12 | フルアクセスの許可 |
 | [BillingAccess](https://console.aws.amazon.com/iam/home#policies/arn:aws:iam::aws:policy/job-function/Billing)	| 1 | 利用料金・請求情報へのアクセス許可 |
 | [DBManagerAccess](https://console.aws.amazon.com/iam/home#policies/arn:aws:iam::aws:policy/job-function/DatabaseAdministrator) | 1 | 一連のDBサービスへのアクセス許可 |
 | [DataAnalystAccess](https://console.aws.amazon.com/iam/home#policies/arn:aws:iam::aws:policy/job-function/DataScientist)	| 1 |  一連のデータ解析サービスへのアクセス許可 |

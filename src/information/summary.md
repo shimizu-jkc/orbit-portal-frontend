@@ -7,6 +7,24 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 ---
 
+## AWS利用時におけるセッション有効時間を変更しました
+<Badge text="リリース情報" type="tip" vertical="bottom"/>
+<Badge text="AWS" type="note" vertical="bottom"/>
+
+**投稿日 : 2021/9/2(木)**
+
+本日、以下のアクセス権限についてセッション有効時間を変更しました。
+
+| アクセス権限名称 | 変更前 | 変更後 |
+| :--: | :--: | :--: |
+| AWSAdministratorAccess | 1時間 | 12時間 |
+| AWSPowerUserAccess | 8時間 | 12時間 |
+
+アクセス権限の詳細については、[こちら](/guide/aws/service/id-management.html#アクセス権限の一覧)をご覧下さい。
+
+この変更でより効率的に開発を進めることができるようになります。
+是非、引き続きOrBITをご利用ください。
+
 ## ユーザーガイドの更新やナレッジの追加を行いました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
 

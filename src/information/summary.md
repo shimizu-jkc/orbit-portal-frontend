@@ -7,23 +7,25 @@ OrBITのリリース情報やメンテナンス情報を掲載しています。
 
 ---
 
-## AWS利用時におけるセッション有効時間を変更しました
+## コスト配分タグの提供を開始しました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>
 <Badge text="AWS" type="note" vertical="bottom"/>
 
-**投稿日 : 2021/9/2(木)**
+**投稿日 : 2021/11/1(月)**
 
-本日、以下のアクセス権限についてセッション有効時間を変更しました。
+本日、以下のコスト配分タグを有効にしました。
 
-| アクセス権限名称 | 変更前 | 変更後 |
-| :--: | :--: | :--: |
-| AWSAdministratorAccess | 1時間 | 12時間 |
-| AWSPowerUserAccess | 8時間 | 12時間 |
+| タグ名 | 想定用途 | 例 |
+| :-- | :-- | :-- |
+| `orbit:cost:Project` | プロジェクト単位での確認 | `orbit:cost:Project` = orbit |
+| `orbit:cost:Group` | グループ単位での確認 | `orbit:cost:Group` = ServerGroup |
+| `orbit:cost:Name` | リソース毎の確認 | `orbit:cost:Name` = Server1 |
+| `orbit:cost:Env` | 環境毎の確認 | `orbit:cost:Env` = dev |
 
-アクセス権限の詳細については、[こちら](/guide/aws/service/id-management.html#アクセス権限の一覧)をご覧下さい。
+EC2などのタグを付与できるサービスにて、上記タグを付与することでタグ毎に使用しているコストを把握できるようになります。
 
-この変更でより効率的に開発を進めることができるようになります。
-引き続き、OrBITをご利用ください。
+コストの把握には ***AWS Cost Explorer*** を使用すると便利です。
+使い方については[「こちら」](https://aws.amazon.com/jp/blogs/news/cost-allocation-tag/)を参考にしてください。
 
 ## ユーザーガイドの更新やナレッジの追加を行いました
 <Badge text="リリース情報" type="tip" vertical="bottom"/>

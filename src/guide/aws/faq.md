@@ -36,3 +36,23 @@ OrBITではセキュリティポリシーに準拠するため、*AWS Config*の
 - 記録対象のリソースを制限します。詳細は下記を参照してください。
     -  [「AWS Config でサポートされている AWS リソースタイプとリソース関係」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/resource-config-reference.html)
     - [「AWS Config で記録するリソースの選択」](https://docs.aws.amazon.com/ja_jp/config/latest/developerguide/select-resources.html)
+
+### Q. EC2インスタンスなどリソース毎に料金を確認する方法はありませんか？
+OrBITでは以下のコスト配分タグを有効にしており、コスト把握に利用することができます。
+
+| タグ名 | 想定用途 | 例 |
+| :-- | :-- | :-- |
+| `orbit:cost:Project` | プロジェクト単位での確認 | `orbit:cost:Project` = orbit |
+| `orbit:cost:Group` | グループ単位での確認 | `orbit:cost:Group` = ServerGroup |
+| `orbit:cost:Name` | リソース毎の確認 | `orbit:cost:Name` = Server1 |
+| `orbit:cost:Env` | 環境毎の確認 | `orbit:cost:Env` = dev |
+
+EC2などのタグを付与できるサービスにて、上記タグを付与することでタグ毎に使用しているコストを把握できるようになります。
+
+コストの把握には ***AWS Cost Explorer*** を使用すると便利です。
+使い方については[「こちら」](https://aws.amazon.com/jp/blogs/news/cost-allocation-tag/)を参考にしてください。
+
+::: tip
+OrBITの仕組み上、プロジェクトで利用しているAWSアカウント上ではコスト配分タグを有効にすることはできません。
+上記以外のタグを希望する際は、[「こちら」](/support/contact.html)よりお問い合わせください。
+:::

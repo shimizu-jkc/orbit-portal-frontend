@@ -43,6 +43,7 @@ module.exports = {
               { text: "AWSの利用を開始する", link: "/guide/aws/startup" },
               { text: "基本的な使い方", link: "/guide/aws/usecase" },
               { text: "提供サービス", link: "/guide/aws/service" },
+              { text: "よくある質問", link: "/guide/aws/faq" },
               { text: "リファレンス", link: "/guide/aws/reference" }
             ]
           }

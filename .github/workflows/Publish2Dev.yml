@@ -14,8 +14,8 @@ jobs:
     env:
       ENV: "dev"
       ENV_PATH: "src/.vuepress/env.json"
-      BASE_URL: "https://api.orbit.jvckenwood-dev.com/organization/v1"
-      DEPLOY_BUCKET_NAME: "orbit.jvckenwood-dev.com"
+      BASE_URL: "https://api.orbit.pcrlab.info/organization/v1"
+      DEPLOY_BUCKET_NAME: "orbit.pcrlab.info"
       API_KEY: ${{ secrets.API_KEY_DEV }}
       AWS_REGION: "us-east-1"
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_FOR_ORBIT_SS_DEV }}

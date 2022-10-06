@@ -13,8 +13,8 @@ jobs:
     env:
       ENV: "stg"
       ENV_PATH: "src/.vuepress/env.json"
-      BASE_URL: "https://api.stg.orbit.jvckenwood-dev.com/organization/v1"
-      DEPLOY_BUCKET_NAME: "stg.orbit.jvckenwood-dev.com"
+      BASE_URL: "https://api.stg.orbit.pcrlab.info/organization/v1"
+      DEPLOY_BUCKET_NAME: "stg.orbit.pcrlab.info"
       API_KEY: ${{ secrets.API_KEY_STG }}
       AWS_REGION: "us-east-1"
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_FOR_ORBIT_SS_STG }}

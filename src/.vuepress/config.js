@@ -1,4 +1,5 @@
 module.exports = {
+  base: "/orbit-portal-frontend/",
   title: "OrBITポータル",
   description: "OrBITは、クラウドを利用した開発や運用を支援するために作られた「クラウド基盤」です。",
   dest: "release",

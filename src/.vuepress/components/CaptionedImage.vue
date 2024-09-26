@@ -6,11 +6,13 @@
 </template>
 
 <script>
+import Config from '../config'
+
 export default {
   props: ['src', 'caption'],
   computed: {
     imagesrc () {
-      return '/img/' + this.src
+      return Config.base + 'img/' + this.src
     }
   }
 }
